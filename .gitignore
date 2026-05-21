@@ -54,15 +54,11 @@ Legacy/
 # vaults — già assorbito in Library
 vaults/
 
-# Fucina - cloned external repos for analysis (privati)
-Library/Fucina/repos/
-
-# Library — symlink verso repo privato (teamolimpo-data)
-# Non tracciare MAI i dati privati nel repo pubblico
+# Library — symlink verso repo privato, non tracciare
+Library
 Library/
 
 # Team/Hermes — stato operativo ricreato dal taskmanager
-# (il path vero è Library/Fucina/Hermes/ — questo è un residuo)
 Team/Hermes/
 
 # Log strumenti
@@ -71,3 +67,6 @@ tools/migrate-email-vault.log
 # Database e log KBA
 Library/data/*.db
 Library/data/*.log
+
+# Lockfile uv
+uv.lock
