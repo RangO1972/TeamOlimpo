@@ -77,7 +77,7 @@ def _check_disk(root: Path) -> tuple[bool, str]:
 def _check_permissions(root: Path) -> list[tuple[bool, str, str]]:
     """Permessi scrittura su cartelle critiche."""
     results: list[tuple[bool, str, str]] = []
-    folders = ["Library/Handoff", "Library/deliverables"]
+    folders = ["Library/Fucina/Handoff", "Library/deliverables"]
     for folder in folders:
         path = root / folder
         if not path.exists():

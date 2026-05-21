@@ -7,7 +7,7 @@ draft: true
 
 # Agent Template — Draft
 
-> **DRAFT** — validate before promoting to `Library/SOPs/`.
+> **DRAFT** — validate before promoting to `Team/SOPs/`.
 > Based on: EN profile translations, third-party AI audit (2026-05-20), Atena v2 structural revision.
 
 ---
@@ -23,7 +23,7 @@ permission:
   read: allow                          # everyone reads everything
   [bash / websearch / webfetch / task] # role-specific
   edit:
-    "Library/Handoff/**": "allow"         # everyone writes handoffs
+    "Library/Fucina/Handoff/**": "allow"         # everyone writes handoffs
     "Team/<AgentName>/**": "allow"     # everyone writes own folder
     "[ROLE_PATH/**]": "allow"          # role-specific outputs
 ---
@@ -83,8 +83,8 @@ Operational description.
 
 ## References
 
-- Agent design methodology: `Library/SOPs/agent-design-methodology.md`
-- Handoff format: `Library/SOPs/handoff-guide.md`
+- Agent design methodology: `Team/SOPs/agent-design-methodology.md`
+- Handoff format: `Team/SOPs/handoff-guide.md`
 ```
 
 ---
@@ -107,14 +107,14 @@ permission:
   read: allow
   [bash / websearch / webfetch / task]  # role-specific
   edit:
-    "Library/Handoff/**": "allow"          # every agent
+    "Library/Fucina/Handoff/**": "allow"          # every agent
     "Team/<AgentName>/**": "allow"      # every agent
     "[ROLE_PATH/**]": "allow"           # role-specific
 ```
 
 **Base rule** — every agent always gets:
 - `read: allow`
-- `edit: Library/Handoff/**`
+- `edit: Library/Fucina/Handoff/**`
 - `edit: Team/<AgentName>/**`
 
 **Role-specific extras:**
@@ -130,7 +130,7 @@ permission:
 - `edit` must be path-restricted for most agents — flat `edit: allow` only for orchestrators with documented justification
 - `write` is **not a valid OpenCode permission key** — never use it. `edit` covers all file writes
 - Never `bash: deny` / `task: deny` — omission is sufficient
-- See `Library/Meta/opencode-permissions-spec.md` for full reference
+- See `Team/Meta/opencode-permissions-spec.md` for full reference
 
 ---
 
@@ -204,6 +204,6 @@ Explicit. No "Don't do things outside your scope".
 SOP paths only. No content duplication.
 
 **Always consult:**
-- `Library/Meta/opencode-permissions-spec.md` — for permission keys, syntax, and rules
-- `Library/SOPs/agent-design-methodology.md` — for design methodology
-- `Library/SOPs/handoff-guide.md` — for handoff format
+- `Team/Meta/opencode-permissions-spec.md` — for permission keys, syntax, and rules
+- `Team/SOPs/agent-design-methodology.md` — for design methodology
+- `Team/SOPs/handoff-guide.md` — for handoff format

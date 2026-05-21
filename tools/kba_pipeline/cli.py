@@ -8,10 +8,10 @@ Orchestratore della pipeline KBA completa:
   [4/4] Merge + enrichment -> Excel finale
 
 Utilizzo:
-  python -m tools.kba_pipeline run Team/Inbox/KBA.xlsx
-  python -m tools.kba_pipeline run Team/Inbox/KBA.xlsx --dry-run
-  python -m tools.kba_pipeline run Team/Inbox/KBA.xlsx --skip-convert --skip-analyze
-  python -m tools.kba_pipeline run Team/Inbox/KBA.xlsx --no-ai-merge --provider grok
+  python -m tools.kba_pipeline run Inbox/KBA.xlsx
+  python -m tools.kba_pipeline run Inbox/KBA.xlsx --dry-run
+  python -m tools.kba_pipeline run Inbox/KBA.xlsx --skip-convert --skip-analyze
+  python -m tools.kba_pipeline run Inbox/KBA.xlsx --no-ai-merge --provider grok
 """
 
 from __future__ import annotations
@@ -183,7 +183,7 @@ def run(
     inbox: Path = typer.Option(
         None,
         "--inbox", "-i",
-        help=f"Cartella sorgente PDF (default: Team/Inbox/).",
+        help=f"Cartella sorgente PDF (default: Inbox/).",
     ),
     provider: str = typer.Option(
         "grok",
@@ -235,7 +235,7 @@ def run(
     Esegue la pipeline KBA completa: PDF -> Markdown -> catalogo -> merge Excel.
 
     Il file Excel DeltaV puo' essere specificato come path assoluto o relativo
-    alla root del progetto (es. 'Team/Inbox/KBA.xlsx').
+    alla root del progetto (es. 'Inbox/KBA.xlsx').
 
     Exit code 0 = completato con successo.
     Exit code 1 = dipendenze documentali mancanti (step 3) o errore critico.

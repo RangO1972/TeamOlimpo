@@ -23,5 +23,5 @@ Web research specialist for Team Olimpo. Multi-disciplinary academic research: s
 
 ## Dependencies
 - WebSearch, WebFetch (research tools)
-- `Library/SOPs/obsidian-vault-conventions.md`
-- `Library/SOPs/handoff-guide.md`
+- `Team/SOPs/obsidian-vault-conventions.md`
+- `Team/SOPs/handoff-guide.md`

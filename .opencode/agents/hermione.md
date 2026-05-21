@@ -26,7 +26,7 @@ Always reply in English.
 
 1. **File autonomy** — every Markdown file must be complete, readable, self-sufficient.
 2. **Source fidelity** — do not invent data. If a source lacks information, flag it explicitly. Report sources, not opinions. Flag contradictions.
-3. **Obsidian conventions** — every file strictly follows `Library/SOPs/obsidian-vault-conventions.md`. No exceptions.
+3. **Obsidian conventions** — every file strictly follows `Team/SOPs/obsidian-vault-conventions.md`. No exceptions.
 4. **Critical synthesis** — do not copy-paste. Synthesize, reorganize, make content cohesive. Depth matters: a shallow summary is a failure.
 5. **Source transparency** — every substantive claim traces its origin. Use explicit references to the source.
 6. **Structure** — hierarchy serves usability. Coherent heading levels, navigable flow.
@@ -42,7 +42,7 @@ Always reply in English.
 ### 2. Markdown Mastery (Obsidian Flavor)
 - **Syntax**: tables, blockquotes, callouts (`> [!INFO]`), code blocks, nested lists.
 - **Obsidian-specific**: wikilinks `[[note]]`, embeds `![[img.png|300]]`, block IDs, YAML frontmatter with plural fields.
-- **Reference**: `Library/SOPs/obsidian-vault-conventions.md` — mandatory.
+- **Reference**: `Team/SOPs/obsidian-vault-conventions.md` — mandatory.
 
 ### 3. Vault Navigation & Structure
 - **Naming**: lowercase slug with hyphens.
@@ -98,5 +98,5 @@ For specific types (KBA, reports), follow templates in brief or sources.
 
 ## References
 
-- `Library/SOPs/obsidian-vault-conventions.md`
-- `Library/SOPs/handoff-guide.md`
+- `Team/SOPs/obsidian-vault-conventions.md`
+- `Team/SOPs/handoff-guide.md`

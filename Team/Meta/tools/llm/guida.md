@@ -438,7 +438,7 @@ Permette di iniettare variabili personalizzate nei template batch. Ogni `--var` 
 ```powershell
 # Inietta la variabile 'site' nel template
 uv run python -m tools.consulto \
-  --prompt Library/Prompts/kba/analisi-rischio-kba.md \
+  --prompt Team/Prompts/kba/analisi-rischio-kba.md \
   --input "Library/documents/*.md" \
   --var site=Lonigo \
   --var anno=2026
@@ -454,7 +454,7 @@ Mostra il payload (system prompt + prompt utente renderizzato) che verrebbe invi
 # Verifica il rendering di un batch (mostra solo il primo file)
 uv run python -m tools.consulto \
   --dry-run \
-  --prompt Library/Prompts/kba/analisi-rischio-kba.md \
+  --prompt Team/Prompts/kba/analisi-rischio-kba.md \
   --input "Library/documents/*.md" \
   --var site=Lonigo
 
@@ -565,7 +565,7 @@ uv run python -m tools.consulto --prompt <template.md> --input <file_o_glob> [--
 
 #### Formato template
 
-Esempio di file template `Library/Prompts/kba/analisi-rischio.md`:
+Esempio di file template `Team/Prompts/kba/analisi-rischio.md`:
 
 ```markdown
 ---
@@ -611,11 +611,11 @@ Durante l'elaborazione, il comando stampa su **stderr** il progresso nel formato
 **Esempio 1: Batch con salvataggio su file**
 
 ```powershell
-# Analizza tutti i documenti KBA, salva i risultati in Library/Handoff/
+# Analizza tutti i documenti KBA, salva i risultati in Library/Fucina/Handoff/
 uv run python -m tools.consulto \
-  --prompt Library/Prompts/kba/analisi-rischio.md \
+  --prompt Team/Prompts/kba/analisi-rischio.md \
   --input "Library/documents/*.md" \
-  --output Library/Handoff/risultati-analisi
+  --output Library/Fucina/Handoff/risultati-analisi
 ```
 
 Output:
@@ -632,7 +632,7 @@ Output:
 ```powershell
 # Analizza due file specifici, stampa i risultati concatenati su stdout
 uv run python -m tools.consulto \
-  --prompt Library/Prompts/kba/analisi.md \
+  --prompt Team/Prompts/kba/analisi.md \
   --input Library/documents/doc1.md Library/documents/doc2.md
 ```
 
@@ -655,18 +655,18 @@ Output (su stdout):
 
 ```powershell
 uv run python -m tools.consulto \
-  --prompt Library/Prompts/kba/analisi-rischio-kba.md \
+  --prompt Team/Prompts/kba/analisi-rischio-kba.md \
   --input "Library/documents/**/*.md" \
   --provider gemini \
   --model gemini-2.5-flash \
-  --output Library/Handoff/analisi
+  --output Library/Fucina/Handoff/analisi
 ```
 
 **Esempio 4: Batch con system prompt aggiuntivo**
 
 ```powershell
 uv run python -m tools.consulto \
-  --prompt Library/Prompts/team/test-profilo.md \
+  --prompt Team/Prompts/team/test-profilo.md \
   --input ".claude/agents/proteo.md" \
   --output "Library/deliverables/" \
   --system ".claude/agents/hermes.md"
@@ -695,7 +695,7 @@ La modalità interattiva si attiva automaticamente quando:
 #### Flusso
 
 1. **Scelta del prompt**:
-   - Il tool scopre automaticamente i file `.md` in `Library/Prompts/**/*.md`
+   - Il tool scopre automaticamente i file `.md` in `Team/Prompts/**/*.md`
    - Elenca i prompt disponibili con titolo e descrizione (da frontmatter YAML)
    - Opzione finale: "Testo libero" per scrivere il prompt direttamente
    - Default: "Testo libero"
@@ -758,13 +758,13 @@ Analisi di rischio per il documento nk-2400-0150:
 (Provider: grok | Modello: grok-4-1-fast-non-reasoning | Tempo: 2.3s)
 
 Salvare in file? [s/N]: s
-Percorso file [consulto-output-grok.txt]: Library/Handoff/analisi-nk-2400-0150.txt
+Percorso file [consulto-output-grok.txt]: Library/Fucina/Handoff/analisi-nk-2400-0150.txt
 Salvato in: C:\Users\dev\Desktop\TeamOlimpo\Team\Handoff\analisi-nk-2400-0150.txt
 ```
 
 #### Note sulla modalità interattiva
 
-- La directory `Library/Prompts/` viene scansionata automaticamente per scoprire i template
+- La directory `Team/Prompts/` viene scansionata automaticamente per scoprire i template
 - I template devono avere una sezione `## Prompt` (come nella modalità batch)
 - Se un template non è parsabile, viene saltato con un warning
 - Il batch interattivo (più file da un singolo template) chiede il provider/modello una volta sola

@@ -78,5 +78,5 @@ Always reply in English.
 
 ## References
 
-- `Library/SOPs/handoff-guide.md`
-- `Library/SOPs/obsidian-vault-conventions.md`
+- `Team/SOPs/handoff-guide.md`
+- `Team/SOPs/obsidian-vault-conventions.md`

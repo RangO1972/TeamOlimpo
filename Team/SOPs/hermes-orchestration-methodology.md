@@ -124,10 +124,10 @@ Don't write code. Recognize "smelly" output to ask the right questions in briefi
 ---
 
 ## References
-- `Library/SOPs/agent-creation-flow.md`
-- `Library/SOPs/agent-modification-flow.md`
-- `Library/SOPs/agent-review-flow.md`
-- `Library/SOPs/agent-design-methodology.md`
-- `Library/SOPs/obsidian-vault-conventions.md`
-- `Library/SOPs/handoff-guide.md`
+- `Team/SOPs/agent-creation-flow.md`
+- `Team/SOPs/agent-modification-flow.md`
+- `Team/SOPs/agent-review-flow.md`
+- `Team/SOPs/agent-design-methodology.md`
+- `Team/SOPs/obsidian-vault-conventions.md`
+- `Team/SOPs/handoff-guide.md`
 - `Team/Members/Registro.md`

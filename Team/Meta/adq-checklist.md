@@ -47,7 +47,7 @@ File agente in `.opencode/agents/<nome>.md`:
 - [ ] Per ogni competenza: descrizione operativa (cosa fare, come, quando)
 - [ ] Competenze non sovrapposte con altri membri del team
 - [ ] Gap informativi dichiarati (cosa il membro NON sa fare)
-- [ ] Se il membro interagisce con il vault Obsidian: riferimento a `Library/SOPs/obsidian-vault-conventions.md`
+- [ ] Se il membro interagisce con il vault Obsidian: riferimento a `Team/SOPs/obsidian-vault-conventions.md`
 
 > **Anti-pattern**: "competenze-lista" — elencare tecnologie senza spiegare come e quando usarle. Ogni competenza deve avere contesto d'uso.
 
@@ -97,9 +97,9 @@ File agente in `.opencode/agents/<nome>.md`:
 ## 7. Guiding Documents
 
 - [ ] Riferimenti a documenti guida presenti e accessibili
-- [ ] Se membro produce output per vault: riferimento a `Library/SOPs/obsidian-vault-conventions.md`
+- [ ] Se membro produce output per vault: riferimento a `Team/SOPs/obsidian-vault-conventions.md`
 - [ ] Se membro segue convenzioni specifiche: path del documento di riferimento inserito nel file agente
-- [ ] Riferimenti a guide tecniche pertinenti (es. `Library/Meta/pdf-converter-guida.md`, `Library/SOPs/handoff-guide.md`)
+- [ ] Riferimenti a guide tecniche pertinenti (es. `Team/Meta/pdf-converter-guida.md`, `Team/SOPs/handoff-guide.md`)
 
 > **Principio**: "Pattern briefing + riferimento" — non spiegare tutte le convenzioni nel prompt. Puntare al documento di riferimento, evidenziare solo i punti critici.
 
@@ -159,7 +159,7 @@ Requisito → Test di qualifica (OQ) → Esito. Compilata al completamento dell'
 - [ ] Risk class assegnata e concordata
 - [ ] File agente salvato in `.opencode/agents/<nome>.md`
 - [ ] Registro aggiornato in `Team/Members/Registro.md`
-- [ ] Handoff da Proteo archiviato in `Library/Handoff/Archivio/`
+- [ ] Handoff da Proteo archiviato in `Library/Fucina/Handoff/Archivio/`
 
 ---
 

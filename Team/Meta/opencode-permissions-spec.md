@@ -77,7 +77,7 @@ If unspecified, OpenCode starts from permissive defaults:
 permission:
   read: allow
   edit:
-    "Library/Handoff/**": "allow"
+    "Library/Fucina/Handoff/**": "allow"
     "Team/<AgentName>/**": "allow"
     "[ROLE_PATH/**]": "allow"
 ```
@@ -180,12 +180,12 @@ Every agent must always have at minimum:
 permission:
   read: allow
   edit:
-    "Library/Handoff/**": "allow"
+    "Library/Fucina/Handoff/**": "allow"
     "Team/<AgentName>/**": "allow"
     "[ROLE_PATH/**]": "allow"
 ```
 
 - `edit` path restriction is best practice. Flat `edit: allow` only for orchestrators.
-- Agent template: `Library/Meta/agent-template-bozza.md`
-- Design methodology: `Library/SOPs/agent-design-methodology.md`
+- Agent template: `Team/Meta/agent-template-bozza.md`
+- Design methodology: `Team/SOPs/agent-design-methodology.md`
 - Consult this file during agent creation to set correct permissions.

@@ -48,14 +48,14 @@ EXPECTED_DIRS=(
   ".opencode/agents"
   "Team"
   "Team/Members"
-  "Team/Handoff"
-  "Team/Hermes"
-  "Team/Fucina"
-  "Team/Inbox"
+  "Library/Fucina/Handoff"
+  "Library/Fucina/Hermes"
+  "Library/Fucina"
+  "Inbox"
   "Owner's Inbox"
   "Library"
-  "Library/Meta"
-  "Library/Prompts"
+  "Team/Meta"
+  "Team/Prompts"
   "Library/assets/images"
   "Library/documents"
   "Library/data"
@@ -78,15 +78,15 @@ EXPECTED_FILES=(
   "Team/Config.md"
   "Team/README.md"
   "Team/Members/Registro.md"
-  "Team/Hermes/Scratchpad.md"
-  "Library/Meta/strumenti-indice.md"
-  "Library/Meta/llm-guida.md"
-  "Library/Meta/hermes-cli-guida.md"
-  "Library/Meta/preflight-check-guida.md"
-  "Library/Meta/obsidian-vault.md"
-  "Library/Meta/flusso-creazione-membro.md"
-  "Library/Prompts/README.md"
-  "Library/Prompts/test-agent-profile.md"
+  "Library/Fucina/Hermes/Scratchpad.md"
+  "Team/Meta/strumenti-indice.md"
+  "Team/Meta/llm-guida.md"
+  "Team/Meta/hermes-cli-guida.md"
+  "Team/Meta/preflight-check-guida.md"
+  "Team/Meta/obsidian-vault.md"
+  "Team/Meta/flusso-creazione-membro.md"
+  "Team/Prompts/README.md"
+  "Team/Prompts/test-agent-profile.md"
   "tools/hermes_cli/cli.py"
   "tools/hermes_cli/generator.py"
   "tools/hermes_cli/validator.py"
@@ -216,7 +216,7 @@ header "7. HANDOFF CREATION & VALIDATION"
 
 # Helper: extract handoff path from output (handles absolute paths)
 extract_handoff_path() {
-  echo "$1" | tr -d '\n' | grep -oE '/Team/Handoff/[0-9]{4}/[0-9]{2}/[^/]+\.md' | head -1
+  echo "$1" | tr -d '\n' | grep -oE '/Library/Fucina/Handoff/[0-9]{4}/[0-9]{2}/[^/]+\.md' | head -1
 }
 
 # Create a test handoff (dry-run first)
@@ -381,7 +381,7 @@ check "python3 -c \"import json; c=json.load(open('$ROOT/opencode.json')); asser
 # =============================================================================
 header "13. HERMES SCRATCHPAD — PERSISTENT STATE"
 
-scratchpad="$ROOT/Team/Hermes/Scratchpad.md"
+scratchpad="$ROOT/Library/Fucina/Hermes/Scratchpad.md"
 check "test -f '$scratchpad'" "Hermes scratchpad exists"
 
 # Validate scratchpad structure

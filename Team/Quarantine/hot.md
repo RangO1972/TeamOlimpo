@@ -31,7 +31,7 @@ Ultimo aggiornamento: 2026-05-16
 ## Ultime operazioni
 
 1. **[2026-05-16]** Hermione — creata [[Library/Wiki/index.md]] + [[Library/Wiki/log.md]] + cartelle cronologiche `concepts/2026/05/`, `decisions/2026/05/`, `research/2026/05/`; seeding pagina [[Library/Wiki/concepts/2026/05/llm-wiki-pattern]]
-2. **[2026-05-16]** Calliope — creazione [[Library/Meta/hot.md]] (questo file)
+2. **[2026-05-16]** Calliope — creazione [[Team/Meta/hot.md]] (questo file)
 3. **[2026-05-16]** Clio — aggiornamento [[AGENTS.md]] (sezione Knowledge Wiki) e guide del team con riferimenti wiki (in corso)
 4. **[2026-05-11]** Metis — [[Handoff/2026-05-11_metis-hermes_analisi-costi-benefici-llm-wiki|analisi costi-benefici 5 miglioramenti LLM Wiki]]: priorità Fase 1 (wiki layer + hot.md) > Fase 2 (wiki-summary su ogni ricerca) > Fase 3 (linking automatico). Costo medio stimato: 300-800 token/sessione Fase 1, 50-150 token/sessione Fase 2
 5. **[2026-05-11]** Proteo — [[Handoff/2026-05-11_proteo-hermes_ricerca_llm-wiki-team-olimpo|ricerca LLM Wiki Karpathy]] completata: raccomandata struttura cronologica YYYY/MM/, index navigabile con summary, log operativo, e convenzione naming per pagine concettuali
@@ -47,7 +47,7 @@ Ultimo aggiornamento: 2026-05-16
 
 - [[Library/Wiki/index.md]]
 - [[Library/Wiki/log.md]]
-- [[Team/Hermes/Scratchpad.md]]
+- [[Library/Fucina/Hermes/Scratchpad.md]]
 - [[Handoff/2026-05-11_metis-hermes_analisi-costi-benefici-llm-wiki.md]]
 - [[Handoff/2026-05-11_proteo-hermes_ricerca_llm-wiki-team-olimpo.md]]
 - [[AGENTS.md]]

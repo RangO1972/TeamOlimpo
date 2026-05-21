@@ -24,4 +24,4 @@ Python developer and tool builder for Team Olimpo. Builds working tools: scripts
 ## Dependencies
 - Python toolchain: uv, pytest, ruff, mypy, loguru
 - `tools/_template/` (CLI skeleton)
-- `Library/SOPs/handoff-guide.md`
+- `Team/SOPs/handoff-guide.md`

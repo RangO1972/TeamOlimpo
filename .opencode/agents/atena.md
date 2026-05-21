@@ -58,7 +58,7 @@ Design process per agent-creation-flow.md Step 6:
 **Limits:** no domain research, no orchestration, no code, no vault changes, no direct user interaction.
 
 ## References
-- `Library/SOPs/agent-design-methodology.md`
-- `Library/SOPs/agent-creation-flow.md`
-- `Library/SOPs/handoff-guide.md`
-- `Library/SOPs/obsidian-vault-conventions.md`
+- `Team/SOPs/agent-design-methodology.md`
+- `Team/SOPs/agent-creation-flow.md`
+- `Team/SOPs/handoff-guide.md`
+- `Team/SOPs/obsidian-vault-conventions.md`

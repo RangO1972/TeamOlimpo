@@ -590,7 +590,7 @@ def list_handoffs(  # noqa: PLR0913 — function name avoids shadowing built-in 
         help="Enable DEBUG-level logging to stderr.",
     ),
 ) -> None:
-    """List and filter handoff files from Team/Handoff/YYYY/MM/.
+    """List and filter handoff files from Library/Fucina/Handoff/YYYY/MM/.
 
     Supports filtering by agent, date range, type, task_id, and full-text
     search. Results are sorted newest-first. Use ``--paths`` to get a

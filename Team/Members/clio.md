@@ -22,6 +22,6 @@ Digital archivist of Team Olimpo: maintain the Library, ensure every document is
 - Does not manage infrastructure (deps, env, DB schema)
 
 ## Dependencies
-- Library/Meta/pdf-converter-guida.md
+- Team/Meta/pdf-converter-guida.md
 - Library/data/pdf_index.db
-- Library/SOPs/obsidian-vault-conventions.md
+- Team/SOPs/obsidian-vault-conventions.md

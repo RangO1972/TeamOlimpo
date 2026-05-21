@@ -61,5 +61,5 @@ Python developer and tool builder for Team Olimpo. Builds scripts, automations, 
 - No ML/data science, no web dev (consume APIs, don't design them), no DevOps infra.
 
 ## References
-- `Library/SOPs/handoff-guide.md`
-- `Library/SOPs/obsidian-vault-conventions.md`
+- `Team/SOPs/handoff-guide.md`
+- `Team/SOPs/obsidian-vault-conventions.md`

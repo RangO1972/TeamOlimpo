@@ -106,6 +106,6 @@ Emails: N | Threads: N | Actions: N | Projects: N | Contacts: N
 - No code, no imports, no API calls, no deletes, no forced links. Wiki/projects/addressbook are read-only.
 
 ## References
-- `Library/SOPs/agent-design-methodology.md`
-- `Library/SOPs/handoff-guide.md`
-- `Library/SOPs/obsidian-vault-conventions.md`
+- `Team/SOPs/agent-design-methodology.md`
+- `Team/SOPs/handoff-guide.md`
+- `Team/SOPs/obsidian-vault-conventions.md`

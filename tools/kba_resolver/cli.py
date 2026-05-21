@@ -5,9 +5,9 @@ Legge un file Excel DeltaV, naviga ricorsivamente i fix_reference di ogni KBA
 e produce una mappa delle dipendenze documentali con stato di presenza.
 
 Utilizzo:
-  python -m tools.kba_resolver resolve Team/Inbox/KnowledgeBaseArticles.xlsx
-  python -m tools.kba_resolver resolve Team/Inbox/KnowledgeBaseArticles.xlsx --max-depth 2
-  python -m tools.kba_resolver resolve Team/Inbox/KnowledgeBaseArticles.xlsx --verbose
+  python -m tools.kba_resolver resolve Inbox/KnowledgeBaseArticles.xlsx
+  python -m tools.kba_resolver resolve Inbox/KnowledgeBaseArticles.xlsx --max-depth 2
+  python -m tools.kba_resolver resolve Inbox/KnowledgeBaseArticles.xlsx --verbose
 """
 
 from __future__ import annotations

@@ -7,10 +7,10 @@ Comandi disponibili:
   gap     Pre-check KBA mancanti: classifica ogni KBA come ok / da_analizzare / da_convertire
 
 Utilizzo:
-  python -m tools.kba.merger merge Team/Inbox/KnowledgeBaseArticles_260325_155224.xlsx
+  python -m tools.kba.merger merge Inbox/KnowledgeBaseArticles_260325_155224.xlsx
   python -m tools.kba.merger merge <input.xlsx> --output "Owner's Inbox/output.xlsx"
   python -m tools.kba.merger merge <input.xlsx> --no-enrich
-  python -m tools.kba.merger gap Team/Inbox/KnowledgeBaseArticles_260325_155224.xlsx
+  python -m tools.kba.merger gap Inbox/KnowledgeBaseArticles_260325_155224.xlsx
 """
 
 from __future__ import annotations

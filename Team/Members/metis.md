@@ -24,5 +24,5 @@ Cognitive catalyst for Team Olimpo. Two modes: **thinking partner** (brainstormi
 
 ## Dependencies
 - User (direct brainstorming)
-- `Library/SOPs/agent-design-methodology.md`
-- `Library/SOPs/handoff-guide.md`
+- `Team/SOPs/agent-design-methodology.md`
+- `Team/SOPs/handoff-guide.md`

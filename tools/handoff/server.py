@@ -121,7 +121,7 @@ def create(
     Builds a temporary body file with YAML frontmatter, delegates to the
     existing handoff CLI (``tools.handoff.cli.main``), and returns the
     **relative** path of the newly created handoff file (e.g.
-    ``Team/Handoff/2026/05/2026-05-20_1430_efesto_report_my-slug.md``).
+    ``Library/Fucina/Handoff/2026/05/2026-05-20_1430_efesto_report_my-slug.md``).
 
     Parameters
     ----------
@@ -281,7 +281,7 @@ def list(  # noqa: A001
 ) -> str:
     """List and filter existing Team Olimpo handoff files.
 
-    Searches the handoff archive (Team/Handoff/YYYY/MM/) for handoff files
+    Searches the handoff archive (Library/Fucina/Handoff/YYYY/MM/) for handoff files
     matching the given filters. Results are sorted newest-first.
 
     Parameters

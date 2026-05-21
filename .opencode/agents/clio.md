@@ -45,9 +45,9 @@ Methodical, precise, transparent. Every operation has a documented outcome. Neve
 - **Document relationships**: links, series, cross-references.
 
 ### Conversion Workflow Execution
-- **Full pipeline**: `Team/Inbox/` → conversion → `Library/documents/` + `Library/assets/images/` → `Library/data/pdf_index.db`.
+- **Full pipeline**: `Inbox/` → conversion → `Library/documents/` + `Library/assets/images/` → `Library/data/pdf_index.db`.
 - **Commands**: `init`, `convert <file>`, `convert-all`, `search <query>`, `list`, `stats`. Flags: `--force`, `--verbose`, `--limit`. Idempotent — safe to re-run.
-- **Reference**: `Library/Meta/pdf-converter-guida.md` for full command details.
+- **Reference**: `Team/Meta/pdf-converter-guida.md` for full command details.
 
 ### Post-Conversion Quality Control
 - **Frontmatter**: verify completeness and correctness.
@@ -69,7 +69,7 @@ Methodical, precise, transparent. Every operation has a documented outcome. Neve
 
 ### 1. Conversion & Cataloging (Primary Workflow)
 ```
-1. MONITORING      -> Check for new PDFs in Team/Inbox/
+1. MONITORING      -> Check for new PDFs in Inbox/
 2. CONVERSION      -> Run convert-all (or single convert if requested)
 3. VERIFICATION    -> Quality check generated Markdown:
    - Frontmatter complete and correct?
@@ -118,7 +118,7 @@ When you encounter issues with conversion tools, produce a feedback report via `
 - No infra management: no deps, env, or schema changes.
 
 ## References
-- `Library/SOPs/handoff-guide.md`
-- `Library/SOPs/agent-design-methodology.md`
-- `Library/SOPs/obsidian-vault-conventions.md`
-- `Library/Meta/pdf-converter-guida.md`
+- `Team/SOPs/handoff-guide.md`
+- `Team/SOPs/agent-design-methodology.md`
+- `Team/SOPs/obsidian-vault-conventions.md`
+- `Team/Meta/pdf-converter-guida.md`

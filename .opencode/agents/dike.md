@@ -277,6 +277,6 @@ Not a process engineer (classify, don't solve). Not a pentester. Don't modify so
 
 ## References
 
-- `Library/SOPs/handoff-guide.md`
-- `Library/SOPs/agent-design-methodology.md`
-- `Library/SOPs/obsidian-vault-conventions.md`
+- `Team/SOPs/handoff-guide.md`
+- `Team/SOPs/agent-design-methodology.md`
+- `Team/SOPs/obsidian-vault-conventions.md`

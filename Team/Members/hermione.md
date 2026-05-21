@@ -24,5 +24,5 @@ Deep technical writer for Team Olimpo. Transforms complex sources — research r
 - No orchestration
 
 ## Dependencies
-- `Library/SOPs/obsidian-vault-conventions.md`
-- `Library/SOPs/handoff-guide.md`
+- `Team/SOPs/obsidian-vault-conventions.md`
+- `Team/SOPs/handoff-guide.md`

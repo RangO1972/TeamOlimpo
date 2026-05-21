@@ -20,21 +20,21 @@ Flow to create a new agent: Hermes → Proteo (domain analysis) → Hermes → A
 ## Folder Structure
 
 - AI agent profiles are integrated in files under `.opencode/agents/` with additional metadata.
-- `Library/Handoff/YYYY/MM/` — Agent output files (handoff). Every agent invocation writes one file here. See `Library/SOPs/handoff-guide.md` for full spec.
-- `Team/Inbox/` — User PDFs to convert (input for pdf_converter)
+- `Library/Fucina/Handoff/YYYY/MM/` — Agent output files (handoff). Every agent invocation writes one file here. See `Team/SOPs/handoff-guide.md` for full spec.
+- `Inbox/` — User PDFs to convert (input for pdf_converter)
 - `Library/deliverables/` — Final outputs destined for the user
-- `Library/` — **Team Obsidian Vault** (see `Library/SOPs/obsidian-vault-conventions.md` for conventions)
+- `Library/` — **Team Obsidian Vault** (see `Team/SOPs/obsidian-vault-conventions.md` for conventions)
   - `Library/documents/` — Markdown files converted from PDFs
   - `Library/assets/images/` — Images extracted from PDFs, organized by document slug
   - `Library/data/` — SQLite database (`pdf_index.db`), converter logs, KBA catalog
-  - `Library/Meta/` — System documentation: vault conventions, tool guides
+  - `Team/Meta/` — System documentation: vault conventions, tool guides
   - `Library/Wiki/` — **Team Olimpo Knowledge Wiki** (LLM Wiki pattern). Compiled and interconnected knowledge: concepts, decisions, research. Chronological structure YYYY/MM/.
     - `index.md` — Navigable semantic index
     - `log.md` — Chronological wiki operations log
     - `concepts/YYYY/MM/` — Persistent conceptual pages
     - `decisions/YYYY/MM/` — Architectural decisions
     - `research/YYYY/MM/` — Completed research summaries
-- `tools/pdf_converter/` — Python module for PDF → Markdown conversion (guide: `Library/Meta/pdf-converter-guida.md`)
+- `tools/pdf_converter/` — Python module for PDF → Markdown conversion (guide: `Team/Meta/pdf-converter-guida.md`)
 - `opencode.json` (root) — Main OpenCode agent configuration
 - `.opencode/agents/` — Individual agent system prompt files
 
@@ -49,7 +49,7 @@ Flow to create a new agent: Hermes → Proteo (domain analysis) → Hermes → A
 
 Every worker agent invocation **must** end by writing one handoff file before returning control to Hermes. **No exceptions. Applies to all agents except Hermes (orchestrator).**
 
-Full specification: `Library/SOPs/handoff-guide.md`
+Full specification: `Team/SOPs/handoff-guide.md`
 
 ---
 
@@ -63,7 +63,7 @@ Agent files in `.opencode/agents/`.
 - Trigger: every user request — Hermes is the single entry point, always delegates
 - Strong: task decomposition, parallel vs serial routing, plan approval for complex tasks, scratchpad state management
 - Does NOT: execute tasks directly — delegates to the right agent
-- Output: synthesized result to user; state in `Team/Hermes/Scratchpad.md`
+- Output: synthesized result to user; state in `Library/Fucina/Hermes/Scratchpad.md`
 
 ---
 
@@ -92,7 +92,7 @@ Agent files in `.opencode/agents/`.
 ---
 
 **clio** — Vault Archivist & QC
-- Trigger: PDF conversion pipeline (Team/Inbox → Library), post-conversion quality check, DB-filesystem consistency audit, OpenCode agent conformity validation after Atena creates an agent
+- Trigger: PDF conversion pipeline (Inbox → Library), post-conversion quality check, DB-filesystem consistency audit, OpenCode agent conformity validation after Atena creates an agent
 - Strong: pdf_converter workflow, frontmatter/tag/image-link validation, Obsidian conventions enforcement, KBA catalog execution
 - Does NOT: write rich documents (→ Hermione), content interpretation, Python debugging (→ Efesto), project decisions
 - Output: enriched docs edited in-place in `Library/documents/`

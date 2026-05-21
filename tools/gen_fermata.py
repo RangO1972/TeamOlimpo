@@ -124,7 +124,7 @@ def build_merged_items(entries):
 
 # Load CSV
 rows = []
-with open(BASE / "Team/Inbox/KBA_Merged_010426_101532.csv", newline='', encoding='utf-8-sig') as f:
+with open(BASE / "Inbox/KBA_Merged_010426_101532.csv", newline='', encoding='utf-8-sig') as f:
     reader = csv.DictReader(f)
     for row in reader:
         rows.append(row)

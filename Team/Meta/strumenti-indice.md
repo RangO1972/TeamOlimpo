@@ -38,16 +38,16 @@ Riepilogo di tutti gli script e moduli Python disponibili nel repository. Per og
 
 ```powershell
 # Flusso completo
-uv run python -m tools.kba_pipeline run Team/Inbox/KBA.xlsx
+uv run python -m tools.kba_pipeline run Inbox/KBA.xlsx
 
 # Saltare la conversione (PDF già convertiti)
-uv run python -m tools.kba_pipeline run Team/Inbox/KBA.xlsx --skip-convert
+uv run python -m tools.kba_pipeline run Inbox/KBA.xlsx --skip-convert
 
 # Ri-analizzare con modello aggiornato (solo record stale)
-uv run python -m tools.kba_pipeline run Team/Inbox/KBA.xlsx --skip-convert --force-analyze --model-analyze grok-4.20-0309-reasoning
+uv run python -m tools.kba_pipeline run Inbox/KBA.xlsx --skip-convert --force-analyze --model-analyze grok-4.20-0309-reasoning
 
 # Merge rapido senza AI
-uv run python -m tools.kba_pipeline run Team/Inbox/KBA.xlsx --skip-convert --skip-analyze --no-ai-merge
+uv run python -m tools.kba_pipeline run Inbox/KBA.xlsx --skip-convert --skip-analyze --no-ai-merge
 ```
 
 → Guida completa: [[tools/kba/pipeline/guida]]
@@ -88,7 +88,7 @@ Permette di interrogare LLM di terze parti (Grok e Gemini) da riga di comando pe
 **Versione**: 0.1.0
 **Dipendenze principali**: `pymupdf`, `pymupdf4llm`, `pydantic`, `loguru`, `rich`
 
-Converte i PDF presenti in `Team/Inbox/` in file Markdown compatibili con il vault Obsidian, salva le immagini estratte in `Library/assets/images/`, e indicizza ogni documento in un database SQLite per la ricerca full-text.
+Converte i PDF presenti in `Inbox/` in file Markdown compatibili con il vault Obsidian, salva le immagini estratte in `Library/assets/images/`, e indicizza ogni documento in un database SQLite per la ricerca full-text.
 
 **Comandi disponibili**:
 
@@ -206,7 +206,7 @@ uv run python -m tools.kba_fermata "Library/deliverables/KBA_Merged_xxx.xlsx"
 **Dipendenze principali**: `openpyxl`, `loguru`, `rich`, `tools.kba_reporter`, `tools.consulto`
 
 Genera il documento per il meeting cliente da KBA con `{WIP}` in Stefano's Notes.
-Chiama Grok con il prompt Dike (`Library/Prompts/kba/report-meeting.md`) e produce
+Chiama Grok con il prompt Dike (`Team/Prompts/kba/report-meeting.md`) e produce
 un Markdown in italiano colloquiale.
 
 **Uso**:
@@ -227,7 +227,7 @@ uv run python -m tools.kba_meeting "Library/deliverables/KBA_Merged_xxx.xlsx" --
 **Versione**: 0.1.0
 **Dipendenze principali**: `pyyaml`, `loguru`, `rich`
 
-Automatizza la gestione del sistema handoff del Team Olimpo: sposta i file con `stato: completato` da `Library/Handoff/` a `Library/Handoff/Archivio/` e rigenera dinamicamente il `Registro.md` con l'indice centralizzato.
+Automatizza la gestione del sistema handoff del Team Olimpo: sposta i file con `stato: completato` da `Library/Fucina/Handoff/` a `Library/Fucina/Handoff/Archivio/` e rigenera dinamicamente il `Registro.md` con l'indice centralizzato.
 
 **Comandi disponibili**:
 
@@ -264,4 +264,4 @@ Per creare un nuovo tool: copia `tools/_template/`, rinomina la cartella, implem
 
 ## Aggiungere uno strumento a questo indice
 
-Quando Efesto crea un nuovo script o modulo, Clio aggiunge una riga a questa tabella e crea il file di guida dettagliata corrispondente in `Library/Meta/`.
+Quando Efesto crea un nuovo script o modulo, Clio aggiunge una riga a questa tabella e crea il file di guida dettagliata corrispondente in `Team/Meta/`.

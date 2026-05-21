@@ -66,8 +66,8 @@ Max 2 cycles of Step 5→6→7 per gap analysis. After 2 fails → escalate to u
 ---
 
 ## References
-- `Library/SOPs/agent-design-methodology.md`
-- `Library/SOPs/agent-review-flow.md`
-- `Library/SOPs/agent-creation-flow.md`
-- `Library/SOPs/handoff-guide.md`
+- `Team/SOPs/agent-design-methodology.md`
+- `Team/SOPs/agent-review-flow.md`
+- `Team/SOPs/agent-creation-flow.md`
+- `Team/SOPs/handoff-guide.md`
 - `Team/Members/Registro.md`

@@ -232,7 +232,7 @@ def cmd_convert_all(
     inbox_path: Path = typer.Option(
         None,
         "--inbox", "-i",
-        help="Cartella sorgente PDF (default: Team/Inbox/).",
+        help="Cartella sorgente PDF (default: Inbox/).",
     ),
     force: bool = typer.Option(False, "--force", "-f", help="Riconverte tutti i PDF."),
 ) -> None:

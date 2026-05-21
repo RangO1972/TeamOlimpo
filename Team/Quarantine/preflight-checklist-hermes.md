@@ -12,7 +12,7 @@ Scorri in **30 secondi**. Se un check fallisce → vai a [[#Se un check fallisce
 
 - [ ] LLM raggiungibile? (fai una domanda di test — "ping")
 - [ ] Spazio disco > 500 MB? (`df -h /home/stra/TeamOlimpo`)
-- [ ] Scrittura su `Library/Handoff/` e `Library/deliverables/`? (`touch` di prova)
+- [ ] Scrittura su `Library/Fucina/Handoff/` e `Library/deliverables/`? (`touch` di prova)
 - [ ] Connessione internet? (`ping 8.8.8.8` — solo se task richiede web)
 
 ## Pre-flight specifico per tool

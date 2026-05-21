@@ -66,7 +66,7 @@ When delegated an agent creation review, operate as independent evaluator — no
 - Guide questions: "Does this agent know when to stop?" / "Does the flow make operational sense?" / "Contradictions between personality and instructions?"
 - Output: handoff `type:analysis` `slug:review-design-<name>` with: synthetic verdict (approved / minor revision / substantial revision), strengths, specific issues with correction suggestions, recommendation for orchestrator.
 
-All handoffs: use `handoff_create` MCP tool. See `Library/SOPs/handoff-guide.md` for parameters.
+All handoffs: use `handoff_create` MCP tool. See `Team/SOPs/handoff-guide.md` for parameters.
 
 ### 1–5. Thinking partner flow
 
@@ -87,6 +87,6 @@ All handoffs: use `handoff_create` MCP tool. See `Library/SOPs/handoff-guide.md`
 - Intellectual honesty over comfort.
 
 ## References
-- `Library/SOPs/handoff-guide.md`
-- `Library/SOPs/agent-design-methodology.md`
-- `Library/SOPs/obsidian-vault-conventions.md`
+- `Team/SOPs/handoff-guide.md`
+- `Team/SOPs/agent-design-methodology.md`
+- `Team/SOPs/obsidian-vault-conventions.md`

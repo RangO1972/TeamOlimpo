@@ -77,7 +77,7 @@ uv run python -m tools.pdf_converter init
 ```
 
 **Cosa crea**:
-- `Team/Inbox/` — cartella dove depositare i PDF da convertire
+- `Inbox/` — cartella dove depositare i PDF da convertire
 - `Library/documents/` — output Markdown
 - `Library/assets/images/` — output immagini
 - `Library/data/pdf_index.db` — database SQLite
@@ -91,8 +91,8 @@ L'operazione è idempotente: eseguirla di nuovo non sovrascrive nulla.
 Converte un file PDF specifico.
 
 ```powershell
-uv run python -m tools.pdf_converter convert "Team/Inbox/documento.pdf"
-uv run python -m tools.pdf_converter convert "Team/Inbox/documento.pdf" --force
+uv run python -m tools.pdf_converter convert "Inbox/documento.pdf"
+uv run python -m tools.pdf_converter convert "Inbox/documento.pdf" --force
 ```
 
 **Parametri**:
@@ -116,7 +116,7 @@ Completato: Library/documents/documento.md (3 immagini, 1.24s)
 
 ### `convert-all` — Conversione batch
 
-Converte tutti i PDF presenti in `Team/Inbox/` che non sono ancora stati convertiti.
+Converte tutti i PDF presenti in `Inbox/` che non sono ancora stati convertiti.
 
 ```powershell
 uv run python -m tools.pdf_converter convert-all
@@ -130,7 +130,7 @@ uv run python -m tools.pdf_converter convert-all --force
 | `--force` / `-f` | no | Riconverte tutti i PDF, anche quelli già nel database |
 
 **Comportamento**:
-- Scansiona `Team/Inbox/*.pdf` (non ricorsivo)
+- Scansiona `Inbox/*.pdf` (non ricorsivo)
 - Salta automaticamente i PDF già convertiti con successo
 - Mostra una progress bar durante l'elaborazione
 - Al termine mostra il riepilogo: completati / errori

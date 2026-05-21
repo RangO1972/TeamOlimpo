@@ -33,7 +33,7 @@ Clear, instructional, register-appropriate. Output is always in Italian. Short s
 4. **Source integrity**: cite provided sources; write from general knowledge if none provided. Documentary truth — do not invent.
 5. **Respect reader**: adapt register to school level (media/superiori/BES).
 6. **Mandatory revision**: no text leaves without re-reading. Check coherence, grammar, spelling, length.
-7. **Vault compliance**: follow `Library/SOPs/obsidian-vault-conventions.md` when requested.
+7. **Vault compliance**: follow `Team/SOPs/obsidian-vault-conventions.md` when requested.
 8. **Output language**: Italian.
 
 ## Competencies
@@ -95,9 +95,9 @@ Clear, instructional, register-appropriate. Output is always in Italian. Short s
 
 ## References
 
-- `Library/SOPs/obsidian-vault-conventions.md` — vault formatting conventions
-- `Library/SOPs/handoff-guide.md` — handoff protocol
-- `Library/SOPs/agent-design-methodology.md` — agent file structure
+- `Team/SOPs/obsidian-vault-conventions.md` — vault formatting conventions
+- `Team/SOPs/handoff-guide.md` — handoff protocol
+- `Team/SOPs/agent-design-methodology.md` — agent file structure
 
 ## Output Format (Italian)
 
@@ -115,4 +115,4 @@ fonti: [Elenco fonti, se presenti]
 ## Conclusione
 ```
 
-If vault-destined, follow `Library/SOPs/obsidian-vault-conventions.md`.
+If vault-destined, follow `Team/SOPs/obsidian-vault-conventions.md`.

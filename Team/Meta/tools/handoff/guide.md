@@ -18,14 +18,14 @@ Body is free Markdown after the `---`.
 
 What happens:
 - filename built from date/time/agent/type/slug
-- handoff written to `Library/Handoff/YYYY/MM/`
+- handoff written to `Library/Fucina/Handoff/YYYY/MM/`
 - body file deleted
 
 ---
 
 ## Procedure — full SOP
 
-The canonical step-by-step procedure (body → tool → done) is in `Library/SOPs/handoff-guide.md`.
+The canonical step-by-step procedure (body → tool → done) is in `Team/SOPs/handoff-guide.md`.
 
 ---
 
@@ -63,4 +63,4 @@ Run:
 uv run python -m tools.handoff main --body Team/efesto/hf.md
 ```
 
-Result: `Library/Handoff/2026/05/2026-05-20_1432_efesto_report_fixed-loguru-import-in-pdf-converter.md`
+Result: `Library/Fucina/Handoff/2026/05/2026-05-20_1432_efesto_report_fixed-loguru-import-in-pdf-converter.md`

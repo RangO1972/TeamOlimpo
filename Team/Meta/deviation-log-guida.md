@@ -225,7 +225,7 @@ Per trovare tutte le deviazioni nel sistema:
 
 ```bash
 # Cerca tutti i file handoff con deviazione
-grep -r "deviazione:" Library/Handoff/ --include="*.md" -l
+grep -r "deviazione:" Library/Fucina/Handoff/ --include="*.md" -l
 ```
 
 Per filtrare per tipo o esito, cerca nel frontmatter.

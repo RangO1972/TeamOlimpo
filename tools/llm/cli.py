@@ -18,7 +18,7 @@ Utilizzo:
   python -m tools.llm --stdin < file.txt
   python -m tools.llm models
   python -m tools.llm models --provider grok
-  python -m tools.llm --prompt Library/Prompts/kba/analisi-rischio.md --input Library/documents/*.md
+  python -m tools.llm --prompt Team/Prompts/kba/analisi-rischio.md --input Library/documents/*.md
   python -m tools.llm -i
 """
 

@@ -6,7 +6,7 @@ aliases: [email vault, vault email, addressbook]
 
 # Mapping Vault Email — Architettura e Regole
 
-> **ℹ️ Nota**: il vault email ora è integrato nel vault principale (`Library/emails/`). Non ha niente a che fare con `Team/Inbox/` (che è per documenti/PDF grezzi).
+> **ℹ️ Nota**: il vault email ora è integrato nel vault principale (`Library/emails/`). Non ha niente a che fare con `Inbox/` (che è per documenti/PDF grezzi).
 
 ---
 
@@ -28,7 +28,7 @@ PROJECT_ROOT/
 │
 ├── tools/email_processor/          ← Tool Python per import/elaborazione
 ├── Library/                        ← VAULT PRINCIPALE Team Olimpo (NON toccato dalle email)
-└── Team/Inbox/                     ← Documenti/PDF in ingresso (NON email)
+└── Inbox/                     ← Documenti/PDF in ingresso (NON email)
 ```
 
 **Principio**: il vault email è integrato in `Library/emails/`. Le operazioni di import, elaborazione e catalogazione contatti avvengono tutte dentro `Library/emails/`.

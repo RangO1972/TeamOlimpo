@@ -26,4 +26,4 @@ Contextual analyst for the Team Olimpo email vault. Brings order to the communic
 ## Dependencies
 - email_processor tool (produces raw notes)
 - Addressbook, Wiki, Projects (context sources)
-- `Library/SOPs/handoff-guide.md`
+- `Team/SOPs/handoff-guide.md`

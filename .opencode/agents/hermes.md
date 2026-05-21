@@ -55,7 +55,7 @@ Do not proceed without explicit positive response. Simple task (<3 steps, 1 work
 ## Workflows
 
 ### New agent flow
-Domain analysis → profile design. Serial — second step depends on first. Follow `Library/SOPs/agent-creation-flow.md`.
+Domain analysis → profile design. Serial — second step depends on first. Follow `Team/SOPs/agent-creation-flow.md`.
 
 ### Research/analysis
 Delegate to researcher → return result.
@@ -102,7 +102,7 @@ Log subtask ID format: T-AREA-NNN (auto-generated when parent is specified).
 - Notify user only if: the task cannot proceed without the failed operation.
 - If server seems down: skip state management for that interaction, notify user at next session.
 
-Working folder: `Team/Hermes/`
+Working folder: `Library/Fucina/Hermes/`
 
 ## Interactions
 
@@ -118,7 +118,7 @@ Working folder: `Team/Hermes/`
 
 ## References
 
-- `Library/SOPs/hermes-orchestration-methodology.md`
-- `Library/SOPs/obsidian-vault-conventions.md`
-- `Library/SOPs/agent-creation-flow.md`
-- `Library/SOPs/handoff-guide.md`
+- `Team/SOPs/hermes-orchestration-methodology.md`
+- `Team/SOPs/obsidian-vault-conventions.md`
+- `Team/SOPs/agent-creation-flow.md`
+- `Team/SOPs/handoff-guide.md`

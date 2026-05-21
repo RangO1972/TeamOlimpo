@@ -1,4 +1,4 @@
-"""Migrate existing tasks from ``Team/Hermes/Scratchpad.md`` to ``state.yaml``.
+"""Migrate existing tasks from ``Library/Fucina/Hermes/Scratchpad.md`` to ``state.yaml``.
 
 Giorno 0 migration: reads the Scratchpad Markdown file (YAML frontmatter +
 body task notation) and produces a ``state.yaml`` snapshot that preserves
@@ -33,11 +33,11 @@ from tools.taskmanager.state import DEFAULT_STATE, StateStore
 
 
 def _find_scratchpad(project_root: Path) -> Path | None:
-    """Locate ``Team/Hermes/Scratchpad.md`` relative to project root.
+    """Locate ``Library/Fucina/Hermes/Scratchpad.md`` relative to project root.
 
     Returns the path, or ``None`` if the file does not exist.
     """
-    path = project_root / "Team" / "Hermes" / "Scratchpad.md"
+    path = project_root / "Library" / "Fucina" / "Hermes" / "Scratchpad.md"
     if path.is_file():
         return path
     return None
@@ -298,7 +298,7 @@ def _compute_counters(tasks_dict: dict[str, Any]) -> dict[str, int]:
 def migrate_from_scratchpad(store: StateStore) -> dict[str, Any]:
     """Run the Giorno 0 migration: Scratchpad -> state.yaml.
 
-    Reads ``Team/Hermes/Scratchpad.md``, extracts all tasks, and writes
+    Reads ``Library/Fucina/Hermes/Scratchpad.md``, extracts all tasks, and writes
     them into the provided ``StateStore``.
 
     Steps:

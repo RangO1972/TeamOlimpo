@@ -14,7 +14,7 @@ a provider AI esterni (Grok, Gemini). Il campo **invocato_da** indica chi lo usa
 ## Struttura
 
 ```
-Library/Prompts/
+Team/Prompts/
   kba/      — prompt operativi per il workflow DeltaV KBA
   team/     — prompt per la gestione e il test degli agenti del Team Olimpo
 ```
@@ -39,8 +39,8 @@ Usati nella pipeline di analisi e gestione KBA Emerson DeltaV.
 ```powershell
 uv run python -m tools.consulto --provider grok --model grok-4.20-0309-reasoning `
   --system ".claude/agents/dike.md" `
-  --prompt "Library/Prompts/kba/analisi-rischio-kba.md" `
-  --input "Library/documents/<slug>.md" --output "Library/Handoff/kba_batch/"
+  --prompt "Team/Prompts/kba/analisi-rischio-kba.md" `
+  --input "Library/documents/<slug>.md" --output "Library/Fucina/Handoff/kba_batch/"
 ```
 
 ---
@@ -125,8 +125,8 @@ Usati da Hermes per la gestione del ciclo di vita degli agenti del Team Olimpo.
 
 ```powershell
 uv run python -m tools.consulto --provider grok --model grok-4.20-0309-reasoning `
-  --prompt "Library/Prompts/team/valutazione-ricerca.md" `
-  --input "Team/Fucina/YYYY-MM-DD_ricerca_MEMBRO_vN.md" --output "Team/Fucina/"
+  --prompt "Team/Prompts/team/valutazione-ricerca.md" `
+  --input "Library/Fucina/YYYY-MM-DD_ricerca_MEMBRO_vN.md" --output "Library/Fucina/"
 ```
 
 ---
@@ -144,9 +144,9 @@ uv run python -m tools.consulto --provider grok --model grok-4.20-0309-reasoning
 
 ```powershell
 uv run python -m tools.consulto --provider grok --model grok-4.20-0309-reasoning `
-  --prompt "Library/Prompts/team/valutazione-profilo.md" `
-  --input ".claude/agents/MEMBRO.md" "Team/Fucina/YYYY-MM-DD_profilo_MEMBRO_vN.md" `
-  --merge --output "Team/Fucina/"
+  --prompt "Team/Prompts/team/valutazione-profilo.md" `
+  --input ".claude/agents/MEMBRO.md" "Library/Fucina/YYYY-MM-DD_profilo_MEMBRO_vN.md" `
+  --merge --output "Library/Fucina/"
 ```
 
 ---
@@ -164,7 +164,7 @@ uv run python -m tools.consulto --provider grok --model grok-4.20-0309-reasoning
 
 ```powershell
 uv run python -m tools.consulto --provider grok --model grok-4.20-0309-reasoning `
-  --prompt "Library/Prompts/team/test-profilo.md" `
+  --prompt "Team/Prompts/team/test-profilo.md" `
   --input ".claude/agents/MEMBRO.md" --output "Library/deliverables/"
 ```
 
@@ -175,6 +175,6 @@ uv run python -m tools.consulto --provider grok --model grok-4.20-0309-reasoning
 - **Ogni prompt ha frontmatter** con `title`, `tags`, `versione`, `autore`, `invocato_da`, `placeholder`
 - **Bump versione** se il framework o i criteri cambiano — rieseguire test su 3-5 input noti
 - **invocato_da** deve sempre essere aggiornato se lo script che usa il prompt cambia path
-- **Prompt deprecati**: spostare in `Library/Prompts/_archivio/` invece di cancellare
+- **Prompt deprecati**: spostare in `Team/Prompts/_archivio/` invece di cancellare
 
 *Ultimo aggiornamento: 2026-04-03*

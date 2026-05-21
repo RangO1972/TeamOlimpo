@@ -92,6 +92,6 @@ Esegui con `uv run pytest`.
 
 ## Riferimenti
 
-- Sistema Keraunos: Library/Handoff/2026-05-12_calliope-prompt-system.md
-- Report Proteo: Library/Handoff/2026-05-12_proteo-team_report_strategia-ia-2026.md
-- Analisi Metis: Library/Handoff/2026-05-12_metis-analisi-strategia-ia.md
+- Sistema Keraunos: Library/Fucina/Handoff/2026-05-12_calliope-prompt-system.md
+- Report Proteo: Library/Fucina/Handoff/2026-05-12_proteo-team_report_strategia-ia-2026.md
+- Analisi Metis: Library/Fucina/Handoff/2026-05-12_metis-analisi-strategia-ia.md

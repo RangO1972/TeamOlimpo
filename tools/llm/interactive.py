@@ -2,12 +2,12 @@
 Modalita' interattiva del tool llm.
 
 Presenta un menu testuale che guida l'utente nella scelta di:
-- Un prompt template da Library/Prompts/ oppure testo libero
+- Un prompt template da Team/Prompts/ oppure testo libero
 - File di input (opzionale, per batch)
 - Provider e modello
 - Salvataggio del risultato
 
-Il discovery dei prompt avviene scansionando Library/Prompts/**/*.md
+Il discovery dei prompt avviene scansionando Team/Prompts/**/*.md
 e leggendo il frontmatter YAML (campi 'title' e 'description').
 """
 

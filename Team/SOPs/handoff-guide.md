@@ -149,4 +149,4 @@ deviation:
 
 ## Tool Reference
 
-Full CLI usage (`list`, filters, `--json`, `--paths`): `Library/Meta/tools/handoff/guide.md`
+Full CLI usage (`list`, filters, `--json`, `--paths`): `Team/Meta/tools/handoff/guide.md`

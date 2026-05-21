@@ -19,10 +19,10 @@ prodotto da Atena, confrontandolo con il precedente.
 uv run python -m tools.consulto `
   --provider grok `
   --model grok-4.20-0309-reasoning `
-  --prompt "Library/Prompts/team/valutazione-profilo.md" `
-  --input ".claude/agents/MEMBRO.md" "Team/Fucina/YYYY-MM-DD_profilo_MEMBRO_vN.md" `
+  --prompt "Team/Prompts/team/valutazione-profilo.md" `
+  --input ".claude/agents/MEMBRO.md" "Library/Fucina/YYYY-MM-DD_profilo_MEMBRO_vN.md" `
   --merge `
-  --output "Team/Fucina/"
+  --output "Library/Fucina/"
 ```
 
 ## Prompt

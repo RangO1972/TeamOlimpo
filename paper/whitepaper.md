@@ -185,7 +185,7 @@ Inter-agent communication in Team Olimpo is mediated exclusively through a **fil
 
 Handoff files follow a strict naming convention and contain YAML frontmatter:
 
-**Path:** `Library/Handoff/YYYY/MM/data_mittente-destinatario_titolo.md`
+**Path:** `Library/Fucina/Handoff/YYYY/MM/data_mittente-destinatario_titolo.md`
 
 **Frontmatter fields:**
 - `date`: ISO date of creation
@@ -209,11 +209,11 @@ sequenceDiagram
     U->>H: Task request
     H->>H: Task decomposition
     H->>A: Handoff file (delegation)
-    Note over H,A: Library/Handoff/YYYY/MM/hermes-agent_title.md
+    Note over H,A: Library/Fucina/Handoff/YYYY/MM/hermes-agent_title.md
     
     A->>A: Execute task
     A->>H: Handoff file (result)
-    Note over A,H: Library/Handoff/YYYY/MM/agent-hermes_title.md
+    Note over A,H: Library/Fucina/Handoff/YYYY/MM/agent-hermes_title.md
     
     H->>Q: Send for quality verification
     Q->>Q: Quality checklist
@@ -528,7 +528,7 @@ The key differences from Karpathy's original single-agent pattern are:
 
 ### 7.3 hot.md: Context Cache
 
-Complementing the wiki, `Library/Meta/hot.md` serves as an ultra-lightweight (~400 tokens) context cache that maintains current team state across sessions:
+Complementing the wiki, `Team/Meta/hot.md` serves as an ultra-lightweight (~400 tokens) context cache that maintains current team state across sessions:
 
 - Current project and active tasks
 - Recent decisions (with date and status)

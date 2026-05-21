@@ -126,7 +126,7 @@ def main() -> None:
     args = parser.parse_args()
 
     # Percorsi hardcoded come richiesto (in produzione, considerare config esterna)
-    source_root = Path('/home/stra/TeamOlimpo/Team/Inbox/working')
+    source_root = Path('/home/stra/TeamOlimpo/Inbox/working')
     dest_root = Path('/home/stra/TeamOlimpo/vaults/email')
 
     try:

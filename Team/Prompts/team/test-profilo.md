@@ -19,7 +19,7 @@ completo di creazione. Utile per audit periodici o dopo modifiche puntuali.
 uv run python -m tools.consulto `
   --provider grok `
   --model grok-4.20-0309-reasoning `
-  --prompt "Library/Prompts/team/test-profilo.md" `
+  --prompt "Team/Prompts/team/test-profilo.md" `
   --input ".claude/agents/MEMBRO.md" `
   --output "Library/deliverables/"
 ```

@@ -186,7 +186,7 @@ La comunicazione tra agenti in Team Olimpo è mediata esclusivamente da un **pro
 
 I file di handoff seguono una convenzione di naming rigorosa e contengono frontmatter YAML:
 
-**Percorso:** `Library/Handoff/YYYY/MM/data_mittente-destinatario_titolo.md`
+**Percorso:** `Library/Fucina/Handoff/YYYY/MM/data_mittente-destinatario_titolo.md`
 
 **Campi del frontmatter:**
 - `date`: data ISO di creazione
@@ -210,11 +210,11 @@ sequenceDiagram
     U->>H: Task request
     H->>H: Task decomposition
     H->>A: Handoff file (delegation)
-    Note over H,A: Library/Handoff/YYYY/MM/hermes-agent_title.md
+    Note over H,A: Library/Fucina/Handoff/YYYY/MM/hermes-agent_title.md
     
     A->>A: Execute task
     A->>H: Handoff file (result)
-    Note over A,H: Library/Handoff/YYYY/MM/agent-hermes_title.md
+    Note over A,H: Library/Fucina/Handoff/YYYY/MM/agent-hermes_title.md
     
     H->>Q: Send for quality verification
     Q->>Q: Quality checklist
@@ -529,7 +529,7 @@ Le differenze chiave rispetto al pattern originale a singolo agente di Karpathy 
 
 ### 7.3 hot.md: Cache di Contesto
 
-A complemento del wiki, `Library/Meta/hot.md` funge da cache di contesto ultra-leggera (~400 token) che mantiene lo stato corrente del team tra le sessioni:
+A complemento del wiki, `Team/Meta/hot.md` funge da cache di contesto ultra-leggera (~400 token) che mantiene lo stato corrente del team tra le sessioni:
 
 - Progetto corrente e compiti attivi
 - Decisioni recenti (con data e stato)

@@ -23,4 +23,4 @@ Senior researcher and domain analyst. Conducts multi-source research and produce
 
 ## Dependencies
 - WebSearch, WebFetch (research tools)
-- `Library/SOPs/handoff-guide.md`
+- `Team/SOPs/handoff-guide.md`

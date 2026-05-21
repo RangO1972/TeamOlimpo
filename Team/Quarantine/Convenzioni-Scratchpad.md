@@ -51,8 +51,8 @@ Team/<NomeAgente>/
 1. **Solo `Scratchpad.md` e' obbligatorio.** Le altre cartelle si creano solo se servono.
 2. **Niente file binari.** Solo Markdown e YAML.
 3. **Naming coerente.** I file nelle sottocartelle usano: `<data>_<breve-descrizione>.md` (es. `2026-05-04_analisi-kba-batch.md`).
-4. **Archiviazione periodica.** I task completati vanno spostati in `Tasks/completed/` o in `Library/Handoff/Archivio/` se sono handoff verso altri membri.
-5. **No duplicazione con Handoff.** Se un file deve essere letto da un altro membro, va in `Library/Handoff/`, non in `Team/<Agente>/Notes/`.
+4. **Archiviazione periodica.** I task completati vanno spostati in `Tasks/completed/` o in `Library/Fucina/Handoff/Archivio/` se sono handoff verso altri membri.
+5. **No duplicazione con Handoff.** Se un file deve essere letto da un altro membro, va in `Library/Fucina/Handoff/`, non in `Team/<Agente>/Notes/`.
 
 ---
 
@@ -71,7 +71,7 @@ Team/<NomeAgente>/
 
 ### Cosa NON registrare nello scratchpad
 
-- Output completi di task (vanno in `Library/Handoff/` o `Library/deliverables/`).
+- Output completi di task (vanno in `Library/Fucina/Handoff/` o `Library/deliverables/`).
 - Dati sensibili o credenziali.
 - Transcript di conversazioni con l'utente.
 - Output intermedi di tool/script (vanno nella loro cartella di destinazione).
@@ -111,7 +111,7 @@ active_tasks:
     status: "in_progress"        # in_progress | blocked | awaiting_review
     started_at: 2026-05-04
     due_at: null                  # null se non c'e' scadenza
-    handoff_ref: "Library/Handoff/kba_batch/"  # path ai file di riferimento
+    handoff_ref: "Library/Fucina/Handoff/kba_batch/"  # path ai file di riferimento
     notes: ""
 ```
 
@@ -255,7 +255,7 @@ active_tasks:
     status: "in_progress"
     started_at: 2026-05-04
     due_at: null
-    handoff_ref: "Library/Handoff/kba_batch/"
+    handoff_ref: "Library/Fucina/Handoff/kba_batch/"
     notes: ""
 
 members_status:
@@ -273,7 +273,7 @@ members_status:
 
 | ID | Titolo | Delegato a | Stato | Note |
 |----|--------|------------|-------|------|
-| T-001 | Analisi batch 15 KBA | Dike | in_progress | Input: Library/Handoff/kba_batch/ |
+| T-001 | Analisi batch 15 KBA | Dike | in_progress | Input: Library/Fucina/Handoff/kba_batch/ |
 ```
 
 **Log aggiornamenti:**
@@ -349,7 +349,7 @@ active_tasks:
     status: "blocked"
     started_at: 2026-05-04
     due_at: null
-    handoff_ref: "Library/Handoff/kba_batch/"
+    handoff_ref: "Library/Fucina/Handoff/kba_batch/"
     notes: "Mancano 3 file sorgente in Library/documents/"
 
 members_status:
@@ -373,7 +373,7 @@ members_status:
 
 ## Parte 6 — Integrazione con il flusso di lavoro esistente
 
-### Relazione con `Library/Handoff/`
+### Relazione con `Library/Fucina/Handoff/`
 
 Lo scratchpad e l'handoff hanno ruoli complementari:
 
@@ -384,7 +384,7 @@ Lo scratchpad e l'handoff hanno ruoli complementari:
 | **Durata** | Sessione corrente + breve storico | Fino ad archiviazione |
 | **Lettori** | Solo l'agente proprietario + Hermes | Agente mittente + destinatario |
 
-**Regola**: se un file deve essere letto da un altro membro, va in `Library/Handoff/`. Lo scratchpad contiene solo il **riferimento** (path), non il contenuto.
+**Regola**: se un file deve essere letto da un altro membro, va in `Library/Fucina/Handoff/`. Lo scratchpad contiene solo il **riferimento** (path), non il contenuto.
 
 ### Flusso tipico con scratchpad
 
@@ -398,7 +398,7 @@ Lo scratchpad e l'handoff hanno ruoli complementari:
 7. Hermes → Utente: restituisce risultato
 ```
 
-### Relazione con `Library/Handoff/brief-*`
+### Relazione con `Library/Fucina/Handoff/brief-*`
 
 I briefing sono input per gli agenti. Lo scratchpad li **referenzia** ma non li contiene:
 
@@ -409,11 +409,11 @@ active_tasks:
     delegated_to: "Clio"
     status: "in_progress"
     started_at: 2026-05-04
-    handoff_ref: "Library/Handoff/brief-wip-020426.md"
+    handoff_ref: "Library/Fucina/Handoff/brief-wip-020426.md"
     notes: ""
 ```
 
-### Relazione con `Team/Fucina/`
+### Relazione con `Library/Fucina/`
 
 La Fucina e' lo spazio di **lavoro grezzo** — bozze, sperimentazioni, materiali non ancora validati. Lo scratchpad puo' riferirsi a file in Fucina quando un task e' in fase esplorativa:
 
@@ -423,7 +423,7 @@ active_tasks:
     title: "Definire profilo nuovo agente"
     delegated_to: "Atena"
     status: "in_progress"
-    handoff_ref: "Team/Fucina/proteo.md"
+    handoff_ref: "Library/Fucina/proteo.md"
     notes: "Bozza in Fucina, da validare prima di spostare in .opencode/agents/"
 ```
 

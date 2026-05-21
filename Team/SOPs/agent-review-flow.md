@@ -106,7 +106,7 @@ In modification flow: max 2 FAIL cycles per gap analysis, then escalate to user.
 - Every gap must be addressed. Unexplained omission = protocol violation
 
 ## References
-- `Library/SOPs/agent-design-methodology.md`
-- `Library/SOPs/agent-creation-flow.md`
-- `Library/SOPs/agent-modification-flow.md`
-- `Library/SOPs/handoff-guide.md`
+- `Team/SOPs/agent-design-methodology.md`
+- `Team/SOPs/agent-creation-flow.md`
+- `Team/SOPs/agent-modification-flow.md`
+- `Team/SOPs/handoff-guide.md`

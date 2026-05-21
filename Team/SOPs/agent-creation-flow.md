@@ -28,7 +28,7 @@ For **new agents only**. For modifications, see `agent-modification-flow.md`.
 
 ## Handoff naming
 
-All handoffs follow `Library/SOPs/handoff-guide.md`:
+All handoffs follow `Team/SOPs/handoff-guide.md`:
 
 ```
 YYYY-MM-DD_HHMM_<agent>_<type>_<slug>.md
@@ -68,8 +68,8 @@ See the referenced SOP for full specs:
 | Gap analysis / review handoff | `agent-review-flow.md` — Review checklist + reporting format |
 
 ## References
-- `Library/SOPs/agent-design-methodology.md`
-- `Library/SOPs/agent-review-flow.md`
-- `Library/SOPs/agent-modification-flow.md`
-- `Library/SOPs/handoff-guide.md`
+- `Team/SOPs/agent-design-methodology.md`
+- `Team/SOPs/agent-review-flow.md`
+- `Team/SOPs/agent-modification-flow.md`
+- `Team/SOPs/handoff-guide.md`
 - `Team/Members/Registro.md`

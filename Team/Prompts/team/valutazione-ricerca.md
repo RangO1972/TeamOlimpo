@@ -19,9 +19,9 @@ prima di passarla ad Atena.
 uv run python -m tools.consulto `
   --provider grok `
   --model grok-4.20-0309-reasoning `
-  --prompt "Library/Prompts/team/valutazione-ricerca.md" `
-  --input "Team/Fucina/YYYY-MM-DD_ricerca_MEMBRO_vN.md" `
-  --output "Team/Fucina/"
+  --prompt "Team/Prompts/team/valutazione-ricerca.md" `
+  --input "Library/Fucina/YYYY-MM-DD_ricerca_MEMBRO_vN.md" `
+  --output "Library/Fucina/"
 ```
 
 ## Prompt

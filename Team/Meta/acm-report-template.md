@@ -285,7 +285,7 @@ tags: [acm, report, quality]
 ## Note operative
 
 - Settimana parziale (5 giorni lavorativi)
-- Dati estratti da frontmatter handoff in `Library/Handoff/`
+- Dati estratti da frontmatter handoff in `Library/Fucina/Handoff/`
 - Deviazioni contate solo su handoff con `stato: completato` o `bloccato`
 - Quality score disponibile solo su handoff completati
 
@@ -298,8 +298,8 @@ tags: [acm, report, quality]
 
 ### Fonti dati
 
-1. **Library/Handoff/** — Frontmatter degli handoff
-2. **Library/Handoff/Registro.md** — Indice aggregato
+1. **Library/Fucina/Handoff/** — Frontmatter degli handoff
+2. **Library/Fucina/Handoff/Registro.md** — Indice aggregato
 3. **Deviazioni** — Campo `deviazione` nel frontmatter
 
 ### Frequenza
