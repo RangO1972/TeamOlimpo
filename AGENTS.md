@@ -12,35 +12,44 @@ The system operates on an **orchestrator-workers** pattern: Hermes routes every 
 
 Flow to create a new agent: Hermes → Proteo (domain analysis) → Hermes → Atena (persona construction) → metadata integration in `.opencode/agents/<name>.md`.
 
-## Folder Structure
+## PUBLIC/PRIVATE Split
 
-- AI agent profiles are integrated in files under `.opencode/agents/` with additional metadata.
-- `Team/Handoff/YYYY/MM/` — Agent output files (handoff). Every agent invocation writes one file here. See `Team/SOPs/handoff-guide.md` for full spec.
-- `Team/Fucina/` — Team working files (repo clonati, analisi temporanee, working data). **Gitignorato.**
-  - `Team/Fucina/repos/` — Repository clonati per analisi e reference
-  - `Team/Fucina/analyses/` — Note di analisi temporanee
-  - `Team/Fucina/KBA/` — Working file del processo KBA
-- `Team/Hermes/` — Hermes scratchpad e stato operativo.
-- `Team/Members/` — Identity files for team agents
-- `Team/Meta/` — System documentation: tool guides, conventions
-- `Team/Prompts/` — Prompt library
-- `Team/SOPs/` — Standard operating procedures
-- `Inbox/` — User PDFs to convert (input for pdf_converter)
-- `Library/deliverables/` — Final outputs destined for the user
-- `Library/` — **Team Obsidian Vault** (see `Team/SOPs/obsidian-vault-conventions.md` for conventions). Symlink to private git repo with backup.
-  - `Library/documents/` — Markdown files converted from PDFs
-  - `Library/assets/images/` — Images extracted from PDFs, organized by document slug
-  - `Library/data/` — SQLite database (`pdf_index.db`), converter logs, KBA catalog
-  - `Library/Wiki/` — **Team Olimpo Knowledge Wiki** (LLM Wiki pattern). Compiled and interconnected knowledge: concepts, decisions, research. Chronological structure YYYY/MM/.
-    - `index.md` — Navigable semantic index
-    - `log.md` — Chronological wiki operations log
-    - `concepts/YYYY/MM/` — Persistent conceptual pages
-    - `decisions/YYYY/MM/` — Architectural decisions
-    - `research/YYYY/MM/` — Completed research summaries
-  - `Library/emails/` — Email vault
-- `tools/pdf_converter/` — Python module for PDF → Markdown conversion (guide: `Team/Meta/pdf-converter-guida.md`)
-- `opencode.json` (root) — Main OpenCode agent configuration
-- `.opencode/agents/` — Individual agent system prompt files
+This repo has two tiers:
+
+- **PUBLIC** (`TeamOlimpo/` → GitHub): templates, skills, configs, tool code, SOPs
+- **PRIVATE** (`Library/` → symlink → local git, no remote): all sensitive data — handoff diaries, system state, wiki, emails, deliverables
+
+`Library/` is gitignored from this repo. It's a symlink to a separate local git repository that never pushes to GitHub.
+
+## Folder Structure — PUBLIC
+
+| Path | Content |
+|------|---------|
+| `.opencode/agents/` | Agent system prompt files (OpenCode format) |
+| `Team/Members/` | Identity files (SOUL.md) for team agents |
+| `Team/SOPs/` | Standard operating procedures |
+| `Team/Meta/` | System documentation, tool guides, conventions |
+| `Team/Prompts/` | Prompt library |
+| `Team/Fucina/` | Team working files (gitignored — cloned repos, temp analyses, KBA working data) |
+| `Inbox/` | User PDFs waiting for conversion |
+| `tools/` | Python tools (handoff, taskmanager, knowledge_base, email_processor, pdf_converter) |
+| `scripts/` | Utility scripts |
+| `opencode.json` | Main OpenCode agent configuration |
+| `AGENTS.md` | This file |
+
+## Folder Structure — PRIVATE (`Library/`)
+
+| Path | Content |
+|------|---------|
+| `Handoff/YYYY/MM/` | Agent output handoff files. Every worker invocation writes one file here. Includes `type: spec` and `type: plan`. See `Team/SOPs/handoff-guide.md` for full spec. |
+| `System/Hermes/` | Hermes scratchpad and operational state (`state.yaml`, scratchpad `.md` files). Task manager state is here. |
+| `Quarantine/` | Files put aside for review or recovery |
+| `documents/` | Markdown files converted from PDFs |
+| `assets/images/` | Images extracted from PDFs, organized by document slug |
+| `data/` | SQLite databases, converter logs, KBA catalog |
+| `Wiki/` | **Team Olimpo Knowledge Wiki** (LLM Wiki pattern). Concepts, decisions, research. Chronological `YYYY/MM/`. |
+| `emails/` | Email vault |
+| `deliverables/` | Final outputs destined for the user |
 
 ## Conventions
 
