@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Improper restoration of DeltaV Configuration Database from FHX backup can result in incomplete or unusable database if specific steps and log verification are not followed",
+  "severity_score": 5,
+  "severity_justification": "Potential impact on configuration data integrity during recovery operations, requiring careful procedure to avoid incomplete database, but no direct safety, shutdown or loss of control risk mentioned.",
+  "occurrence_score": 3,
+  "occurrence_justification": "Database restoration is an infrequent activity performed only after incidents requiring recovery, not a continuous or common operational condition.",
+  "detectability_score": 5,
+  "detectability_justification": "Import errors are recorded in a specific log file that must be manually inspected; warnings are common but harmless, making issues detectable with procedure adherence.",
+  "risk_score": 4.4,
+  "risk_score_calculation": "(5 × 0.5) + (3 × 0.3) + (5 × 0.2) = 4.4",
+  "modifiers_applied": [
+    {
+      "modifier": "Detailed procedural workaround available",
+      "adjustment": -1.2,
+      "reason": "Entire KBA is a comprehensive step-by-step guide for correct restoration"
+    },
+    {
+      "modifier": "Information Only classification",
+      "adjustment": -0.5,
+      "reason": "Emerson marks this as non-urgent technical information rather than a defect"
+    }
+  ],
+  "final_risk_score": 2.7,
+  "risk_level": "Informational",
+  "problem_type": "procedural",
+  "architecture_level": 3,
+  "architecture_level_description": "Livello 3: Ingegneria e gestione (DeltaV Explorer, storico dati, batch)",
+  "affected_products": ["DeltaV Workstation Software", "VE210x-31 Workstation - Objectivity Database"],
+  "affected_versions_count": 6,
+  "workaround_available": true,
+  "workaround_complexity": "complex",
+  "workaround_description": "Follow detailed multi-step procedure: create new database, import custom device definitions if needed, import FHX with specific checkboxes, review import log for errors before download",
+  "fix_available": false,
+  "fix_reference": "N/A",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": ["Must verify absence of import Errors in log before download", "FHX restoration is not straightforward and requires strict sequence"],
+  "notes": "This KBA is primarily a best-practice procedural guide for database recovery rather than a report of a software bug, vulnerability or hardware defect. No safety-related components or levels 0-1 are involved."
+}

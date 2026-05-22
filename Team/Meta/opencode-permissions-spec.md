@@ -77,7 +77,7 @@ If unspecified, OpenCode starts from permissive defaults:
 permission:
   read: allow
   edit:
-    "Library/Fucina/Handoff/**": "allow"
+    "Team/Handoff/**": "allow"
     "Team/<AgentName>/**": "allow"
     "[ROLE_PATH/**]": "allow"
 ```
@@ -180,7 +180,7 @@ Every agent must always have at minimum:
 permission:
   read: allow
   edit:
-    "Library/Fucina/Handoff/**": "allow"
+    "Team/Handoff/**": "allow"
     "Team/<AgentName>/**": "allow"
     "[ROLE_PATH/**]": "allow"
 ```

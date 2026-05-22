@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Downloading a module with an ECTLSL function block inside a composite, when there is a mismatch between extensible parameters and NOF_USED_SEL, causes a software-generated controller reset",
+  "severity_score": 6,
+  "severity_justification": "Causa reset del controllore durante il download con perdita temporanea di comunicazione e necessità di Total Download; impatto sulla produzione ma non su safety o shutdown imprevisto dell'impianto",
+  "occurrence_score": 4,
+  "occurrence_justification": "Richiede una configurazione specifica non valida (discrepanza parametri ECTLSL) all'interno di un composite; non è un comportamento normale ma possibile in progetti complessi",
+  "detectability_score": 6,
+  "detectability_justification": "La validazione fallisce correttamente nel blocco singolo ma è bypassata quando il blocco è in un composite; il problema si manifesta solo al momento del download",
+  "risk_score": 5.6,
+  "risk_score_calculation": "(6 × 0.5) + (4 × 0.3) + (6 × 0.2) = 5.6",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround banale disponibile",
+      "adjustment": -1,
+      "reason": "La correzione dei parametri e il salvataggio successivo è semplice e chiaramente documentata"
+    },
+    {
+      "modifier": "Coinvolge livelli 0-1 (campo/controllo base)",
+      "adjustment": 1,
+      "reason": "Interessa direttamente il software dei controllori (Level 1)"
+    }
+  ],
+  "final_risk_score": 5.6,
+  "risk_level": "Advisory",
+  "problem_type": "bug_software",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori (S-series, M-series), schede I/O",
+  "affected_products": ["DeltaV Controller Software", "VE3101-03 Logic Software - Function Blocks"],
+  "affected_versions_count": 9,
+  "workaround_available": true,
+  "workaround_complexity": "simple",
+  "workaround_description": "Impostare NOF_USED_SEL e il numero di parametri estensibili allo stesso valore, salvare il modulo e poi eseguire il download",
+  "fix_available": false,
+  "fix_reference": "N/A - La issue è ancora sotto investigazione",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": ["Software-generated reset del controllore", "Bypass della validazione in composite"],
+  "notes": "Nessuna patch disponibile al momento della pubblicazione della KBA. Il problema è limitato a configurazioni non valide ma il sistema non le blocca adeguatamente nei composite."
+}

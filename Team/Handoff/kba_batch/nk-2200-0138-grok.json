@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Redundant Interzone Server mostra erroneamente \"Partner is Available\" come NO e Status come \"Failed Component\" in DeltaV Diagnostics dopo riavvio dello standby, nonostante licenza corretta",
+  "severity_score": 4,
+  "severity_justification": "Problema di visualizzazione errata dello stato di ridondanza che genera confusione diagnostica ma senza impatto dichiarato su controllo di processo, produzione o safety.",
+  "occurrence_score": 3,
+  "occurrence_justification": "Si verifica in condizioni specifiche (riavvio dello standby IZS) e viene descritto come \"rare issue\".",
+  "detectability_score": 2,
+  "detectability_justification": "L'anomalia è immediatamente visibile in DeltaV Diagnostics, Watchit e DeltaV Explorer.",
+  "risk_score": 3.5,
+  "risk_score_calculation": "(4 × 0.5) + (3 × 0.3) + (2 × 0.2) = 3.5",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -0.5,
+      "reason": "Attacco di dongle SI risolve lo stato errato"
+    },
+    {
+      "modifier": "Fix reference disponibile",
+      "adjustment": -0.5,
+      "reason": "Rinvia a KBA NK-2500-0342"
+    }
+  ],
+  "final_risk_score": 2.5,
+  "risk_level": "Informational",
+  "problem_type": "bug_software",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["VE210x-35 Workstation - DeltaV Inter-Zone"],
+  "affected_versions_count": 9,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Collegare un system-integrator dongle all'IZS per resettare lo stato \"Failed Component\"",
+  "fix_available": true,
+  "fix_reference": "NK-2500-0342",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "La KBA non specifica alcun impatto operativo o di produzione, rendendo difficile valutare la reale criticità oltre allo stato diagnostico errato.",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": ["Stato di ridondanza errato in diagnostics", "Dipendenza da dongle hardware per ripristino"],
+  "notes": "Il problema sembra legato alla gestione della licenza Batch Redundancy dopo switchover. Emerson classifica l'azione come \"Next Service Interval\"."
+}

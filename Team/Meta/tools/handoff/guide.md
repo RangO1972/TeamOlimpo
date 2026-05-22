@@ -18,7 +18,7 @@ Body is free Markdown after the `---`.
 
 What happens:
 - filename built from date/time/agent/type/slug
-- handoff written to `Library/Fucina/Handoff/YYYY/MM/`
+- handoff written to `Team/Handoff/YYYY/MM/`
 - body file deleted
 
 ---
@@ -63,4 +63,4 @@ Run:
 uv run python -m tools.handoff main --body Team/efesto/hf.md
 ```
 
-Result: `Library/Fucina/Handoff/2026/05/2026-05-20_1432_efesto_report_fixed-loguru-import-in-pdf-converter.md`
+Result: `Team/Handoff/2026/05/2026-05-20_1432_efesto_report_fixed-loguru-import-in-pdf-converter.md`

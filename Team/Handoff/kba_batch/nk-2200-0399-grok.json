@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Incompatibilità tra Solidcore v8.3.4 (in modalità Enabled/Observe/Update) e DeltaV PHV che causa freeze dell'applicazione durante lo scrolling temporale nei chart",
+  "severity_score": 4,
+  "severity_justification": "Degrado delle funzionalità HMI/operatorie con freeze di PHV e possibili difficoltà di apertura di altre applicazioni DeltaV, recuperabile manualmente senza impatto su controllo di processo o safety",
+  "occurrence_score": 5,
+  "occurrence_justification": "Richiede versione specifica di Solidcore 8.3.4 e l'azione concreta di scrolling temporale nei chart PHV, quindi plausibile ma non generico",
+  "detectability_score": 2,
+  "detectability_justification": "Il freeze è immediatamente visibile all'operatore tramite cerchio blu di caricamento e applicazione unresponsive",
+  "risk_score": 3.9,
+  "risk_score_calculation": "(4 × 0.5) + (5 × 0.3) + (2 × 0.2) = 3.9",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -0.5,
+      "reason": "Workaround disponibili (disabilitazione Solidcore o kill processo)"
+    },
+    {
+      "modifier": "Fix disponibile",
+      "adjustment": -1,
+      "reason": "Patch ufficiale con aggiornamento Solidcore 8.4.1 + Hotfix Bundle 22"
+    }
+  ],
+  "final_risk_score": 2.4,
+  "risk_level": "Informational",
+  "problem_type": "incompatibility",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["Application Whitelisting for DeltaV Systems 2.3", "Trellix Solidcore"],
+  "affected_versions_count": 1,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Disabilitare Solidcore su stazioni PHV oppure terminare il processo CHS.exe da Task Manager (richiede accesso desktop e privilegi admin)",
+  "fix_available": true,
+  "fix_reference": "Aggiornamento a Solidcore 8.4.1 + Application Whitelisting Hotfix Bundle 22",
+  "emerson_category": "Product Issues",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": ["Possibile accumulo di istanze multiple di processi DeltaV (CHS.exe, hlo.exe, etc.)", "Richiede intervento manuale su workstation operatore"],
+  "notes": "Nessun impatto su livelli di controllo (0-1), nessun riferimento a safety system, perdita di controllo o dati. Emerson classifica come 'Next Service Interval'."
+}

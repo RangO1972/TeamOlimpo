@@ -1,0 +1,51 @@
+{
+  "kba_problem_summary": "Aggiornamenti Microsoft causano errori di connessione (access denied/authentication) a VM console, host e cluster in DeltaV Virtual Studio e tool Hyper-V/Failover Cluster Manager se non applicati uniformemente su tutto il dominio",
+  "severity_score": 6,
+  "severity_justification": "Degrado significativo nella gestibilità e manutenzione del layer di virtualizzazione DeltaV, con potenziali difficoltà di troubleshooting e intervento su sistemi virtualizzati, ma senza perdita diretta di controllo di processo o impatto safety.",
+  "occurrence_score": 5,
+  "occurrence_justification": "Si manifesta dopo l'installazione di aggiornamenti Microsoft specifici quando il patching non è applicato in modo uniforme su tutti i nodi del dominio (host, DC, client), condizione plausibile durante attività di manutenzione ordinarie.",
+  "detectability_score": 3,
+  "detectability_justification": "Gli errori (access denied, authentication failure) sono immediatamente visibili nelle interfacce di Hyper-V Manager, DVS Client e Failover Cluster Manager quando si tenta la connessione.",
+  "risk_score": 5.1,
+  "risk_score_calculation": "(6 × 0.5) + (5 × 0.3) + (3 × 0.2) = 5.1",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround complesso/parziale",
+      "adjustment": -1,
+      "reason": "La soluzione richiede patching coordinato su tutto il dominio, reboot sequenziali, verifica PowerShell e, in alcuni casi, complesse modifiche temporanee di Group Policy per WinRM"
+    }
+  ],
+  "final_risk_score": 4.1,
+  "risk_level": "Advisory",
+  "problem_type": "incompatibility",
+  "architecture_level": 3,
+  "architecture_level_description": "Livello 3: Ingegneria e gestione (strumenti di amministrazione e virtualizzazione)",
+  "affected_products": [
+    "VF1026S002 DeltaV Virtual Studio (DVS) v3.3",
+    "VF1026S002 DeltaV Virtual Studio (DVS) v3.3.1",
+    "VF1026S002 DeltaV Virtual Studio (DVS) v3.3.2",
+    "VF1026S002 DeltaV Virtual Studio (DVS) v3.3.3",
+    "VF1026S002 DeltaV Virtual Studio (DVS) v3.3.4",
+    "VF1026S020 DeltaV Virtual Studio (DVS) v4.3",
+    "VF1026S020 DeltaV Virtual Studio (DVS) v4.3.1",
+    "VF1026S020 DeltaV Virtual Studio (DVS) v4.3.2",
+    "VF1026S020 DeltaV Virtual Studio (DVS) v4.3.3"
+  ],
+  "affected_versions_count": 9,
+  "workaround_available": true,
+  "workaround_complexity": "complex",
+  "workaround_description": "Applicare gli stessi aggiornamenti Microsoft approvati (rif. KBA AK-1200-0033) su tutti gli host, domain controller e client del dominio, con sequenza consigliata, reboot e verifica. Per errori WinRM persistenti sono richieste complesse modifiche temporanee di Group Policy.",
+  "fix_available": false,
+  "fix_reference": "N/A - Solo workaround procedurale (nessuna patch DeltaV)",
+  "emerson_category": "Advisory",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "La KBA non specifica l'impatto concreto sulla produzione in caso di VM già operative; non è chiaro se le VM continuino a funzionare senza console di gestione.",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": [
+    "Necessità di patching perfettamente uniforme su tutto il dominio (anche domain controller)",
+    "Procedura complessa con modifiche Group Policy per Windows Server 2022"
+  ],
+  "notes": "Il problema non è un bug di DeltaV ma una incompatibilità di configurazione Windows post-aggiornamento. L'azione è programmabile al prossimo service interval come indicato da Emerson."
+}

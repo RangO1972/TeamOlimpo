@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Duplicate electronic signature write events (0-to-0 transitions) are recorded when using Acknowledge All Alarms on a faceplate due to case inconsistencies in DeltaV Operate expressions",
+  "severity_score": 4,
+  "severity_justification": "Il problema genera eventi duplicati nei log di firma elettronica senza impattare il funzionamento dell'acknowledgement degli allarmi, il controllo di processo o la sicurezza.",
+  "occurrence_score": 5,
+  "occurrence_justification": "Richiede configurazione specifica (electronic signature abilitato con NALM nella policy e presenza di espressioni in lowercase), condizione plausibile ma non universale.",
+  "detectability_score": 5,
+  "detectability_justification": "I duplicati sono visibili in Process History View ma non generano allarmi o indicazioni immediate, richiedendo una verifica manuale dei log.",
+  "risk_score": 4.5,
+  "risk_score_calculation": "(4 × 0.5) + (5 × 0.3) + (5 × 0.2) = 2.0 + 1.5 + 1.0 = 4.5",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround banale disponibile",
+      "adjustment": -1.0,
+      "reason": "La correzione delle espressioni da lowercase a uppercase è semplice e risolutiva"
+    },
+    {
+      "modifier": "Nessun fix disponibile",
+      "adjustment": 0.5,
+      "reason": "Emerson dichiara che una soluzione non è attualmente disponibile"
+    }
+  ],
+  "final_risk_score": 4.0,
+  "risk_level": "Informational",
+  "problem_type": "bug_software",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["DeltaV Workstation Software", "VE2126 Operator Interface"],
+  "affected_versions_count": 5,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Convertire tutte le espressioni contenenti riferimenti lowercase (es. f_nalm) in uppercase (es. F_NALM) all'interno di DeltaV Operate",
+  "fix_available": false,
+  "fix_reference": "N/A - A solution is not available for this issue",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": [],
+  "notes": "L'articolo classifica l'azione come 'Next Service Interval'. Nessun impatto su livelli 0-1 o SIS. Il problema è confinato alla qualità dei log di firma elettronica."
+}

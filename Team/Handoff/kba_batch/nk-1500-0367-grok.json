@@ -1,0 +1,40 @@
+{
+  "kba_problem_summary": "DeltaV Virtual Studio v2.3.1 richiede l'applicazione di hotfix bundle per risolvere molteplici problemi di installazione, gestione VM, replica, rete iSCSI, thin client e sicurezza, inclusi casi di potenziale perdita dati in scenari di disaster recovery e instabilità di virtual controller dopo patch Microsoft.",
+  "severity_score": 5,
+  "severity_justification": "La maggior parte dei problemi riguarda gestione della virtualizzazione e installazione con impatto su disponibilità e integrità dati in casi specifici (es. disaster recovery), senza rischio diretto su safety o shutdown impianto.",
+  "occurrence_score": 4,
+  "occurrence_justification": "Molti issue si manifestano solo in condizioni specifiche (thin client Wyse, live migration, disabilitazione replica, patch Microsoft su Hyper-V, Windows 7 embedded).",
+  "detectability_score": 5,
+  "detectability_justification": "Errori di installazione e warning sono evidenti, ma problemi come perdita dati in DR o leak di memoria possono essere silenziosi fino a manifestarsi in situazioni operative critiche.",
+  "risk_score": 4.8,
+  "risk_score_calculation": "(5 × 0.5) + (4 × 0.3) + (5 × 0.2) = 2.5 + 1.2 + 1.0 = 4.8",
+  "modifiers_applied": [
+    {"modifier": "Patch/fix disponibile", "adjustment": -1.0, "reason": "Hotfix bundle WS_07 e template hardware aggiornati sono forniti con link di download e istruzioni di installazione"},
+    {"modifier": "Workaround banale disponibile", "adjustment": -0.5, "reason": "L'azione richiesta è l'applicazione dell'hotfix bundle (As Needed)"}
+  ],
+  "final_risk_score": 3.3,
+  "risk_level": "Informational",
+  "problem_type": "bug_software",
+  "architecture_level": 3,
+  "architecture_level_description": "Livello 3: Gestione operativa (DeltaV Virtual Studio, workstation virtuali, engineering tools) con impatto indiretto su virtual controller (livello 1)",
+  "affected_products": ["DeltaV Virtual Studio (DVS) v2.3.1", "DeltaV Virtualization Software"],
+  "affected_versions_count": 5,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Applicare il bundle hotfix DeltaV_DVS_231_WS_07 (o più recente), reinstallare DVS e DRDC, rieseguire Host Setup e riavviare gli host. Per i template hardware, estrarre i file nella cartella VM.",
+  "fix_available": true,
+  "fix_reference": "DeltaV_DVS_231_WS_07, DVS231_HVS_1131_ControllerTemplates_01, DVS231_HVS_1231_ControllerTemplates_01, DVS231_HVS_1331_ControllerTemplates_02",
+  "fix_versions": ["v2.3.1.10"],
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": [
+    "Potenziale perdita dati in disaster recovery (disabilitazione replica VM)",
+    "Virtual controller instabili dopo patch Microsoft di sicurezza",
+    "VM unresponsive per 5 minuti in caso di perdita rete iSCSI"
+  ],
+  "notes": "KBA di tipo 'Product Issues' con Required Action 'As Needed'. Aggrega hotfix precedenti (WS_01 a WS_07) e template hardware. Non descrive una nuova vulnerabilità attiva ma l'aggiornamento cumulativo per sistemi già in produzione. Nessun componente SIS coinvolto."
+}

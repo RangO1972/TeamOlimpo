@@ -1,0 +1,44 @@
+{
+  "kba_problem_summary": "Dopo la rimozione del dongle cliente, l'opzione 'Re-Send Last Known Good Download' risulta disabilitata per workstation, controller e nodi IO DeltaV v15.LTS.",
+  "severity_score": 5,
+  "severity_justification": "Impedisce l'uso di una funzione di recovery/configurazione su nodi di controllo (livello 1), con potenziale impatto su tempi di manutenzione e disponibilità, ma senza perdita di controllo runtime, shutdown o compromissione safety.",
+  "occurrence_score": 3,
+  "occurrence_justification": "Si manifesta solo dopo rimozione intenzionale o accidentale del dongle valido; condizione non standard durante il normale esercizio.",
+  "detectability_score": 4,
+  "detectability_justification": "La mancata disponibilità dell'opzione è visibile quando si tenta l'azione di download, ma può passare inosservata finché non si rende necessario il recovery.",
+  "risk_score": 4.2,
+  "risk_score_calculation": "(5 × 0.5) + (3 × 0.3) + (4 × 0.2) = 4.2",
+  "modifiers_applied": [
+    {"modifier": "Nessun workaround disponibile", "adjustment": 1.5, "reason": "KBA dichiara esplicitamente 'There is no work-around for this issue'"},
+    {"modifier": "Patch/fix disponibile", "adjustment": -1, "reason": "Hotfix incluso in NK-2200-0460 (TFSB1183620) per v15.LTS"},
+    {"modifier": "Coinvolge livelli 0-1 (controller e I/O)", "adjustment": 1, "reason": "Interessa numerosi modelli di controller (PK, MX, SX, SQ) e schede I/O (EIOC, CIOC)"}
+  ],
+  "final_risk_score": 5.7,
+  "risk_level": "Advisory",
+  "problem_type": "bug_software",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori (S/M-series, PK, MX, SX, SQ) e schede I/O; Livello 2: Workstation",
+  "affected_products": [
+    "DeltaV Controller & I/O Hardware (PK Controller, MX Controller, SX/SQ Controller, EIOC, CIOC)",
+    "DeltaV Workstation Software - Engineering Tools (DeltaV Explorer)"
+  ],
+  "affected_versions_count": 1,
+  "workaround_available": false,
+  "workaround_complexity": "none",
+  "workaround_description": "Nessun workaround disponibile; unica indicazione è mantenere il dongle inserito.",
+  "fix_available": true,
+  "fix_reference": "NK-2200-0460",
+  "fix_versions": ["v15.LTS"],
+  "emerson_category": "Advisory",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": [
+    "Nessun workaround disponibile",
+    "Richiede installazione contemporanea di hotfix workstation e controller/IO",
+    "Interessa numerosi modelli hardware di livello 1"
+  ],
+  "notes": "L'articolo richiede azione al 'Next Service Interval' e specifica che entrambi i pacchetti software (workstation + controller/IO) devono essere installati per risolvere completamente il problema. Il difetto è legato al controllo di validità del dongle per la funzione di download."
+}

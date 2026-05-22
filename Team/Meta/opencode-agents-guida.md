@@ -329,12 +329,12 @@ Il processo di creazione di un nuovo membro segue un flusso preciso, orchestrato
 ### Flusso di creazione (7 step)
 
 1. **Briefing** (Hermes): raccoglie competenze richieste e vincoli
-2. **Analisi dominio** (Proteo): produce profilo di competenze in `Library/Fucina/Handoff/`
+2. **Analisi dominio** (Proteo): produce profilo di competenze in `Team/Handoff/`
 3. **Scelta nome** (Calliope o Atena): associato al dominio, verificando `Team/Members/Registro.md`
 4. **Profilo descrittivo** (Atena): crea `Team/Members/<Nome>.md`
 5. **File agente** (Atena): crea `.opencode/agents/<nome>.md`
 6. **Registro** (Atena): aggiorna `Team/Members/Registro.md`
-7. **Archiviazione** (Atena): sposta handoff in `Library/Fucina/Handoff/Archivio/`
+7. **Archiviazione** (Atena): sposta handoff in `Team/Handoff/Archivio/`
 
 > **Nota**: il membro è operativo solo al completamento degli step 4 e 5.
 

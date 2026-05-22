@@ -1,0 +1,38 @@
+{
+  "kba_problem_summary": "Guida di integrazione e configurazione del Microchip/Microsemi SyncServer S650 come time server NTP per reti remote DeltaV e controllo (supporto aggiornato da v14.LTS)",
+  "severity_score": 2,
+  "severity_justification": "La KBA non descrive un bug, vulnerabilità o malfunzionamento, ma fornisce istruzioni tecniche per una corretta integrazione di un time server GPS. Nessun impatto operativo o safety dichiarato.",
+  "occurrence_score": 3,
+  "occurrence_justification": "L'installazione richiede configurazione specifica su reti remote o dedicate (IP riservati come 10.4.128.1); non avviene per impostazione predefinita ma è un'opzione volontaria.",
+  "detectability_score": 2,
+  "detectability_justification": "Lo stato di sincronizzazione NTP è visibile nelle diagnostiche DeltaV (Diagnostics) sia su ProfessionalPLUS che su Operator Station; eventuali problemi di sync generano integrity error configurabili.",
+  "risk_score": 2.3,
+  "risk_score_calculation": "(2 × 0.5) + (3 × 0.3) + (2 × 0.2) = 2.3",
+  "modifiers_applied": [
+    {
+      "modifier": "Article type: Information Only",
+      "adjustment": -1,
+      "reason": "Si tratta di documentazione tecnica, non di un problema noto o vulnerabilità"
+    }
+  ],
+  "final_risk_score": 1.3,
+  "risk_level": "Negligible",
+  "problem_type": "procedural",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore, ProfessionalPLUS) con estensione alle reti di controllo per versioni v14.LTS+",
+  "affected_products": ["DeltaV Network (VE61xxNET)", "DeltaV Workstation Software (VE210x-22 NTP)"],
+  "affected_versions_count": 2,
+  "workaround_available": false,
+  "workaround_complexity": "none",
+  "workaround_description": "La KBA stessa costituisce la procedura di setup raccomandata",
+  "fix_available": false,
+  "fix_reference": "N/A",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "La KBA non descrive un failure mode ma solo una guida di integrazione; il framework FMEA risulta solo parzialmente applicabile",
+  "operational_recommendation": "seguire_le_istruzioni",
+  "red_flags": [],
+  "notes": "Nessun segnale di alta severità presente (no loss of control, no shutdown, no safety impact). La KBA evidenzia il cambiamento da broadcast a request/response in v14.LTS che ha reso possibile l'uso del S650 anche sulle control networks."
+}

@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Guida all'installazione e utilizzo di DeltaV Data Collector (DDC) utility per la raccolta dati di troubleshooting",
+  "severity_score": 2,
+  "severity_justification": "Si tratta di una guida informativa su uno strumento diagnostico; nessun impatto su produzione, safety o integrità del sistema DeltaV.",
+  "occurrence_score": 4,
+  "occurrence_justification": "Eventuali problemi (false positive antivirus, blocco whitelisting, errore versione specifica) si verificano solo durante l'uso scorretto o su configurazioni particolari.",
+  "detectability_score": 2,
+  "detectability_justification": "Errori, blocchi e avvisi sono immediatamente visibili durante l'esecuzione dell'utility o nei messaggi di precondition.",
+  "risk_score": 2.6,
+  "risk_score_calculation": "(2 × 0.5) + (4 × 0.3) + (2 × 0.2) = 2.6",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround banale disponibile",
+      "adjustment": -1.0,
+      "reason": "Istruzioni dettagliate per gestire false positive, whitelisting, file blocking e versione specifica"
+    },
+    {
+      "modifier": "Article Type: Information Only",
+      "adjustment": -0.5,
+      "reason": "Emerson classifica esplicitamente come informazione tecnica, non come problema"
+    }
+  ],
+  "final_risk_score": 1.1,
+  "risk_level": "Negligible",
+  "problem_type": "procedural",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["DeltaV Workstation Software", "VE210x DeltaV Workstation"],
+  "affected_versions_count": 7,
+  "workaround_available": true,
+  "workaround_complexity": "simple",
+  "workaround_description": "Utilizzare versione DDC corretta per la release DeltaV, sbloccare file zip, cambiare modalità Application Whitelisting in 'Update' se necessario, verificare appartenenza al gruppo Administrators",
+  "fix_available": true,
+  "fix_reference": "Nuove release DDC (v6.1.0, v5.11.0 specifica per v9.3.x) e policy aggiornate di Application Whitelisting",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "follow_documentation",
+  "red_flags": ["False positive Trellix Endpoint Security", "Application Whitelisting può bloccare DDC su policy obsolete"],
+  "notes": "La KBA non descrive un bug, vulnerabilità o guasto del sistema DeltaV, ma fornisce istruzioni operative per uno strumento di supporto. Non sono presenti segnali di alta severità (loss of control, shutdown, safety impact)."
+}

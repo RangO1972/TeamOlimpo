@@ -1,0 +1,48 @@
+{
+  "kba_problem_summary": "Cavi extender local bus 12P1795X032 spediti dopo ottobre 2005 utilizzano bulk cable non approvato, privo di shielding interno e fuori specifica di temperatura, con possibile suscettibilità al rumore e degradazione dell'isolamento",
+  "severity_score": 7,
+  "severity_justification": "Possibile disrupzione delle operazioni per problemi di comunicazione I/O (railbus retries) e rischio di perdita di integrità del cavo nel tempo, con impatto sulla produzione a livello di controllo.",
+  "occurrence_score": 5,
+  "occurrence_justification": "Interessa solo i cavi con specifiche marcature e date code (D4005-D0106) ma questi sono stati spediti per diversi mesi; richiede condizioni di rumore o corrente elevata per manifestarsi.",
+  "detectability_score": 6,
+  "detectability_justification": "I sintomi di comunicazione (retries) sono visibili nei diagnostici DeltaV, ma la degradazione progressiva dell'isolamento può avvenire in modo silenzioso fino al guasto.",
+  "risk_score": 6.2,
+  "risk_score_calculation": "(7 × 0.5) + (5 × 0.3) + (6 × 0.2) = 3.5 + 1.5 + 1.2 = 6.2",
+  "modifiers_applied": [
+    {
+      "modifier": "Nessun workaround",
+      "adjustment": 1.5,
+      "reason": "Esplicitamente dichiarato che non esiste workaround né riparazione sul campo"
+    },
+    {
+      "modifier": "Coinvolge livelli 0-1",
+      "adjustment": 1,
+      "reason": "Componente hardware che collega carrier I/O (Livello 1)"
+    },
+    {
+      "modifier": "Fix disponibile",
+      "adjustment": -1,
+      "reason": "Sostituzione con cavi Commscope approvati è possibile"
+    }
+  ],
+  "final_risk_score": 7.7,
+  "risk_level": "Warning",
+  "problem_type": "hardware",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori (S-series, M-series), schede I/O",
+  "affected_products": ["12P1795 Extender Cables", "VE4050 8-Wide I/O Interface Carrier"],
+  "affected_versions_count": 1,
+  "workaround_available": false,
+  "workaround_complexity": "none",
+  "workaround_description": "Nessun workaround disponibile; i cavi devono essere sostituiti",
+  "fix_available": true,
+  "fix_reference": "Contattare Emerson Customer Service per sostituzione con cavi Commscope (vedi anche KBA AP-0500-0107)",
+  "emerson_category": "Alert",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "azione_immediata",
+  "red_flags": ["No workaround available", "Required Action: Mandatory", "Potential I/O communication disruption", "Degradazione isolamento nel tempo"],
+  "notes": "La sostituzione può avvenire durante il prossimo shutdown programmato per configurazioni simplex; per ridondanti è possibile sostituire un cavo alla volta senza interruzione. Il problema è circoscritto a cavi con marcature blu scuro specifiche."
+}

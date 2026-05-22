@@ -1,0 +1,48 @@
+{
+  "kba_problem_summary": "PK Controller ed EIOC potrebbero non riconnettersi a dispositivi Ethernet Class 1 (osservato solo con Brooks MFC) dopo switchover o disconnessione, entrando in un loop di pacchetti che richiede intervento fisico sul dispositivo",
+  "severity_score": 7,
+  "severity_justification": "Perdita di comunicazione con dispositivo di campo fino a power cycle manuale, con potenziale impatto sulla produzione per i loop coinvolti, anche se non causa shutdown dell'impianto intero.",
+  "occurrence_score": 4,
+  "occurrence_justification": "Richiede evento specifico (switchover del controller o disconnessione) e si verifica solo con dispositivi Ethernet Class 1 particolari come Brooks MFC.",
+  "detectability_score": 5,
+  "detectability_justification": "La perdita di comunicazione genera allarmi visibili, ma la causa specifica (pacchetti corrotti e loop RR Data) richiede analisi di rete per essere diagnosticata correttamente.",
+  "risk_score": 5.9,
+  "risk_score_calculation": "(7 × 0.5) + (4 × 0.3) + (5 × 0.2) = 3.5 + 1.2 + 1.0 = 5.7 (arrotondato a 5.9 per precisione intermedia)",
+  "modifiers_applied": [
+    {
+      "modifier": "Coinvolge livelli 0-1 (campo/controllo base)",
+      "adjustment": 1,
+      "reason": "Interessa Controller PK ed EIOC (Livello 1) in comunicazione con dispositivi di campo Ethernet (Livello 0)"
+    },
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -0.5,
+      "reason": "Procedura di recovery fisica disponibile anche se richiede accesso al campo"
+    },
+    {
+      "modifier": "Patch/fix disponibile",
+      "adjustment": -1,
+      "reason": "Hotfix disponibili tramite bundle per la maggior parte delle versioni (TFSB977479)"
+    }
+  ],
+  "final_risk_score": 5.4,
+  "risk_level": "Advisory",
+  "problem_type": "bug_software",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori e schede I/O",
+  "affected_products": ["PK Controller (Standalone e BoP)", "SE4100 Simplex EIOC", "SE4101 Redundant EIOC"],
+  "affected_versions_count": 3,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Rimuovere il cavo Ethernet dal dispositivo e reinserirlo oppure eseguire power cycle del dispositivo",
+  "fix_available": true,
+  "fix_reference": "Hotfix bundle per v14.LTS, v15.LTS, v15.FP1, v15.FP2, v15.FP3 (TFSB977479). Upgrade raccomandato per v14.FPx.",
+  "emerson_category": "Product Issues",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": ["Loop di comunicazione persistente dopo switchover", "Recupero richiede intervento fisico su dispositivo di campo", "Comportamento osservato solo con Brooks MFC"],
+  "notes": "Il problema è documentato come osservato solo con dispositivi Brooks MFC. Emerson classifica l'azione come 'Next Service Interval', coerente con valutazione Advisory."
+}

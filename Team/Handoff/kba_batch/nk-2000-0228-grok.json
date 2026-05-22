@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "DeltaV ScreenSaver causa flickering dello schermo (schermo nero per ~1 secondo) su Windows 10 e Server 2016 a causa di tecnologia Microsoft deprecata",
+  "severity_score": 4,
+  "severity_justification": "Problema ergonomico che causa affaticamento oculare, mal di testa e riduzione delle performance dell'operatore, senza alcun impatto su controllo, produzione o safety",
+  "occurrence_score": 8,
+  "occurrence_justification": "Il flickering si verifica in modo consistente ogni volta che il DeltaV ScreenSaver viene attivato sui sistemi affetti",
+  "detectability_score": 2,
+  "detectability_justification": "Il flickering è immediatamente visibile all'attivazione del screensaver",
+  "risk_score": 4.8,
+  "risk_score_calculation": "(4 × 0.5) + (8 × 0.3) + (2 × 0.2) = 4.8",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround complesso/parziale",
+      "adjustment": -0.5,
+      "reason": "Soluzione alternativa disponibile ma richiede configurazione GPO, script VB e Task Scheduler con tempistica imprevedibile"
+    },
+    {
+      "modifier": "Nessuna patch/fix disponibile",
+      "adjustment": 0.7,
+      "reason": "Nessuna soluzione software per le versioni attuali; fix rimandato a release future"
+    }
+  ],
+  "final_risk_score": 5.0,
+  "risk_level": "Advisory",
+  "problem_type": "incompatibility",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["DeltaV Workstation Software", "VE2126 Operator Interface"],
+  "affected_versions_count": 5,
+  "workaround_available": true,
+  "workaround_complexity": "complex",
+  "workaround_description": "Script VBS + BAT per autologon utente VIEWONLY tramite Windows Task Scheduler e GPO, con tempistica non deterministica",
+  "fix_available": false,
+  "fix_reference": "N/A - soluzione rimandata a future release DeltaV",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": ["Impatto ergonomico prolungato su operatori", "Workaround complesso che modifica comportamento di login"],
+  "notes": "L'articolo classifica l'azione come 'Next Service Interval'. Il workaround sostituisce completamente il DeltaV ScreenSaver con un meccanismo basato su Task Scheduler."
+}

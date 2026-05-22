@@ -1,0 +1,59 @@
+{
+  "kba_problem_summary": "Mancanza di visibilità utente per errori sul redundancy link, che possono causare perdita di configurazione su controller ridondanti",
+  "severity_score": 7,
+  "severity_justification": "La perdita di configurazione su un controller ridondante rappresenta un rischio per l'integrità del sistema di controllo e per la produzione, anche se non causa shutdown immediato o danno fisico.",
+  "occurrence_score": 5,
+  "occurrence_justification": "Gli errori sul redundancy link richiedono condizioni specifiche (problemi di cablaggio, schede difettose, seating) plausibili in ambiente industriale ma non quotidiane.",
+  "detectability_score": 9,
+  "detectability_justification": "Il difetto principale è l'assenza totale di indicazione visibile o allarme prima dell'installazione della fix; l'errore è silenzioso fino alla manifestazione dell'impatto.",
+  "risk_score": 6.8,
+  "risk_score_calculation": "(7 × 0.5) + (5 × 0.3) + (9 × 0.2) = 3.5 + 1.5 + 1.8 = 6.8",
+  "modifiers_applied": [
+    {
+      "modifier": "Livello 1 (Controller) coinvolto",
+      "adjustment": 1,
+      "reason": "Interessa direttamente i controllori ridondanti (Livello 1)"
+    },
+    {
+      "modifier": "Fix/hotfix disponibile",
+      "adjustment": -1,
+      "reason": "Hotfix rilasciati per tutte le versioni principali tramite bundle software"
+    },
+    {
+      "modifier": "Nessun workaround per il rilevamento",
+      "adjustment": 0.5,
+      "reason": "Prima della fix non esisteva alcun metodo di monitoraggio proattivo"
+    }
+  ],
+  "final_risk_score": 7.3,
+  "risk_level": "Warning",
+  "problem_type": "bug_software",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori (S-series, M-series, PK, ecc.) e schede I/O",
+  "affected_products": [
+    "DeltaV Controller & I/O Hardware",
+    "PK0xxxxx Controller PK Hardware",
+    "RRE3007 MX Controller",
+    "RSE3007 SX Controller",
+    "SE6502 Redundant CIOC",
+    "VE3006/VE3007/VE3008 Controllers"
+  ],
+  "affected_versions_count": 5,
+  "workaround_available": false,
+  "workaround_complexity": "none",
+  "workaround_description": "Nessun metodo proattivo di rilevamento; solo procedura di recovery (risolvere link error + total download)",
+  "fix_available": true,
+  "fix_reference": "Hotfix TFSB766142 incluso nei bundle delle KBA NK-1900-0840, NK-2000-0448, NK-2100-0184, NK-2200-0045, NK-2200-0460, NK-2300-0348",
+  "emerson_category": "Product Issues",
+  "divergence_from_emerson": true,
+  "divergence_explanation": "Emerson classifica come 'Next Service Interval' (azione non urgente). La valutazione FMEA assegna punteggio più alto per l'impatto sul Livello 1 e la completa assenza di visibilità.",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": [
+    "Nessuna visibilità utente degli errori di redundancy link",
+    "Possibile perdita di configurazione su controller ridondante",
+    "Interessa ampia gamma di controllori Livello 1"
+  ],
+  "notes": "La fix introduce il monitoraggio tramite Real Time Statistics in DeltaV Diagnostics. Il problema è presente su moltissimi modelli di controller PK, S-series e I/O ridondanti."
+}

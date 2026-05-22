@@ -611,11 +611,11 @@ Durante l'elaborazione, il comando stampa su **stderr** il progresso nel formato
 **Esempio 1: Batch con salvataggio su file**
 
 ```powershell
-# Analizza tutti i documenti KBA, salva i risultati in Library/Fucina/Handoff/
+# Analizza tutti i documenti KBA, salva i risultati in Team/Handoff/
 uv run python -m tools.consulto \
   --prompt Team/Prompts/kba/analisi-rischio.md \
   --input "Library/documents/*.md" \
-  --output Library/Fucina/Handoff/risultati-analisi
+  --output Team/Handoff/risultati-analisi
 ```
 
 Output:
@@ -659,7 +659,7 @@ uv run python -m tools.consulto \
   --input "Library/documents/**/*.md" \
   --provider gemini \
   --model gemini-2.5-flash \
-  --output Library/Fucina/Handoff/analisi
+  --output Team/Handoff/analisi
 ```
 
 **Esempio 4: Batch con system prompt aggiuntivo**
@@ -758,7 +758,7 @@ Analisi di rischio per il documento nk-2400-0150:
 (Provider: grok | Modello: grok-4-1-fast-non-reasoning | Tempo: 2.3s)
 
 Salvare in file? [s/N]: s
-Percorso file [consulto-output-grok.txt]: Library/Fucina/Handoff/analisi-nk-2400-0150.txt
+Percorso file [consulto-output-grok.txt]: Team/Handoff/analisi-nk-2400-0150.txt
 Salvato in: C:\Users\dev\Desktop\TeamOlimpo\Team\Handoff\analisi-nk-2400-0150.txt
 ```
 

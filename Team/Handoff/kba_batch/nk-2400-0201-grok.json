@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Vulnerabilità in Trellix Agent 5.7.9 (CVE-2023-38545 CVSS 9.8 e CVE-2023-38546) presenti in Application Whitelisting e Endpoint Security for DeltaV Systems v2.3",
+  "severity_score": 8,
+  "severity_justification": "CVE-2023-38545 ha impatto Critical (9.8) con vettore remoto che compromette C/I/A del layer di sicurezza che protegge i sistemi DeltaV; Emerson lo classifica come Alert.",
+  "occurrence_score": 5,
+  "occurrence_justification": "Interessa solo chi ha installato i prodotti di sicurezza opzionali alla versione specifica 2.3; lo sfruttamento è remoto ma richiede la presenza del software vulnerabile.",
+  "detectability_score": 8,
+  "detectability_justification": "Vulnerabilità nel software di sicurezza endpoint sono silenziose; non generano allarmi visibili o errori prima di un possibile sfruttamento.",
+  "risk_score": 7.1,
+  "risk_score_calculation": "(8 × 0.5) + (5 × 0.3) + (8 × 0.2) = 4.0 + 1.5 + 1.6 = 7.1",
+  "modifiers_applied": [
+    {
+      "modifier": "Patch/fix disponibile",
+      "adjustment": -1,
+      "reason": "Aggiornamento Trellix Agent disponibile tramite NK-2400-0214"
+    },
+    {
+      "modifier": "Workaround banale disponibile",
+      "adjustment": -0.5,
+      "reason": "Best practices di segmentazione di rete e riduzione esposizione internet"
+    }
+  ],
+  "final_risk_score": 5.6,
+  "risk_level": "Advisory",
+  "problem_type": "security_vulnerability",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["Endpoint Security for DeltaV Systems", "Application Whitelisting for DeltaV Systems"],
+  "affected_versions_count": 2,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Seguire best practices di network segmentation, firewall e riduzione esposizione internet; l'aggiornamento vero e proprio è descritto in altra KBA",
+  "fix_available": true,
+  "fix_reference": "NK-2400-0214",
+  "emerson_category": "Alert",
+  "divergence_from_emerson": true,
+  "divergence_explanation": "Emerson lo classifica come Alert per la criticità del CVE principale, ma il problema riguarda un layer di sicurezza opzionale (non core controllo o SIS), esiste una patch e mitigazioni di best practice, giustificando un livello Advisory nel framework FMEA.",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": ["CVE Critical 9.8 remotamente sfruttabile", "Vulnerabilità nel software di sicurezza stesso"],
+  "notes": "Il documento è una Security Notification classificata Alert. La revisione del 2025-09-02 ha aggiornato la sezione Solution. Non coinvolge SIS né livelli 0-1."
+}

@@ -1,0 +1,45 @@
+{
+  "kba_problem_summary": "Raccomandazioni sui limiti dei parametri diagnostici dei controller DeltaV per prevenire degrado delle prestazioni e slippage dei moduli",
+  "severity_score": 5,
+  "severity_justification": "Possibile degrado delle prestazioni del controller e slippage dei moduli se i limiti vengono superati, con rischio di interrupted control solo in casi estremi (es. FREOIDS < 2000), ma nessun impatto su safety o shutdown improvviso.",
+  "occurrence_score": 4,
+  "occurrence_justification": "Richiede una configurazione pesante o non ottimizzata del controller; non accade in configurazioni normali ma è plausibile in impianti complessi.",
+  "detectability_score": 4,
+  "detectability_justification": "I parametri sono visibili nell'applicazione Diagnostics e si raccomanda di storicizzarli; rilevabili con monitoraggio periodico ma non immediatamente evidenti senza controlli attivi.",
+  "risk_score": 4.6,
+  "risk_score_calculation": "(5 × 0.5) + (4 × 0.3) + (4 × 0.2) = 2.5 + 1.2 + 0.8 = 4.5 (arrotondato 4.6)",
+  "modifiers_applied": [
+    {
+      "modifier": "Coinvolge livelli 0-1 (campo/controllo base)",
+      "adjustment": 1,
+      "reason": "Interessa direttamente i controller (Livello 1)"
+    }
+  ],
+  "final_risk_score": 5.6,
+  "risk_level": "Advisory",
+  "problem_type": "procedural",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori (S-series, M-series) e schede I/O",
+  "affected_products": [
+    "DeltaV Controller & I/O Hardware (vari modelli PK, SE3006, SE3007, SE3008, SE4100, SE4101, SS3001, VE3003, VE3005, VE3006, VE3007, VE3008)",
+    "Standalone PK Controller",
+    "DeltaV Upgrade Services"
+  ],
+  "affected_versions_count": 12,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Monitorare e storicizzare i parametri diagnostici, mantenere la configurazione entro i limiti raccomandati riducendo scan rate o numero di moduli",
+  "fix_available": false,
+  "fix_reference": "N/A - Non è un bug ma una raccomandazione",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": true,
+  "divergence_explanation": "Emerson classifica come 'Information Only' / 'Required Action: Information Only'. Il mio score è leggermente più alto per il potenziale impatto sul controllo (interrupted control) e perché coinvolge direttamente i controller di Livello 1.",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "monitorare",
+  "red_flags": [
+    "Degrado prestazioni del controller se limiti superati",
+    "Possibile module slippage e interrupted control in condizioni estreme"
+  ],
+  "notes": "Il documento non descrive un bug o vulnerabilità ma fornisce linee guida aggiornate sui limiti dei parametri diagnostici. Molti parametri sono stati sostituiti dai Performance Index nelle versioni più recenti (v12.3+)."
+}

@@ -1,0 +1,38 @@
+{
+  "kba_problem_summary": "Consumo progressivo dello spazio su disco C: delle workstation DeltaV dovuto a cartelle di sistema Windows (SoftwareDistribution, Dumps, Error Reporting, WinSxS)",
+  "severity_score": 5,
+  "severity_justification": "Può causare degrado prestazionale o instabilità delle workstation (HMI, historian, engineering) se il disco si satura, ma nessun impatto diretto su controllo di processo o safety.",
+  "occurrence_score": 6,
+  "occurrence_justification": "Si verifica gradualmente durante l'uso normale e dopo upgrade di sistema; comportamento noto di Windows su installazioni DeltaV longeve.",
+  "detectability_score": 4,
+  "detectability_justification": "Il sistema operativo genera avvisi di spazio disco insufficiente; monitorabile con strumenti standard di Windows o di sistema.",
+  "risk_score": 5.0,
+  "risk_score_calculation": "(5 × 0.5) + (6 × 0.3) + (4 × 0.2) = 2.5 + 1.8 + 0.8 = 5.1 (arrotondato a 5.0)",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -1.0,
+      "reason": "Procedura dettagliata fornita da Emerson, da eseguire al prossimo intervallo di servizio"
+    }
+  ],
+  "final_risk_score": 4.0,
+  "risk_level": "Informational",
+  "problem_type": "procedural",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["DeltaV Workstation Software"],
+  "affected_versions_count": 7,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Esecuzione di Disk Cleanup, eliminazione controllata di SoftwareDistribution e Dumps, disabilitazione Windows Error Reporting e modifica registro",
+  "fix_available": false,
+  "fix_reference": "N/A - si tratta di manutenzione periodica, non di un fix",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "monitorare",
+  "red_flags": [],
+  "notes": "Si tratta di un articolo procedurale di manutenzione e non di un bug, vulnerabilità o difetto. Emerson classifica l'azione come 'Next Service Interval'. Il warning sul ridimensionamento di WinSxS indica che Emerson non ha validato quelle operazioni su DeltaV."
+}

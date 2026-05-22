@@ -1,0 +1,38 @@
+{
+  "kba_problem_summary": "Articolo informativo sulle utility Workstation Configuration e Regall per configurazione e risoluzione di problemi comuni su nodi workstation DeltaV",
+  "severity_score": 2,
+  "severity_justification": "La KBA non descrive un difetto, bug o vulnerabilità ma fornisce solo informazioni generali su strumenti di manutenzione; nessun impatto su produzione, safety o integrità dati.",
+  "occurrence_score": 4,
+  "occurrence_justification": "Gli scenari descritti si verificano in contesti specifici di riconfigurazione o troubleshooting, richiedono un intervento umano e non sono automatici.",
+  "detectability_score": 2,
+  "detectability_justification": "I problemi per cui vengono usate queste utility generano tipicamente errori visibili (red X in Explorer, messaggi di errore, servizi non avviati).",
+  "risk_score": 2.6,
+  "risk_score_calculation": "(2 × 0.5) + (4 × 0.3) + (2 × 0.2) = 2.6",
+  "modifiers_applied": [
+    {
+      "modifier": "Contenuto puramente informativo",
+      "adjustment": -0.5,
+      "reason": "Emerson classifica l'articolo come 'Information Only' senza alcun rischio operativo dichiarato"
+    }
+  ],
+  "final_risk_score": 2.1,
+  "risk_level": "Informational",
+  "problem_type": "procedural",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["DeltaV Workstation Software", "Workstation Configuration Utility"],
+  "affected_versions_count": 8,
+  "workaround_available": false,
+  "workaround_complexity": "none",
+  "workaround_description": "",
+  "fix_available": false,
+  "fix_reference": "",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "monitorare",
+  "red_flags": [],
+  "notes": "La KBA è documentazione di riferimento, non segnala un problema tecnico specifico. Menziona un effetto collaterale (cancellazione del file HOSTS) rimandando ad altra KBA (AP-0900-0181)."
+}

@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Memory leak in Windows Explorer.exe on virtualized DeltaV RDP Terminal Servers causing progressive high memory usage leading to sluggishness and eventual session/server lockup",
+  "severity_score": 6,
+  "severity_justification": "Causa degrado prestazioni e lockup di sessioni RDP critiche per accesso operatorio, con potenziale impatto sulla produzione ma senza perdita di controllo diretto, dati o sicurezza fisica",
+  "occurrence_score": 5,
+  "occurrence_justification": "Richiede utilizzo RDP su server virtualizzati con multiple sessioni; si manifesta in settimane/mesi a seconda dell'uso, non è immediato ma plausibile in configurazioni standard",
+  "detectability_score": 7,
+  "detectability_justification": "Richiede monitoraggio proattivo specifico di Explorer.exe tramite Task Manager; il leak è silenzioso fino a quando si verifica sluggishness o lockup",
+  "risk_score": 5.9,
+  "risk_score_calculation": "(6 × 0.5) + (5 × 0.3) + (7 × 0.2) = 5.9",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -1,
+      "reason": "Procedure di sign-out corretto, policy di sessione e riavvii periodici sono disponibili ma richiedono disciplina operativa"
+    },
+    {
+      "modifier": "Nessun fix disponibile",
+      "adjustment": 0.5,
+      "reason": "Nessuna soluzione software o patch rilasciata al momento"
+    }
+  ],
+  "final_risk_score": 5.4,
+  "risk_level": "Advisory",
+  "problem_type": "bug_software",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["DeltaV Virtual Studio (DVS) v3.3.x", "DeltaV Virtual Studio (DVS) v4.3.x"],
+  "affected_versions_count": 11,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Eseguire sign-out corretto invece di disconnessione, configurare Group Policy per limitare sessioni, eseguire riavvii periodici coordinati dei server RDP",
+  "fix_available": false,
+  "fix_reference": "N/A - Nessuna soluzione software disponibile al momento",
+  "emerson_category": "Product Issues",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "Manca indicazione chiara dell'impatto reale su operazioni di controllo continuo (solo menzione di sluggishness e lockup RDP)",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": ["Memory leak progressivo", "Lockup del Terminal Server", "Nessuna patch disponibile"],
+  "notes": "Il problema è di origine Windows (Explorer.exe) ma si manifesta specificamente nell'ambiente virtualizzato DeltaV con ruolo RDP. Non coinvolge livelli di controllo 0-1 né SIS."
+}

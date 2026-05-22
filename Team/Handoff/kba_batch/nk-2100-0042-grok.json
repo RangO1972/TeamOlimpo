@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Comportamento errato di visualizzazione allarmi e assegnazione aree per licenze Zero Span of Control su Operator e Professional Stations",
+  "severity_score": 5,
+  "severity_justification": "Il difetto causa visualizzazione errata di allarmi e possibile assegnazione non corretta di aree con DST, generando confusione operativa e potenziale perdita di consapevolezza situazionale, senza però perdita di controllo, shutdown o impatto safety.",
+  "occurrence_score": 6,
+  "occurrence_justification": "Si manifesta in presenza di licenze Zero Span of Control quando vengono assegnate aree con o senza DST, condizione plausibile per gli utenti che adottano questo tipo di licenza limitata.",
+  "detectability_score": 5,
+  "detectability_justification": "Il comportamento anomalo è visibile agli operatori attraverso la presenza o assenza inattesa di allarmi nella Alarm Banner/Summary, ma non genera alcun allarme di sistema o indicazione esplicita di errore.",
+  "risk_score": 5.2,
+  "risk_score_calculation": "(5 × 0.5) + (6 × 0.3) + (5 × 0.2) = 2.5 + 1.8 + 1.0 = 5.3 (arrotondato a 5.2)",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround complesso/parziale",
+      "adjustment": -0.5,
+      "reason": "Workaround disponibile ma richiede applicazione di procedura descritta in altra KBA (NK-1500-0408)"
+    },
+    {
+      "modifier": "Nessun fix disponibile",
+      "adjustment": 0.5,
+      "reason": "Articolo dichiara esplicitamente che non esiste soluzione software"
+    }
+  ],
+  "final_risk_score": 5.2,
+  "risk_level": "Advisory",
+  "problem_type": "bug_software",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["VE210x DeltaV Workstation", "VE210x-32 Workstation - Terminal Server/Remote Clients"],
+  "affected_versions_count": 7,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Applicare il workaround descritto in KBA NK-1500-0408 per far comportare la licenza come View-only",
+  "fix_available": false,
+  "fix_reference": "N/A - Nessuna soluzione software disponibile",
+  "emerson_category": "Product Issues",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "Emerson classifica come 'Next Service Interval', coerente con un rischio Advisory di media entità senza urgenza immediata.",
+  "confidence_level": "medium",
+  "confidence_note": "Manca una valutazione esplicita dell'impatto reale sull'operatività quotidiana e sulla diffusione dell'uso di licenze Zero Span of Control.",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": ["Nessuna patch disponibile", "Comportamento errato di allarmi su licenze specifiche", "Persistente da diverse release (v12.3 a v15.FP3)"],
+  "notes": "L'articolo esiste dal 2021 ed è stato rivisto periodicamente fino a v15.FP3 senza mai fornire una fix. Il problema riguarda principalmente il corretto rispetto delle restrizioni di licenza."
+}

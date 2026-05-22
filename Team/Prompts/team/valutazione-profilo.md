@@ -20,9 +20,9 @@ uv run python -m tools.consulto `
   --provider grok `
   --model grok-4.20-0309-reasoning `
   --prompt "Team/Prompts/team/valutazione-profilo.md" `
-  --input ".claude/agents/MEMBRO.md" "Library/Fucina/YYYY-MM-DD_profilo_MEMBRO_vN.md" `
+  --input ".claude/agents/MEMBRO.md" "Team/Fucina/analyses/YYYY-MM-DD_profilo_MEMBRO_vN.md" `
   --merge `
-  --output "Library/Fucina/"
+  --output "Team/Fucina/analyses/"
 ```
 
 ## Prompt

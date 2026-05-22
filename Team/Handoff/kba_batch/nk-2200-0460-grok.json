@@ -1,0 +1,67 @@
+{
+  "kba_problem_summary": "Raccolta di hotfix e aggiornamenti software per DeltaV v15.LTS che risolvono numerosi bug (reset controller, problemi di ridondanza, errori EDC/DC block, perdita di comunicazione, crash DeltaV Live, Historian issues) inclusi alcuni marcati come PRODUCT SAFETY CONCERN e security issues",
+  "severity_score": 8,
+  "severity_justification": "La KBA include fix per problemi che possono causare reset di controller, perdita di ridondanza, mancata scrittura su output e problemi di sicurezza; alcuni sono esplicitamente classificati come PRODUCT SAFETY CONCERN.",
+  "occurrence_score": 5,
+  "occurrence_justification": "Molti problemi si verificano solo in condizioni specifiche (configurazioni particolari, switchover, download massicci, determinate combinazioni di blocchi), altri più frequenti dopo reboot o upgrade.",
+  "detectability_score": 6,
+  "detectability_justification": "Alcuni problemi generano allarmi o stati FAILED visibili in Diagnostics, altri (es. reset improvvisi, accumulo processi CefSharp, problemi silenziosi di scrittura) sono meno immediatamente rilevabili.",
+  "risk_score": 6.7,
+  "risk_score_calculation": "(8 × 0.5) + (5 × 0.3) + (6 × 0.2) = 4.0 + 1.5 + 1.2 = 6.7",
+  "modifiers_applied": [
+    {
+      "modifier": "Patch/fix disponibile",
+      "adjustment": -1,
+      "reason": "La KBA stessa fornisce i bundle di hotfix sia per General Maintenance che Targeted Distribution"
+    },
+    {
+      "modifier": "Coinvolge livelli 0-1 (campo/controllo base)",
+      "adjustment": 1,
+      "reason": "Molti fix riguardano controller (MQ/MX/SQ/SX/SZ/PK), I/O cards e Safety Logic Solver"
+    },
+    {
+      "modifier": "CVE/security issue presente",
+      "adjustment": 1,
+      "reason": "Sono menzionati esplicitamente diversi 'DeltaV security issue' e un 'product security issue' nel bundle Targeted"
+    },
+    {
+      "modifier": "Componente safety-related (SIS) coinvolto",
+      "adjustment": 1,
+      "reason": "Riferimenti a SIS alarm groups, CSLS, Safety Logic Solver e fix che influenzano blocchi usati in safety (EDC/DC)"
+    }
+  ],
+  "final_risk_score": 7.7,
+  "risk_level": "Warning",
+  "problem_type": "bug_software",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori (S-series, M-series), schede I/O e Safety Logic Solver",
+  "affected_products": [
+    "DeltaV v15.LTS Controller (MQ,MX,SQ,SX,SZ,PK)",
+    "DeltaV v15.LTS Workstation Software",
+    "DeltaV v15.LTS I/O (CIOC, CIOC2, EIOC, WIOC, RIOZ2)",
+    "DeltaV Live",
+    "Batch Historian",
+    "Safety Logic Solver"
+  ],
+  "affected_versions_count": 7,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Alcuni problemi hanno workaround o configurazioni da evitare (es. non scrivere su Profibus DST in SFC, verificare integrità DeltaV Live DB prima dell'installazione), ma la maggior parte richiede l'hotfix",
+  "fix_available": true,
+  "fix_reference": "Bundle elencati nella KBA (DeltaV_15LTS_CTRL_Q_07_CSS, WS_08_CSS, CIOC_04_CSS, EIOC_07_CSS, ecc.)",
+  "emerson_category": "Product Issues",
+  "divergence_from_emerson": true,
+  "divergence_explanation": "Emerson classifica come 'Product Issues - Next Service Interval'. La presenza di PRODUCT SAFETY CONCERN, security issues e problemi a livello controller giustifica un punteggio più elevato (Warning) rispetto alla classificazione di routine.",
+  "confidence_level": "medium",
+  "confidence_note": "La KBA è un documento aggregato di decine di fix diversi; non è possibile assegnare un unico punteggio FMEA perfettamente rappresentativo di tutti i problemi contenuti.",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": [
+    "PRODUCT SAFETY CONCERN",
+    "controller reset",
+    "loss of redundancy / switchover issues",
+    "DeltaV security issue",
+    "safety system affected (SIS alarm groups, CSLS)",
+    "no workaround available per alcuni problemi"
+  ],
+  "notes": "Si tratta di una Knowledge Base di tipo 'Software Updates' che raccoglie molteplici correzioni. I problemi più critici riguardano controller e blocchi di controllo (EDC/DC) utilizzati anche in applicazioni safety. Si raccomanda di installare almeno i bundle General Maintenance più recenti e di verificare con particolare attenzione i sistemi che usano ridondanza o SIS."
+}

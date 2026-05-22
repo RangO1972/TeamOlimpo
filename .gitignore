@@ -58,8 +58,8 @@ vaults/
 Library
 Library/
 
-# Team/Hermes — stato operativo ricreato dal taskmanager
-Team/Hermes/
+# Team/Fucina — working file temporanei, non versionare
+Team/Fucina/
 
 # Log strumenti
 tools/migrate-email-vault.log

@@ -1,0 +1,53 @@
+{
+  "kba_problem_summary": "Guida completa di best practices, configurazioni raccomandate e troubleshooting per DeltaV Virtual Studio v3.3.x (virtualizzazione Hyper-V, Active Directory, DNS, NTP, clustering, replica VM e alert hardware)",
+  "severity_score": 4,
+  "severity_justification": "Il documento non descrive un difetto specifico o una vulnerabilità, ma configura e risolve problemi che possono causare degrado operativo, difficoltà di gestione VM, problemi di connettività e potenziali interruzioni di produzione se ignorati.",
+  "occurrence_score": 5,
+  "occurrence_justification": "I problemi trattati (errata configurazione di DNS/NTP, DFSR, VirtualizationAdmin, delegation, replica) sono plausibili e ricorrenti in ambienti virtualizzati complessi, ma richiedono configurazioni non banali.",
+  "detectability_score": 7,
+  "detectability_justification": "Molti problemi (sincronizzazione temporale, repliche DFS, delegation errata) non generano allarmi evidenti fino a quando si manifestano come impossibilità di connettersi, muovere VM o autenticarsi.",
+  "risk_score": 4.9,
+  "risk_score_calculation": "(4 × 0.5) + (5 × 0.3) + (7 × 0.2) = 2.0 + 1.5 + 1.4 = 4.9",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround banale/complesso disponibile",
+      "adjustment": -1.5,
+      "reason": "L'intera KBA è una guida dettagliata di controlli e procedure di risoluzione; non esiste un singolo workaround ma un insieme ampio di best practices."
+    },
+    {
+      "modifier": "Nessun bug specifico / solo informazione",
+      "adjustment": -0.5,
+      "reason": "Non è descritto un difetto software o hardware concreto, ma solo configurazioni e troubleshooting."
+    }
+  ],
+  "final_risk_score": 2.9,
+  "risk_level": "Informational",
+  "problem_type": "procedural",
+  "architecture_level": 3,
+  "architecture_level_description": "Livello 3: Ingegneria e gestione (DeltaV Virtual Studio, Hyper-V, Active Directory, strumenti di management). Impatta indirettamente anche Livello 1 e 2 tramite le VM.",
+  "affected_products": [
+    "VF1026S002 DeltaV Virtual Studio (DVS) v3.3",
+    "VF1026S002 DeltaV Virtual Studio (DVS) v3.3.1",
+    "VF1026S002 DeltaV Virtual Studio (DVS) v3.3.2",
+    "VF1026S002 DeltaV Virtual Studio (DVS) v3.3.3",
+    "VF1026S002 DeltaV Virtual Studio (DVS) v3.3.4"
+  ],
+  "affected_versions_count": 5,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "L'intera KBA fornisce checklist, comandi PowerShell, procedure di verifica NTP/DNS/DFSR, configurazione delegation, cleanup Hyper-V e troubleshooting per i problemi più comuni.",
+  "fix_available": false,
+  "fix_reference": "N/A (rimanda ad AK-1700-0071 per aggiornamenti software DVS)",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "La classificazione Emerson come 'Information Only' / 'Required Action: Information Only' è perfettamente allineata con la valutazione FMEA.",
+  "confidence_level": "medium",
+  "confidence_note": "La KBA non descrive un singolo problema tecnico ma una raccolta di raccomandazioni; l'applicazione del framework FMEA è quindi meno diretta rispetto a una KBA su un bug o vulnerabilità specifico.",
+  "operational_recommendation": "applicare_best_practices",
+  "red_flags": [
+    "Nessun difetto o vulnerabilità specifica descritta",
+    "Molti problemi possono rimanere silenti fino a un evento critico (failover, replica, perdita di connettività)",
+    "Coinvolge infrastruttura critica di virtualizzazione che ospita workstation, domain controller e virtual controllers"
+  ],
+  "notes": "Si tratta di un documento di 48 pagine molto utile per ridurre il rischio operativo in ambienti DeltaV virtualizzati. Si raccomanda di integrarlo nei processi di commissioning e manutenzione periodica. Non sono presenti segnali di alta severità (loss of control, safety system affected, data corruption, etc.)."
+}

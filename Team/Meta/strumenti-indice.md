@@ -227,7 +227,7 @@ uv run python -m tools.kba_meeting "Library/deliverables/KBA_Merged_xxx.xlsx" --
 **Versione**: 0.1.0
 **Dipendenze principali**: `pyyaml`, `loguru`, `rich`
 
-Automatizza la gestione del sistema handoff del Team Olimpo: sposta i file con `stato: completato` da `Library/Fucina/Handoff/` a `Library/Fucina/Handoff/Archivio/` e rigenera dinamicamente il `Registro.md` con l'indice centralizzato.
+Automatizza la gestione del sistema handoff del Team Olimpo: sposta i file con `stato: completato` da `Team/Handoff/` a `Team/Handoff/Archivio/` e rigenera dinamicamente il `Registro.md` con l'indice centralizzato.
 
 **Comandi disponibili**:
 

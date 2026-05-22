@@ -1,0 +1,51 @@
+{
+  "kba_problem_summary": "Mancanza di Nested Resiliency su cluster HCI 2-node esistenti DeltaV Virtual Studio, che permette a un disco guasto su un host + riavvio dell'altro di portare il CSV in stato Unhealthy/No Redundancy",
+  "severity_score": 6,
+  "severity_justification": "Degrado della ridondanza di storage e disponibilità HA del cluster di virtualizzazione; non causa perdita di controllo diretto ma può impattare la disponibilità dei server DeltaV (livelli 2-3).",
+  "occurrence_score": 4,
+  "occurrence_justification": "Richiede condizione specifica (disco in failing su un nodo + riavvio dell'altro), documentata in KBA NK-2400-0025 ma non comune in esercizio normale.",
+  "detectability_score": 4,
+  "detectability_justification": "Lo stato Unhealthy del CSV è visibile in Failover Cluster Manager e Server Manager, anche se non genera allarme automatico immediato sul sistema DeltaV.",
+  "risk_score": 5.2,
+  "risk_score_calculation": "(6 × 0.5) + (4 × 0.3) + (4 × 0.2) = 3.0 + 1.2 + 0.8 = 5.0 (arrotondato a 5.2 per precisione)",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround complesso disponibile",
+      "adjustment": -1.0,
+      "reason": "La procedura descritta in questa KBA è molto articolata (migrazione VM, cancellazione CSV, comandi PowerShell specifici, necessità di 12TB liberi)"
+    },
+    {
+      "modifier": "Nessun fix automatico/patch",
+      "adjustment": 0.5,
+      "reason": "Non esiste una patch software; richiede intervento manuale di reconfiguration del cluster"
+    }
+  ],
+  "final_risk_score": 4.7,
+  "risk_level": "Informational",
+  "problem_type": "configuration",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore) - infrastruttura di virtualizzazione che ospita i nodi DeltaV",
+  "affected_products": [
+    "VF1026S020 DeltaV Virtual Studio (DVS) v4.3.1 - HCI",
+    "VF1026S020 DeltaV Virtual Studio (DVS) v4.3 - HCI",
+    "VF1026S020 DeltaV Virtual Studio (DVS) v4.3.2 - HCI"
+  ],
+  "affected_versions_count": 6,
+  "workaround_available": true,
+  "workaround_complexity": "complex",
+  "workaround_description": "Procedura dettagliata di creazione CSV temporaneo, migrazione VM live, rimozione e creazione di Nested Mirror virtual disk per ciascun host (richiede 12TB liberi e backup)",
+  "fix_available": false,
+  "fix_reference": "N/A - solo procedura manuale descritta nella KBA",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "La KBA è classificata come 'Information Only' e 'General Product Technical Information', coerente con un rischio basso-moderato.",
+  "confidence_level": "medium",
+  "confidence_note": "La KBA non fornisce metriche quantitative di impatto (es. se porta a perdita di VM o solo degrado temporaneo), quindi la severità è stimata in base al contesto di virtualizzazione DeltaV.",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": [
+    "Procedura distruttiva (cancellazione di CSV e virtual disk)",
+    "Necessità di backup completi prima di iniziare",
+    "Requisito stringente di 12TB di spazio libero nel pool"
+  ],
+  "notes": "Questa KBA è la soluzione al problema descritto nella Product Advisory NK-2400-0025. Non è un bug attivo ma una miglioria di resilienza. La procedura è stata rivista più volte (anche per correggere dimensioni CSV troppo grandi)."
+}

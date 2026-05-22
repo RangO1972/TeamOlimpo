@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Mouse cursor occasionally freezes in non-arrow shape (e.g. hourglass) in DeltaV Operate during RDP multi-monitor sessions under specific Windows builds",
+  "severity_score": 2,
+  "severity_justification": "Problema puramente cosmetico: le operazioni del mouse (movimento e click) rimangono completamente funzionali, nessun impatto su produzione, controllo o safety.",
+  "occurrence_score": 3,
+  "occurrence_justification": "Richiede condizioni molto specifiche (RDP/DRDC con multi-monitor + Windows 10 LTSB 1607 o Server 2016) e si manifesta solo in modo raro e intermittente.",
+  "detectability_score": 2,
+  "detectability_justification": "Il cursore congelato è immediatamente visibile all'operatore quando si verifica durante l'uso di faceplate o graphics.",
+  "risk_score": 2.3,
+  "risk_score_calculation": "(2 × 0.5) + (3 × 0.3) + (2 × 0.2) = 2.3",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround banale disponibile",
+      "adjustment": -1.0,
+      "reason": "Un semplice click o Ctrl+Alt+Del ripristina immediatamente il cursore"
+    },
+    {
+      "modifier": "Nessun fix disponibile",
+      "adjustment": 0.5,
+      "reason": "Emerson dichiara che non esiste una soluzione software"
+    }
+  ],
+  "final_risk_score": 1.8,
+  "risk_level": "Negligible",
+  "problem_type": "bug_software",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["DeltaV Workstation Software", "VE2126 Operator Interface"],
+  "affected_versions_count": 8,
+  "workaround_available": true,
+  "workaround_complexity": "simple",
+  "workaround_description": "Click sinistro del mouse oppure Ctrl+Alt+Del + Esc; tool opzionale CursorKeepAlive sul client",
+  "fix_available": false,
+  "fix_reference": "N/A - A software solution for this issue is not available",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "monitorare",
+  "red_flags": [],
+  "notes": "L'articolo classifica l'azione come \"Next Service Interval\". Il problema non ha alcun impatto sulla funzionalità del sistema di controllo."
+}

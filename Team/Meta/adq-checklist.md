@@ -159,7 +159,7 @@ Requisito → Test di qualifica (OQ) → Esito. Compilata al completamento dell'
 - [ ] Risk class assegnata e concordata
 - [ ] File agente salvato in `.opencode/agents/<nome>.md`
 - [ ] Registro aggiornato in `Team/Members/Registro.md`
-- [ ] Handoff da Proteo archiviato in `Library/Fucina/Handoff/Archivio/`
+- [ ] Handoff da Proteo archiviato in `Team/Handoff/Archivio/`
 
 ---
 

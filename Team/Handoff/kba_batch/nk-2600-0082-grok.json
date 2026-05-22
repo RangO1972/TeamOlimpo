@@ -1,0 +1,48 @@
+{
+  "kba_problem_summary": "Temporary loss of communication from CIOC/CIOC2 to PK Controller causes I/O Input/Output Failure, module errors, loops transitioning to IMAN mode and subsequent process trips.",
+  "severity_score": 9,
+  "severity_justification": "Direct loss of I/O data to the controller results in process trips and loss of control over affected control loops.",
+  "occurrence_score": 5,
+  "occurrence_justification": "The communication loss occurs suddenly but requires specific (unspecified) conditions; affects a wide range of versions indicating plausible occurrence.",
+  "detectability_score": 4,
+  "detectability_justification": "Errors are visible via module status, Event Chronicle messages ('I/O Input Failure', 'I/O Output Failure') and loops going to IMAN, but the initial data loss can be brief.",
+  "risk_score": 6.3,
+  "risk_score_calculation": "(9 × 0.5) + (5 × 0.3) + (4 × 0.2) = 6.3",
+  "modifiers_applied": [
+    {"modifier": "No workaround available", "adjustment": 1.5, "reason": "No workaround exists, increasing exposure time"},
+    {"modifier": "Levels 0-1 involvement", "adjustment": 1, "reason": "Affects PK Controller and CIOC/CIOC2 hardware at control and field level"},
+    {"modifier": "Fix available for multiple versions", "adjustment": -1, "reason": "Hotfix bundles or upgrade path available for several affected versions"}
+  ],
+  "final_risk_score": 7.8,
+  "risk_level": "Warning",
+  "problem_type": "bug_software",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllo base (controller PK, schede I/O CIOC/CIOC2)",
+  "affected_products": [
+    "PK Controller (BoP)",
+    "PK Controller (Standalone)",
+    "SE6502 Redundant CIOC",
+    "SE6504 Redundant CIOC2"
+  ],
+  "affected_versions_count": 8,
+  "workaround_available": false,
+  "workaround_complexity": "none",
+  "workaround_description": "Nessun workaround disponibile",
+  "fix_available": true,
+  "fix_reference": "NK-1900-0840 (v14.LTS), NK-2200-0045 (v14.FP3), NK-2400-0598 (v15.FP3); upgrade a v15.LTS per versioni più vecchie",
+  "fix_versions": ["v14.LTS", "v14.FP3", "v15.FP3"],
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "La frequenza esatta e le condizioni precise che scatenano la perdita temporanea di comunicazione non sono specificate nella KBA.",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": [
+    "Process Trips",
+    "No workaround available",
+    "Loss of I/O communication to controller",
+    "I/O Input/Output Failure errors",
+    "Affected loops go to IMAN mode"
+  ],
+  "notes": "Problema critico ai livelli 0-1 con impatto diretto su continuità di controllo e produzione. Si raccomanda di applicare gli hotfix o eseguire l'upgrade alle versioni supportate il prima possibile."
+}

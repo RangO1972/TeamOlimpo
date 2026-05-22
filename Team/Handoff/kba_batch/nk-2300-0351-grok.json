@@ -1,0 +1,55 @@
+{
+  "kba_problem_summary": "Timing issue tra thread di Unsolicited communication e control thread causa ritardi fino a 300 secondi nell'aggiornamento di parametri di Unit Module verso client (DeltaV Live/Operate)",
+  "severity_score": 6,
+  "severity_justification": "Degrado significativo della visibilità operatore (valori stale fino a 5 minuti) con possibile impatto su situational awareness, ma senza perdita di esecuzione del modulo o controllo.",
+  "occurrence_score": 4,
+  "occurrence_justification": "Difficile da riprodurre, richiede moduli Unit grandi con multiple fasi e ciclo 100ms; non si verifica in configurazioni tipiche.",
+  "detectability_score": 7,
+  "detectability_justification": "Nessun allarme o errore visibile generato; il ritardo si manifesta solo come valori non aggiornati nelle HMI senza indicazione esplicita.",
+  "risk_score": 5.6,
+  "risk_score_calculation": "(6 × 0.5) + (4 × 0.3) + (7 × 0.2) = 5.6",
+  "modifiers_applied": [
+    {
+      "modifier": "Coinvolge livelli 0-1 (campo/controllo base)",
+      "adjustment": 1,
+      "reason": "Il problema risiede nei controllori (Level 1)"
+    },
+    {
+      "modifier": "Fix disponibile",
+      "adjustment": -1,
+      "reason": "Hotfix TFSB793386 disponibile per tutte le versioni indicate"
+    },
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -0.5,
+      "reason": "Total download del controller come recovery (azione non banale)"
+    }
+  ],
+  "final_risk_score": 5.1,
+  "risk_level": "Advisory",
+  "problem_type": "bug_software",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori (S-series, M-series), schede I/O",
+  "affected_products": [
+    "DeltaV Controller & I/O Hardware (vari modelli PK, MX, MQ, SX, SQ, SZ, MD PLUS)",
+    "SE4100/SE4101 Ethernet I/O Card (EIOC)",
+    "General Workstation Products"
+  ],
+  "affected_versions_count": 6,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Eseguire un total download del controller/EIOC interessato",
+  "fix_available": true,
+  "fix_reference": "Hotfix TFSB793386 incluso nei bundle di aggiornamento (KBA NK-1900-0840, NK-2000-0448, NK-2100-0184, NK-2200-0045, NK-2200-0460, NK-2300-0348)",
+  "emerson_category": "Product Issues",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": [
+    "Ritardi fino a 300 secondi su dati HMI critici",
+    "Timing issue tra thread di comunicazione e controllo"
+  ],
+  "notes": "Il problema colpisce solo le comunicazioni unsolicited; l'esecuzione del modulo rimane completamente intatta. L'articolo classifica l'azione come 'Next Service Interval'."
+}

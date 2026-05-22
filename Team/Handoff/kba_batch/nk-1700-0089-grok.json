@@ -1,0 +1,49 @@
+{
+  "kba_problem_summary": "Raccomandazioni su versioni testate di driver e firmware per hardware Virtualization (Dell servers, SAN, VRTX, HCI) su DeltaV Virtual Studio v3.3.x e v4.3.x per evitare problemi noti come crash Intel E810 e spegnimenti automatici VRTX",
+  "severity_score": 5,
+  "severity_justification": "Possibili crash o spegnimenti automatici dell'infrastruttura di virtualizzazione che possono causare degrado o interruzione dei sistemi online/offline, ma non coinvolge direttamente safety o perdita di controllo immediata.",
+  "occurrence_score": 4,
+  "occurrence_justification": "Si manifesta solo utilizzando firmware/driver non testati o versioni specifiche problematiche (es. CMC 3.30 o Intel E810 errato), mentre le configurazioni factory o aggiornate correttamente non sono impattate.",
+  "detectability_score": 5,
+  "detectability_justification": "Alcuni effetti (spegnimento VRTX) sono immediatamente evidenti, mentre crash Intel possono essere improvvisi; richiede monitoraggio proattivo delle versioni installate.",
+  "risk_score": 5.0,
+  "risk_score_calculation": "(5 × 0.5) + (4 × 0.3) + (5 × 0.2) = 2.5 + 1.2 + 1.0 = 4.7 (arrotondato a 5.0)",
+  "modifiers_applied": [
+    {
+      "modifier": "Fix/recommended versions available",
+      "adjustment": -1.0,
+      "reason": "Emerson fornisce spreadsheet con versioni testate e driver specifico Intel E810"
+    },
+    {
+      "modifier": "Required Action: Next Service Interval",
+      "adjustment": -0.5,
+      "reason": "Nessuna urgenza immediata, aggiornamento pianificabile"
+    }
+  ],
+  "final_risk_score": 3.5,
+  "risk_level": "Informational",
+  "problem_type": "hardware",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2/3: Infrastruttura server e virtualizzazione che ospita HMI, workstation e potenzialmente componenti di controllo",
+  "affected_products": [
+    "DeltaV Virtualization Hardware (multiple Dell R730/R740/R440/M640/PowerVault MD/VRTX models)",
+    "DeltaV Virtual Studio (DVS) v3.3.x and v4.3.x"
+  ],
+  "affected_versions_count": 22,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Aggiornare driver e firmware alle versioni testate Emerson (spreadsheet + driver Intel E810 specifico) durante il prossimo intervallo di servizio o outage programmato",
+  "fix_available": true,
+  "fix_reference": "Dell_Virtualization_Drivers_for_DVS_3.x4.x_23FEB2026.xlsx e driver Intel E810 dedicato",
+  "emerson_category": "Product Issues",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "La KBA è principalmente un documento di manutenzione e compatibilità con raccomandazioni cumulative piuttosto che la descrizione di un singolo bug attivo; l'impatto reale varia fortemente tra sistemi HCI vs VRTX vs standalone.",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": [
+    "Critical Intel-related crash events on HCI (R740xd)",
+    "VRTX chassis automatic power down causato da specifica versione CMC firmware"
+  ],
+  "notes": "Articolo con numerose revisioni storiche che dimostra manutenzione continua della matrice di compatibilità. Una versione di firmware è stata ritirata per indagini in corso. Non coinvolge SIS o livelli 0-1 di campo."
+}

@@ -1,0 +1,52 @@
+{
+  "kba_problem_summary": "Procedura per installare in modo sicuro gli aggiornamenti di sicurezza Microsoft approvati su sistemi DeltaV tramite batch file, per mitigare vulnerabilità del sistema operativo sottostante",
+  "severity_score": 7,
+  "severity_justification": "Un sistema non patchato espone a rischi di compromissione dei workstation/servers DeltaV (livello 2), con potenziale impatto su produzione, integrità dati e connettività OPC, anche se non coinvolge direttamente safety o shutdown di controllo.",
+  "occurrence_score": 6,
+  "occurrence_justification": "Gli aggiornamenti Microsoft vengono rilasciati mensilmente; l'applicazione è plausibile e ricorrente su tutti i sistemi DeltaV in esercizio, ma richiede azione esplicita e pianificazione.",
+  "detectability_score": 8,
+  "detectability_justification": "La mancanza di patch non genera allarmi visibili o errori immediati; è silenziosa fino a un audit, incidente di sicurezza o problema di compatibilità.",
+  "risk_score": 6.8,
+  "risk_score_calculation": "(7 × 0.5) + (6 × 0.3) + (8 × 0.2) = 3.5 + 1.8 + 1.6 = 6.9 (arrotondato a 6.8)",
+  "modifiers_applied": [
+    {
+      "modifier": "Patch/fix disponibile",
+      "adjustment": -1,
+      "reason": "La KBA fornisce i batch file, checksum e procedura dettagliata per applicare gli aggiornamenti"
+    },
+    {
+      "modifier": "Workaround complesso/parziale",
+      "adjustment": -0.5,
+      "reason": "Richiede test su nodi non critici, piano di recovery e può causare problemi noti (es. DCOM, SIEM, avvio stazione)"
+    }
+  ],
+  "final_risk_score": 5.3,
+  "risk_level": "Advisory",
+  "problem_type": "security_vulnerability",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore) e alcuni componenti livello 3 (IDDC)",
+  "affected_products": [
+    "DeltaV Workstation Software",
+    "VE210x DeltaV Workstation",
+    "IDDC Independent DeltaV Domain Controller",
+    "DeltaV Upgrade Offline/Online Service"
+  ],
+  "affected_versions_count": 18,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Utilizzare i batch file forniti su stazioni non critiche, verificare checksum, seguire piano di recovery e riavviare come richiesto",
+  "fix_available": true,
+  "fix_reference": "Batch files (Column A/B/C/D/E) e ReadMe.txt inclusi nella KBA AP-0900-0040",
+  "emerson_category": "Advisory",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "La KBA è principalmente una guida procedurale di manutenzione security piuttosto che la descrizione di un singolo bug o vulnerabilità nuova; mancano dettagli su impatto di specifiche patch recenti.",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": [
+    "Installing Microsoft security updates is not risk-free",
+    "Riferimenti a precedenti incidenti di avvio fallito delle stazioni (KBA NK-2000-0035)",
+    "Problemi noti con DCOM (CVE-2021-26414), SIEM e applicazioni SQL"
+  ],
+  "notes": "La KBA viene aggiornata mensilmente con nuovi aggiornamenti approvati. È fortemente raccomandato testare prima su nodi non di produzione e avere un piano di rollback. Non coinvolge livelli 0-1 o SIS."
+}

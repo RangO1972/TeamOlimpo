@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "DeltaV Delete Utility rimuove automaticamente Picture e Chart files su workstation operatorie quando riutilizzano lo stesso filename di elementi precedentemente cancellati",
+  "severity_score": 5,
+  "severity_justification": "Causa perdita di elementi HMI (grafici e trend) sulle postazioni operative con necessità di procedura di recovery, senza impatto su controllo di processo o safety",
+  "occurrence_score": 4,
+  "occurrence_justification": "Richiede l'utilizzo specifico della Delete Utility seguito dal riutilizzo dello stesso nome file, pratica non comune ma plausibile durante attività di manutenzione",
+  "detectability_score": 6,
+  "detectability_justification": "La cancellazione avviene silenziosamente senza allarmi; è rilevabile controllando il file DeletedFiles.tmp o notando la scomparsa dei grafici",
+  "risk_score": 4.9,
+  "risk_score_calculation": "(5 × 0.5) + (4 × 0.3) + (6 × 0.2) = 4.9",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround complesso disponibile",
+      "adjustment": -0.5,
+      "reason": "Procedura di recovery dettagliata in 14 passi ma efficace"
+    },
+    {
+      "modifier": "Nessuna patch/fix disponibile",
+      "adjustment": +1,
+      "reason": "KBA dichiara esplicitamente che non esiste soluzione software"
+    }
+  ],
+  "final_risk_score": 5.4,
+  "risk_level": "Advisory",
+  "problem_type": "bug_software",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["DeltaV Workstation Software", "VE2126 Operator Interface"],
+  "affected_versions_count": 2,
+  "workaround_available": true,
+  "workaround_complexity": "complex",
+  "workaround_description": "Utilizzare Delete Utility solo per cancellazioni permanenti; seguire procedura di recovery su ProfessionalPLUS (cancellazione DeletedFiles.tmp, svuotamento Recycle Bin, download Setup Data)",
+  "fix_available": false,
+  "fix_reference": "N/A - Nessuna soluzione software disponibile",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": ["Nessuna fix software disponibile", "Comportamento persistente legato al file DeletedFiles.tmp", "Impatto su consistenza HMI operatorie"],
+  "notes": "Il problema è confinato ai file grafici/trend (Livello 2). ProfessionalPLUS non subisce la cancellazione automatica. La KBA fornisce metodo di verifica chiaro tramite DeletedFiles.tmp."
+}

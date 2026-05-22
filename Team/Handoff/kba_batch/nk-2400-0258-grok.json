@@ -1,0 +1,38 @@
+{
+  "kba_problem_summary": "Multipath-IO feature installato di default in DeltaV Virtual Studio 4.3.x ma non più necessario nell'architettura di virtualizzazione corrente",
+  "severity_score": 3,
+  "severity_justification": "Nessun impatto operativo, di produzione, dati o safety menzionato; si tratta di una pulizia di un componente non più utilizzato.",
+  "occurrence_score": 7,
+  "occurrence_justification": "La feature viene installata di default su tutte le versioni indicate (DVS 4.3, 4.3.1, 4.3.2), rendendo la condizione molto comune.",
+  "detectability_score": 3,
+  "detectability_justification": "La presenza della feature è immediatamente verificabile tramite un semplice comando PowerShell (Get-WindowsFeature).",
+  "risk_score": 4.1,
+  "risk_score_calculation": "(3 × 0.5) + (7 × 0.3) + (3 × 0.2) = 1.5 + 2.1 + 0.6 = 4.2",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -0.5,
+      "reason": "Procedura di rimozione fornita, seppur richieda reboot e migrazione VM"
+    }
+  ],
+  "final_risk_score": 3.7,
+  "risk_level": "Informational",
+  "problem_type": "procedural",
+  "architecture_level": 3,
+  "architecture_level_description": "Livello 3: Ingegneria e gestione (infrastruttura di virtualizzazione e host per componenti DeltaV)",
+  "affected_products": ["VF1026S020 DeltaV Virtual Studio (DVS) v4.3", "VF1026S020 DeltaV Virtual Studio (DVS) v4.3.1", "VF1026S020 DeltaV Virtual Studio (DVS) v4.3.2"],
+  "affected_versions_count": 3,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Eseguire comandi PowerShell per rimuovere la feature su tutti gli HCI host, migrare VM e risorse cluster, poi reboot.",
+  "fix_available": false,
+  "fix_reference": "N/A",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "La KBA non specifica alcuna conseguenza negativa derivante dal lasciare la feature installata, rendendo difficile valutare l'effettiva severità.",
+  "operational_recommendation": "monitorare",
+  "red_flags": ["Richiede reboot degli host HCI", "Necessita migrazione preventiva di VM e risorse cluster"],
+  "notes": "L'articolo è classificato 'Information Only' e 'Required Action: Information Only'. Non si tratta di un bug, vulnerabilità o malfunzionamento, ma di una raccomandazione di pulizia."
+}

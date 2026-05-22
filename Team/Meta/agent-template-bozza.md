@@ -23,7 +23,7 @@ permission:
   read: allow                          # everyone reads everything
   [bash / websearch / webfetch / task] # role-specific
   edit:
-    "Library/Fucina/Handoff/**": "allow"         # everyone writes handoffs
+    "Team/Handoff/**": "allow"         # everyone writes handoffs
     "Team/<AgentName>/**": "allow"     # everyone writes own folder
     "[ROLE_PATH/**]": "allow"          # role-specific outputs
 ---
@@ -107,14 +107,14 @@ permission:
   read: allow
   [bash / websearch / webfetch / task]  # role-specific
   edit:
-    "Library/Fucina/Handoff/**": "allow"          # every agent
+    "Team/Handoff/**": "allow"          # every agent
     "Team/<AgentName>/**": "allow"      # every agent
     "[ROLE_PATH/**]": "allow"           # role-specific
 ```
 
 **Base rule** — every agent always gets:
 - `read: allow`
-- `edit: Library/Fucina/Handoff/**`
+- `edit: Team/Handoff/**`
 - `edit: Team/<AgentName>/**`
 
 **Role-specific extras:**

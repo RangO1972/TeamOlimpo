@@ -1,0 +1,48 @@
+{
+  "kba_problem_summary": "Cumulative hotfix bundles resolving numerous software bugs, controller resets, communication/redundancy failures, security vulnerabilities and configuration issues in DeltaV v14.LTS",
+  "severity_score": 7,
+  "severity_justification": "Includes PRODUCT SAFETY CONCERN fixes, controller resets, loss of control/communication, redundancy deadlocks and security issues (privilege escalation/DoS) that can impact production and safety",
+  "occurrence_score": 5,
+  "occurrence_justification": "Many issues require specific configurations, downloads or rare conditions, but some (network disconnects, certain module operations) are more readily encountered",
+  "detectability_score": 6,
+  "detectability_justification": "Some issues produce visible alarms or diagnostics errors while others (memory issues, silent buffer leaks, certain security problems) may remain undetected until failure",
+  "risk_score": 6.2,
+  "risk_score_calculation": "(7 × 0.5) + (5 × 0.3) + (6 × 0.2) = 6.2",
+  "modifiers_applied": [
+    {
+      "modifier": "Patch/fix available",
+      "adjustment": -1,
+      "reason": "Comprehensive hotfix bundles provided for proactive or targeted installation"
+    },
+    {
+      "modifier": "Coinvolge livelli 0-1 (campo/controllo base)",
+      "adjustment": 1,
+      "reason": "Majority of critical fixes target controllers, I/O cards and field communication at Level 1"
+    },
+    {
+      "modifier": "Security vulnerabilities included",
+      "adjustment": 1,
+      "reason": "Multiple security enhancements and explicit privilege escalation/DoS fixes"
+    }
+  ],
+  "final_risk_score": 7.2,
+  "risk_level": "Warning",
+  "problem_type": "bug_software",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori (S-series, M-series), schede I/O e comunicazione di campo",
+  "affected_products": ["DeltaV v14.LTS", "Controller MD+/SD+/MQ/MX/SQ/SX/SZ/PK", "Workstation Software", "CIOC/CIOC2/EIOC/WIOC/RIOZ", "Batch Historian", "Safety Logic Solver"],
+  "affected_versions_count": 40,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Configuration changes, installation order requirements, or operational restrictions detailed in referenced KBAs; not available for all issues",
+  "fix_available": true,
+  "fix_reference": "DeltaV_1431_*.CSS hotfix bundles (CTRL_P_14_CSS, WS_39_CSS, CIOC_12_CSS, EIOC_18_CSS etc.)",
+  "emerson_category": "Product Issues",
+  "divergence_from_emerson": true,
+  "divergence_explanation": "Emerson marks as Product Issues with 'Next Service Interval' action, but the presence of explicit PRODUCT SAFETY CONCERN items, controller resets and security fixes justifies a Warning rating",
+  "confidence_level": "medium",
+  "confidence_note": "KBA is a very large compilation of dozens of issues with widely varying severity and affected components; a single composite score is inherently approximate",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": ["PRODUCT SAFETY CONCERN", "controller reset", "loss of redundancy", "safety system affected", "security vulnerabilities", "deadlock condition"],
+  "notes": "This is a major cumulative update document covering both General Maintenance and Targeted Distribution bundles. Several previous bundles were withdrawn due to introduced regressions. Review of specific TFSB items against system configuration is strongly recommended."
+}

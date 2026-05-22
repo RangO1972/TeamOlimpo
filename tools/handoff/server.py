@@ -77,7 +77,7 @@ def _get_handoff_root(project_root: Path) -> Path:
     if not handoff_rel:
         raise RuntimeError("Missing 'handoff_root' in tools/config.yaml [handoff]")
 
-    return (project_root / handoff_rel).resolve()
+    return project_root / handoff_rel
 
 
 def _reconstruct_handoff_path(
@@ -121,7 +121,7 @@ def create(
     Builds a temporary body file with YAML frontmatter, delegates to the
     existing handoff CLI (``tools.handoff.cli.main``), and returns the
     **relative** path of the newly created handoff file (e.g.
-    ``Library/Fucina/Handoff/2026/05/2026-05-20_1430_efesto_report_my-slug.md``).
+    ``Team/Handoff/2026/05/2026-05-20_1430_efesto_report_my-slug.md``).
 
     Parameters
     ----------
@@ -281,7 +281,7 @@ def list(  # noqa: A001
 ) -> str:
     """List and filter existing Team Olimpo handoff files.
 
-    Searches the handoff archive (Library/Fucina/Handoff/YYYY/MM/) for handoff files
+    Searches the handoff archive (Team/Handoff/YYYY/MM/) for handoff files
     matching the given filters. Results are sorted newest-first.
 
     Parameters

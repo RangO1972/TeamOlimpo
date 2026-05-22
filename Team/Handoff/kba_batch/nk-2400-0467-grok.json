@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "DeltaV Operate (WorkSpace.exe) stops responding when switching displays that contain Embedded Trends, faulting in PEGRP32G.dll",
+  "severity_score": 6,
+  "severity_justification": "Crash dell'HMI operatoria durante una operazione normale (switch display) che compromette temporaneamente la visibilità e il controllo del processo da parte dell'operatore",
+  "occurrence_score": 6,
+  "occurrence_justification": "Si verifica in modo consistente su sistemi configurati con Embedded Trends (configurazione comune) ogni volta che si cambia display contenente trend",
+  "detectability_score": 2,
+  "detectability_justification": "Il blocco dell'applicazione è immediatamente visibile all'operatore e viene registrato un Application Error nel Windows Event Viewer",
+  "risk_score": 5.0,
+  "risk_score_calculation": "(6 × 0.5) + (6 × 0.3) + (2 × 0.2) = 5.0",
+  "modifiers_applied": [
+    {
+      "modifier": "Nessun workaround disponibile",
+      "adjustment": 1.0,
+      "reason": "KBA dichiara esplicitamente che un work-around non è disponibile"
+    },
+    {
+      "modifier": "Patch/fix disponibile",
+      "adjustment": -1,
+      "reason": "Hotfix inclusi nei bundle di aggiornamento ufficiali per tutte le versioni elencate (TFSB944369)"
+    }
+  ],
+  "final_risk_score": 5.0,
+  "risk_level": "Advisory",
+  "problem_type": "bug_software",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["DeltaV Workstation Software", "VE2126 Operator Interface"],
+  "affected_versions_count": 7,
+  "workaround_available": false,
+  "workaround_complexity": "none",
+  "workaround_description": "Nessun workaround disponibile",
+  "fix_available": true,
+  "fix_reference": "Hotfix bundle per v14.LTS/FPx e v15.LTS/FP1/FP2 (riferimenti a NK-1900-0840, NK-2000-0448, NK-2100-0184, ecc.)",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": ["Nessun workaround disponibile", "Coinvolge l'HMI principale (WorkSpace.exe)"],
+  "notes": "L'articolo classifica l'azione come \"Next Service Interval\". Il problema si manifesta anche con grafica out-of-the-box. Non coinvolge livelli di controllo o SIS."
+}

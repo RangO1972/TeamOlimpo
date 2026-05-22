@@ -1,0 +1,38 @@
+{
+  "kba_problem_summary": "Configurazione DNS incompleta o non corretta su workstation DeltaV in ambiente di dominio può causare problemi di risoluzione nomi, errori di replica Active Directory e messaggi di black hole server",
+  "severity_score": 5,
+  "severity_justification": "Causa degrado operativo (login dominio, risoluzione nomi, replica AD) senza impatto diretto su controllo di processo o safety.",
+  "occurrence_score": 5,
+  "occurrence_justification": "Richiede setup di dominio con ProfessionalPLUS come DC e/o presenza di NIC Plant LAN, condizione plausibile ma non universale.",
+  "detectability_score": 5,
+  "detectability_justification": "Problemi generano messaggi nei log eventi (black hole) e fallimenti di login/replica visibili, ma richiedono controllo attivo.",
+  "risk_score": 5.0,
+  "risk_score_calculation": "(5 × 0.5) + (5 × 0.3) + (5 × 0.2) = 5.0",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround banale disponibile",
+      "adjustment": -1.0,
+      "reason": "L'articolo stesso fornisce istruzioni dettagliate di configurazione"
+    }
+  ],
+  "final_risk_score": 4.0,
+  "risk_level": "Informational",
+  "problem_type": "configuration",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["DeltaV Workstation Software", "DeltaV Upgrade Services"],
+  "affected_versions_count": 4,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Configurazione manuale del secondary DNS e zone transfer dopo ogni Workstation Configuration; setup forwarder per Plant LAN",
+  "fix_available": false,
+  "fix_reference": "N/A",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "La KBA è una guida di best practices piuttosto che la descrizione di un bug o vulnerabilità specifica, rendendo l'applicazione del modello FMEA parzialmente forzata.",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": ["Configurazione DNS secondario resettata dopo ogni Workstation Configuration", "Problemi di replica Active Directory legati a DNS", "Richieste DNS verso Plant LAN che generano black hole server"],
+  "notes": "Articolo datato (2010) relativo a Windows XP/Server 2003. Non sono presenti segnali di alta severità (nessun loss of control, nessun impatto SIS, nessun CVE)."
+}

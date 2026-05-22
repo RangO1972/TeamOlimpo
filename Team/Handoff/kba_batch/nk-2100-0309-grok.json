@@ -1,0 +1,48 @@
+{
+  "kba_problem_summary": "Vulnerabilità Microsoft Windows Print Spooler (CVE-2021-34527 - PrintNightmare) che permette Remote Code Execution su DeltaV Workstations",
+  "severity_score": 8,
+  "severity_justification": "RCE che consente esecuzione arbitraria di codice, manipolazione/eliminazione dati e creazione di account con privilegi elevati (CVSS 8.8 High)",
+  "occurrence_score": 5,
+  "occurrence_justification": "Richiede utente autenticato (PR:L) e accesso di rete; plausibile in ambienti industriali ma non avviene spontaneamente o su tutte le configurazioni",
+  "detectability_score": 8,
+  "detectability_justification": "Vulnerabilità silenziosa: non genera allarmi o indicazioni visibili prima dello sfruttamento riuscito",
+  "risk_score": 7.1,
+  "risk_score_calculation": "(8 × 0.5) + (5 × 0.3) + (8 × 0.2) = 4.0 + 1.5 + 1.6 = 7.1",
+  "modifiers_applied": [
+    {
+      "modifier": "CVE with exploit noto",
+      "adjustment": 1.0,
+      "reason": "CVE-2021-34527 (PrintNightmare) ha avuto exploit pubblici noti"
+    },
+    {
+      "modifier": "Patch/fix disponibile",
+      "adjustment": -1.0,
+      "reason": "Emerson ha testato e approvato patch Microsoft per versioni 13.3.1 e successive"
+    },
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -0.5,
+      "reason": "Mitigazioni immediate Microsoft disponibili (disabilitazione spooler o modifiche permessi)"
+    }
+  ],
+  "final_risk_score": 6.6,
+  "risk_level": "Warning",
+  "problem_type": "security_vulnerability",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["DeltaV Workstations"],
+  "affected_versions_count": 8,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Mitigazioni Microsoft per Print Spooler (disabilitare servizio, modifiche registry o permessi file)",
+  "fix_available": true,
+  "fix_reference": "KB5004238 e KB5004244 (per v13.3.1+); upgrade raccomandato per versioni precedenti",
+  "emerson_category": "Alert",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": ["Remote Code Execution", "Print Spooler vulnerability", "Impatto su versioni legacy senza patch diretta"],
+  "notes": "Per DeltaV v10.3.1-v12.3.1 e vR2-vR5 non esiste patch diretta: è obbligatorio l'upgrade. La classificazione Emerson come Alert è coerente con il rischio di compromissione delle workstation."
+}

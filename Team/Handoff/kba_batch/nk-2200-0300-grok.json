@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Naming a control module \"P01\" causes the module not to run but shows as \"GOOD\" in DeltaV Diagnostics",
+  "severity_score": 7,
+  "severity_justification": "Il modulo di controllo non viene eseguito ma i diagnostics riportano falsamente stato GOOD, con rischio di perdita di controllo non rilevata e problemi su Control Studio.",
+  "occurrence_score": 4,
+  "occurrence_justification": "Richiede la specifica denominazione \"P01\" di un control module, condizione possibile ma non comune o predefinita.",
+  "detectability_score": 7,
+  "detectability_justification": "Lo stato \"GOOD\" nei diagnostics è fuorviante; i sintomi secondari (riferimenti ???, crash di Control Studio) appaiono solo successivamente.",
+  "risk_score": 6.1,
+  "risk_score_calculation": "(7 × 0.5) + (4 × 0.3) + (7 × 0.2) = 3.5 + 1.2 + 1.4 = 6.1",
+  "modifiers_applied": [
+    {
+      "modifier": "Coinvolge livelli 0-1 (campo/controllo base)",
+      "adjustment": 1,
+      "reason": "Interessa direttamente i controllori Level 1 e l'esecuzione dei control module"
+    },
+    {
+      "modifier": "Workaround banale disponibile",
+      "adjustment": -1.5,
+      "reason": "La semplice rinomina del modulo risolve completamente il problema"
+    }
+  ],
+  "final_risk_score": 5.6,
+  "risk_level": "Advisory",
+  "problem_type": "bug_software",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori (S-series, M-series), schede I/O",
+  "affected_products": ["DeltaV Controller & I/O Hardware v14.LTS (CE300x, SE300x, VE300x, PK, RRE, RSE, RSS, SS series)"],
+  "affected_versions_count": 1,
+  "workaround_available": true,
+  "workaround_complexity": "simple",
+  "workaround_description": "Rinominare il modulo con un nome diverso da “P01”",
+  "fix_available": false,
+  "fix_reference": "Soluzione software potrà essere valutata per release future",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": ["Diagnostica fuorviante (stato GOOD errato)", "Modulo non in esecuzione", "Possibile crash di Control Studio"],
+  "notes": "Il problema si manifesta su sistemi nuovi, aggiornati o già validati. Non coinvolge SIS. L'impatto è limitato alla specifica denominazione \"P01\"."
+}

@@ -1,0 +1,58 @@
+{
+  "kba_problem_summary": "Zone 2 Remote IO o WIOC flashed con bundle contenente hotfix per TFSB667533 causa indisponibilità intermittente del controller standby",
+  "severity_score": 6,
+  "severity_justification": "Compromette la ridondanza del controller (standby diventa intermittentemente unavailable), con potenziale impatto sulla continuità produttiva in caso di failure del primario, senza però causare perdita immediata di controllo o shutdown.",
+  "occurrence_score": 5,
+  "occurrence_justification": "Richiede configurazione specifica (RIO/WIOC Zone 2 o Wireless assegnati a controller ridondante) e flashing di bundle precisi contenenti l'hotfix incriminato.",
+  "detectability_score": 6,
+  "detectability_justification": "Genera warning continui nel Runtime Recorder del controller standby; rilevabile tramite analisi log ma non tramite allarmi operatore standard.",
+  "risk_score": 5.7,
+  "risk_score_calculation": "(6 × 0.5) + (5 × 0.3) + (6 × 0.2) = 5.7",
+  "modifiers_applied": [
+    {
+      "modifier": "Coinvolge livelli 0-1 (campo/controllo base)",
+      "adjustment": 1,
+      "reason": "Interessa direttamente hardware I/O e controller ridondanti (Livello 1)"
+    },
+    {
+      "modifier": "Workaround complesso/parziale",
+      "adjustment": -0.5,
+      "reason": "Disponibile solo per v14 (uninstall + hotfix + flash); nessuna workaround per v15"
+    },
+    {
+      "modifier": "Patch/fix disponibile",
+      "adjustment": -1,
+      "reason": "Hotfix per TFSB820051 disponibili tramite KBAs di aggiornamento software"
+    }
+  ],
+  "final_risk_score": 5.2,
+  "risk_level": "Advisory",
+  "problem_type": "bug_software",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori (S-series, M-series), schede I/O",
+  "affected_products": [
+    "RRE4021 Zone 2 - Remote I/O Scanner",
+    "VE4021 Zone 2 - Remote I/O Scanner",
+    "SE4801T0X Redundant Wireless I/O Card",
+    "SE4801T1X Simplex Wireless I/O Card",
+    "VE4023 RIU2"
+  ],
+  "affected_versions_count": 6,
+  "workaround_available": true,
+  "workaround_complexity": "complex",
+  "workaround_description": "Per v14: uninstall bundle affetti, installare hotfix raccomandati e performare flash upgrade (non applicabile a v15)",
+  "fix_available": true,
+  "fix_reference": "Hotfix per TFSB820051 (vedi NK-1900-0840, NK-2000-0448, NK-2100-0184, NK-2200-0045, NK-2200-0460, NK-2300-0348 e NK-2000-0197)",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "Mancano dettagli precisi sull'impatto operativo reale dell'indisponibilità intermittente e sulla frequenza osservata in campo; mitigazioni differenziate per versione.",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": [
+    "Problema introdotto da hotfix precedente (TFSB667533)",
+    "Nessuna workaround per sistemi v15.LTS e v15.FP1",
+    "Affects controller redundancy"
+  ],
+  "notes": "L'articolo classifica l'azione come 'Next Service Interval'. Il problema è un effetto collaterale di correzione di un altro bug; la soluzione definitiva è l'adozione degli hotfix successivi che includono TFSB820051."
+}

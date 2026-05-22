@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Configurazione errata di bit mascherati in tag di output Profibus/DeviceNet o cancellazione di moduli di controllo senza procedura corretta può causare valori inattesi sugli output verso dispositivi di campo",
+  "severity_score": 6,
+  "severity_justification": "Può provocare disturbi al processo a causa di valori di output imprevisti verso dispositivi di campo, senza però causare shutdown totale o coinvolgimento diretto di sistemi di sicurezza SIS",
+  "occurrence_score": 5,
+  "occurrence_justification": "Richiede condizioni di configurazione specifiche (bit mascherati o cancellazione di moduli) che Emerson definisce rare sul campo",
+  "detectability_score": 7,
+  "detectability_justification": "I valori inattesi su bit mascherati o output bloccati dopo cancellazione modulo non generano allarmi evidenti e possono rimanere silenti fino a impatto sul processo",
+  "risk_score": 5.9,
+  "risk_score_calculation": "(6 × 0.5) + (5 × 0.3) + (7 × 0.2) = 5.9",
+  "modifiers_applied": [
+    {
+      "modifier": "Coinvolge livelli 0-1 (campo/controllo base)",
+      "adjustment": 1,
+      "reason": "Interessa direttamente schede I/O di livello 1 e segnali verso dispositivi di campo (livello 0)"
+    },
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -0.5,
+      "reason": "Workaround esistenti ma richiedono download della scheda e consultazione di documentazione specifica"
+    }
+  ],
+  "final_risk_score": 6.4,
+  "risk_level": "Warning",
+  "problem_type": "configuration",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori e schede I/O (VE4009, VE4014, VE4016)",
+  "affected_products": ["VE4009 ASi Card", "VE4014 Profibus DP Card", "VE4016 Device Net I/O Interface"],
+  "affected_versions_count": 5,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Riassegnare l'intero pattern di bit o creare tag aggiuntivi per bit mascherati (Issue 1); cancellare il device in DeltaV Explorer e scaricare la card dopo eliminazione del modulo (Issue 2)",
+  "fix_available": false,
+  "fix_reference": "N/A - solo misure di configurazione e procedurali",
+  "emerson_category": "Advisory",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": ["Valori di output inattesi verso dispositivi di campo", "Required Action: Mandatory", "Interessa tutti i tipi di bus (Profibus DP, DeviceNet, AS-i)"],
+  "notes": "Si tratta di raccomandazioni di configurazione piuttosto che di un bug software. L'articolo sottolinea che gli eventi sono rari ma Emerson richiede azione per eliminare completamente il rischio."
+}

@@ -1,0 +1,39 @@
+{
+  "kba_problem_summary": "La procedura per abilitare l'Auto Logon automatico in Windows e DeltaV prevede modifiche al registro di sistema e script che possono introdurre vulnerabilità di sicurezza se utilizzate con account amministrativi o credenziali esposte.",
+  "severity_score": 5,
+  "severity_justification": "Il rischio principale è la compromissione della riservatezza (credenziali memorizzate in chiaro nel registro) e potenziale accesso non autorizzato, senza impatto diretto su controllo di processo, produzione o sicurezza fisica.",
+  "occurrence_score": 4,
+  "occurrence_justification": "Il problema si manifesta solo se l'utente esegue deliberatamente la configurazione e ignora le best practice indicate (uso di account non amministrativi).",
+  "detectability_score": 7,
+  "detectability_justification": "Le modifiche al registro e la presenza di Auto Logon non generano allarmi né errori visibili; sono rilevabili solo con audit di sicurezza o ispezione manuale.",
+  "risk_score": 5.3,
+  "risk_score_calculation": "(5 × 0.5) + (4 × 0.3) + (7 × 0.2) = 5.3",
+  "modifiers_applied": [
+    {"modifier": "Avvertenza esplicita di sicurezza presente", "adjustment": -0.5, "reason": "La KBA avverte chiaramente di usare solo utenti senza privilegi amministrativi"},
+    {"modifier": "Procedura informativa con mitigazioni", "adjustment": -0.5, "reason": "Fornisce alternative più sicure (-autologon) e best practice"}
+  ],
+  "final_risk_score": 4.3,
+  "risk_level": "Informational",
+  "problem_type": "configuration",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["DeltaV General Workstation", "DeltaV Upgrade Services"],
+  "affected_versions_count": 14,
+  "workaround_available": true,
+  "workaround_complexity": "simple",
+  "workaround_description": "Utilizzare account senza privilegi amministrativi; preferire il parametro -autologon invece di -password sulle versioni v14.LTS e successive; configurare il DeltaV Screen Saver per auto-logoff.",
+  "fix_available": false,
+  "fix_reference": "",
+  "fix_versions": [],
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "monitorare",
+  "red_flags": [
+    "Memorizzazione credenziali in registro Windows",
+    "Rischio di vulnerabilità di sicurezza esplicitamente dichiarato"
+  ],
+  "notes": "KBA di tipo informativo (Information Only) che fornisce procedure di configurazione con avvertenze di sicurezza. Non descrive un difetto o una vulnerabilità nota da correggere, bensì una guida all'uso di funzionalità che comportano rischi se implementate scorrettamente. Su v14.LTS e successive Emerson ha già migliorato la sicurezza sostituendo il parametro -password con -autologon."
+}

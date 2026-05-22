@@ -1,0 +1,64 @@
+{
+  "kba_problem_summary": "DeltaV controllers possono perdere comunicazione sulla ACN (Red X permanente) a causa di errori socket osStat 9 senza attivare il node switchover automatico, causando riavvio software e possibili eventi process-disruptive",
+  "severity_score": 7,
+  "severity_justification": "Problema a livello di controller (Livello 1) che causa perdita di controllo comunicativo e potenziali interruzioni di processo senza failover automatico.",
+  "occurrence_score": 4,
+  "occurrence_justification": "Richiede una condizione specifica di socket error (osStat 9); osservato su alcuni controller ma descritto come evento che 'might' verificarsi.",
+  "detectability_score": 3,
+  "detectability_justification": "Red X visibile in DeltaV Diagnostics e messaggi ripetuti nei log telnet rendono il problema evidente, anche se la mancanza di switchover automatico richiede analisi dei log.",
+  "risk_score": 5.3,
+  "risk_score_calculation": "(7 × 0.5) + (4 × 0.3) + (3 × 0.2) = 5.3",
+  "modifiers_applied": [
+    {
+      "modifier": "Coinvolge livelli 0-1 (campo/controllo base)",
+      "adjustment": 1,
+      "reason": "Interessa direttamente i controller DeltaV (Livello 1)"
+    },
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -0.5,
+      "reason": "Reseat del controller è possibile ma richiede intervento fisico"
+    },
+    {
+      "modifier": "Patch/fix disponibile",
+      "adjustment": -1,
+      "reason": "Hotfix disponibile per v15.FP3; soluzione in sviluppo per altre versioni"
+    }
+  ],
+  "final_risk_score": 4.8,
+  "risk_level": "Advisory",
+  "problem_type": "bug_software",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori (S-series, M-series), schede I/O",
+  "affected_products": [
+    "PK0xxxxx Controller PK Hardware (BoP)",
+    "RRE3007 MX Controller",
+    "RRE3008 Controller MQ Hardware",
+    "RSE3007 SX Controller",
+    "RSE3008 SQ Controller",
+    "RSS3001 Redundant SZ Controller Assembly",
+    "SE3007 SX Controller",
+    "SE3008 SQ Controller",
+    "SS3001 Simplex SZ Controller Assembly",
+    "VE3007 MX Controller",
+    "VE3008 Controller MQ Hardware"
+  ],
+  "affected_versions_count": 4,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Reseat (rimuovere e reinserire) il controller interessato",
+  "fix_available": true,
+  "fix_reference": "Per v15.FP3: KBA NK-2400-0598 (hotfix bundle con fix per TFSB1356600). Soluzione software in sviluppo per v15.LTS, FP1, FP2.",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": [
+    "No automatic node switchover on osStat 9 error",
+    "Permanent Red X and process-disruptive events possible",
+    "Multiple controller families affected in v15"
+  ],
+  "notes": "Emerson sta implementando cambiamenti di design per abilitare lo switchover automatico. L'azione richiesta dal produttore è 'Next Service Interval'."
+}

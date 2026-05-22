@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 # Configurazione percorsi
 EXCEL_FILE = Path("Inbox/merged_enriched_260505.xlsx")
-OUTPUT_FILE = Path("Library/Fucina/Handoff/2026-05-05_estrazione-kba-excel.md")
+OUTPUT_FILE = Path("Team/Handoff/2026-05-05_estrazione-kba-excel.md")
 
 def load_excel_data(file_path: Path) -> pd.DataFrame:
     """

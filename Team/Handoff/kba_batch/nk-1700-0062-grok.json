@@ -1,0 +1,45 @@
+{
+  "kba_problem_summary": "Guida procedurale per configurare un ambiente di dominio Active Directory e DNS su ProfessionalPLUS e workstation DeltaV (Windows 10/Server 2016)",
+  "severity_score": 4,
+  "severity_justification": "Si tratta di una guida di configurazione, non di un bug o vulnerabilità attiva. Errori nella sequenza (es. installare DeltaV prima della promozione) possono causare problemi di login SQL o blocco del sistema, ma non comportano perdita di controllo o rischio safety.",
+  "occurrence_score": 5,
+  "occurrence_justification": "La configurazione del dominio avviene durante l'installazione iniziale o l'espansione del sistema; richiede una sequenza precisa ma è plausibile in ambienti DeltaV enterprise.",
+  "detectability_score": 6,
+  "detectability_justification": "Errori di configurazione possono non essere immediatamente evidenti (es. problemi SQL o replica DFS che emergono successivamente), ma sono rilevabili durante i test di join o con verifiche di dominio.",
+  "risk_score": 4.7,
+  "risk_score_calculation": "(4 × 0.5) + (5 × 0.3) + (6 × 0.2) = 2.0 + 1.5 + 1.2 = 4.7",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround banale disponibile",
+      "adjustment": -1.5,
+      "reason": "La KBA stessa costituisce la procedura corretta e dettagliata; basta seguirla"
+    }
+  ],
+  "final_risk_score": 3.2,
+  "risk_level": "Informational",
+  "problem_type": "procedural",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore) - ProfessionalPLUS Station usata come Domain Controller",
+  "affected_products": [
+    "DeltaV Workstation Software",
+    "Embedded Operating System Windows 10",
+    "Embedded Operating System Windows Server 2016"
+  ],
+  "affected_versions_count": 5,
+  "workaround_available": false,
+  "workaround_complexity": "none",
+  "workaround_description": "Non applicabile: la KBA è essa stessa la procedura raccomandata",
+  "fix_available": false,
+  "fix_reference": "N/A - si tratta di istruzioni di configurazione, non di un fix",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "monitorare",
+  "red_flags": [
+    "DeltaV non deve essere installato prima della promozione a domain controller (causa problemi login SQL)",
+    "Per additional domain controller, DeltaV deve essere disinstallato preventivamente altrimenti il sistema smette di funzionare"
+  ],
+  "notes": "Questa KBA è puramente procedurale/informativa ('Information Only' e 'Required Action: Information Only'). Non descrive un difetto esistente ma indica come evitare problemi comuni di configurazione di dominio in ambienti DeltaV. Non coinvolge livelli di controllo (0-1) né sistemi SIS."
+}

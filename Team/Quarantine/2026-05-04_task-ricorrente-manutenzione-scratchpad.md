@@ -15,18 +15,18 @@ date: 2026-05-04
 
 ### 1. Rotazione Log Settimanale (Hermes)
 Hermes esegue automaticamente ogni lunedì la rotazione del log:
-- Sposta la sezione "Log aggiornamenti" in `Library/Fucina/Hermes/Logs/Scratchpad-Log-YYYY-WW.md`
+- Sposta la sezione "Log aggiornamenti" in `Team/Hermes/Logs/Scratchpad-Log-YYYY-WW.md`
 - Lascia solo le ultime 3-5 righe di log nello scratchpad principale
 
 ### 2. Pulizia e Consolidamento (Dike)
 Ogni 7-10 giorni Dike esegue:
 
 - **Verifica task attivi**:
-  - Controlla che tutti i task con `status: "in_progress"` abbiano un output corrispondente in `Library/Fucina/Handoff/`
+  - Controlla che tutti i task con `status: "in_progress"` abbiano un output corrispondente in `Team/Handoff/`
   - Segnala task orfani o bloccati
 
 - **Consolidamento decisioni**:
-  - Sposta le decisioni più vecchie di 30 giorni in `Library/Fucina/Hermes/Decisions/Archivio/`
+  - Sposta le decisioni più vecchie di 30 giorni in `Team/Hermes/Decisions/Archivio/`
   - Mantieni solo le ultime 10-12 decisioni attive nello scratchpad
 
 - **Pulizia sezioni**:
@@ -34,7 +34,7 @@ Ogni 7-10 giorni Dike esegue:
   - Aggiorna "Prossimi step" se necessario
 
 - **Report mini**:
-  - Produce un breve report in `Library/Fucina/Hermes/Snapshots/Report-YYYY-MM-DD.md` con:
+  - Produce un breve report in `Team/Hermes/Snapshots/Report-YYYY-MM-DD.md` con:
     - Numero di task attivi
     - Decisioni consolidate
     - Eventuali anomalie rilevate
@@ -42,13 +42,13 @@ Ogni 7-10 giorni Dike esegue:
 
 ### 3. Snapshot Mensile (ogni 4 settimane)
 Dike crea uno snapshot completo:
-- Copia lo stato corrente dello scratchpad in `Library/Fucina/Hermes/Snapshots/Scratchpad-Snapshot-YYYY-MM.md`
+- Copia lo stato corrente dello scratchpad in `Team/Hermes/Snapshots/Scratchpad-Snapshot-YYYY-MM.md`
 
 ## Struttura cartelle
 
-- `Library/Fucina/Hermes/Logs/` → Log settimanali
-- `Library/Fucina/Hermes/Snapshots/` → Snapshot mensili e report
-- `Library/Fucina/Hermes/Decisions/Archivio/` → Decisioni storiche
+- `Team/Hermes/Logs/` → Log settimanali
+- `Team/Hermes/Snapshots/` → Snapshot mensili e report
+- `Team/Hermes/Decisions/Archivio/` → Decisioni storiche
 
 ## Criteri di successo
 

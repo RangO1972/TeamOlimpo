@@ -1,0 +1,57 @@
+{
+  "kba_problem_summary": "Configurazione di IP addresses nello stesso subnet per PK P01 port e Modbus Server sulla stessa porta fisica IOP causa interruzione comunicazioni sulla Device Network dopo reset/switchover",
+  "severity_score": 5,
+  "severity_justification": "Provoca degrado delle comunicazioni con dispositivi di campo in condizioni specifiche, con impatto potenziale sulla produzione ma senza rischio diretto per safety o shutdown incontrollato.",
+  "occurrence_score": 4,
+  "occurrence_justification": "Richiede una configurazione errata specifica (stesso subnet su stessa porta fisica), non è uno scenario di default ma plausibile durante l'ingegnerizzazione.",
+  "detectability_score": 6,
+  "detectability_justification": "Si manifesta solo dopo eventi trigger (reset, switchover, disable/enable porta); diagnosticabile con Wireshark ma non genera allarmi evidenti o errori immediati visibili all'operatore.",
+  "risk_score": 4.9,
+  "risk_score_calculation": "(5 × 0.5) + (4 × 0.3) + (6 × 0.2) = 2.5 + 1.2 + 1.2 = 4.9",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -1,
+      "reason": "Prevenzione chiara tramite configurazione corretta di subnet e porte separate"
+    },
+    {
+      "modifier": "Nessun fix software disponibile",
+      "adjustment": 1,
+      "reason": "Esplicitamente dichiarato che non esiste soluzione software per le versioni affette"
+    },
+    {
+      "modifier": "Coinvolge livelli 0-1 (campo/controllo base)",
+      "adjustment": 1,
+      "reason": "Interessa direttamente PK Controller e comunicazioni I/O di livello 1"
+    }
+  ],
+  "final_risk_score": 5.9,
+  "risk_level": "Advisory",
+  "problem_type": "configuration",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori (S-series, M-series), schede I/O",
+  "affected_products": [
+    "DeltaV PK Controller & I/O Hardware",
+    "PK0xxxxx Controller PK Hardware (BoP)",
+    "PK0xxxxx Controller PK Hardware (Standalone)",
+    "PK0xxxxx PK IOP"
+  ],
+  "affected_versions_count": 2,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Usare subnet diverse per P01 e Modbus Server su porte fisiche separate; abilitare 'No Ports communicate' nelle proprietà del controller",
+  "fix_available": false,
+  "fix_reference": "N/A (non applicabile a DeltaV v15.FP1 e successive)",
+  "emerson_category": "Advisory",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": [
+    "Interruzione comunicazione Device Network",
+    "Comportamento dopo reset/switchover",
+    "Nessuna soluzione software disponibile"
+  ],
+  "notes": "L'articolo indica 'Next Service Interval' e rende la configurazione non valida a partire da v15.FP1. Si tratta di una limitazione architetturale del binding IP sul PK Controller piuttosto che di un bug vero e proprio."
+}

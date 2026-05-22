@@ -1,0 +1,39 @@
+{
+  "kba_problem_summary": "Procedura per l'installazione di aggiornamenti di sicurezza Microsoft approvati su sistemi DeltaV v13.3.2 con Guardian Support Bridge tramite file batch.",
+  "severity_score": 4,
+  "severity_justification": "Mancata applicazione degli aggiornamenti espone il sistema a vulnerabilità note del sistema operativo, con potenziale impatto su integrità e disponibilità, ma senza rischio diretto su controllo di processo o safety.",
+  "occurrence_score": 5,
+  "occurrence_justification": "Riguarda tutti i sistemi v13.3.2 non aggiornati di recente; la necessità di aggiornamento è comune in ambienti industriali con cicli di patching lenti.",
+  "detectability_score": 3,
+  "detectability_justification": "L'installazione può essere verificata tramite registrazione Guardian, SureService e elenco programmi installati; la verifica è semplice e documentata.",
+  "risk_score": 4.1,
+  "risk_score_calculation": "(4 × 0.5) + (5 × 0.3) + (3 × 0.2) = 4.1",
+  "modifiers_applied": [
+    {"modifier": "Workaround banale disponibile", "adjustment": -0.5, "reason": "File batch predefiniti e procedure dettagliate fornite per l'installazione"},
+    {"modifier": "Patch/fix disponibile", "adjustment": -0.5, "reason": "Aggiornamenti Microsoft approvati e link di download forniti"}
+  ],
+  "final_risk_score": 3.1,
+  "risk_level": "Informational",
+  "problem_type": "procedural",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["DeltaV Workstation Software VE210x"],
+  "affected_versions_count": 1,
+  "workaround_available": true,
+  "workaround_complexity": "simple",
+  "workaround_description": "Utilizzare i file batch All-Inclusive o Most Recent forniti, verificare checksum, eseguire in sequenza con riavvii e riconferma.",
+  "fix_available": true,
+  "fix_reference": "NK-2200-0180",
+  "fix_versions": ["v13.3.2"],
+  "emerson_category": "Advisory",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": [
+    "Riferimento obbligatorio a KBA NK-2200-0042 per modifiche DCOM (CVE-2021-26414)",
+    "Required Action indicata come 'Next Service Interval' (non immediata)"
+  ],
+  "notes": "La KBA non descrive un difetto o una vulnerabilità di DeltaV, ma fornisce la procedura di mitigazione per mantenere il livello di sicurezza del sistema operativo. La versione v13.3.2 è datata e richiede patching periodico. Il rischio reale deriva dall'omissione degli aggiornamenti, non dalla KBA stessa."
+}

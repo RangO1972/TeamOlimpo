@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Nuovi utenti DeltaV non possono accedere al Windows Desktop tramite Flexlock quando la Default Domain Policy è enforced in sistemi domain v14.x e v15.LTS",
+  "severity_score": 4,
+  "severity_justification": "Problema di usabilità che impedisce l'accesso al desktop Windows per nuovi utenti, senza impatto su controllo di processo, produzione o sicurezza.",
+  "occurrence_score": 5,
+  "occurrence_justification": "Si verifica solo in configurazioni specifiche dove la Default Domain Policy viene enforced (configurazione non raccomandata da Emerson).",
+  "detectability_score": 3,
+  "detectability_justification": "L'errore è immediatamente visibile tramite prompt Flexlock quando si tenta di passare al desktop Windows.",
+  "risk_score": 4.1,
+  "risk_score_calculation": "(4 × 0.5) + (5 × 0.3) + (3 × 0.2) = 4.1",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -1,
+      "reason": "Un-enforce della policy e gpupdate/force è fattibile da personale IT"
+    },
+    {
+      "modifier": "Fix disponibile",
+      "adjustment": -1,
+      "reason": "Upgrade a v15.FP1 o superiore risolve il problema"
+    }
+  ],
+  "final_risk_score": 2.1,
+  "risk_level": "Informational",
+  "problem_type": "configuration",
+  "architecture_level": 3,
+  "architecture_level_description": "Livello 3: Ingegneria e gestione (DeltaV Explorer, storico dati, batch)",
+  "affected_products": ["DeltaV Workstation Software", "IDDC Independent DeltaV Domain Controller"],
+  "affected_versions_count": 2,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Un-enforce the Default Domain Policy dal domain controller e eseguire gpupdate/force sui domain members",
+  "fix_available": true,
+  "fix_reference": "Upgrade a DeltaV v15.FP1 o versione successiva",
+  "emerson_category": "Advisory",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": ["Conflitto tra Default Domain Policy e GPO di DeltaV", "Interessa solo utenti appena creati", "Nessuna patch software per v14.x/v15.LTS"],
+  "notes": "Si tratta principalmente di una raccomandazione di configurazione (non applicare la Default Domain Policy) piuttosto che di un bug software vero e proprio. L'articolo sottolinea che questa policy non deve essere enforced sui domain controller DeltaV."
+}

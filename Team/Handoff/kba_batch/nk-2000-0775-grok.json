@@ -1,0 +1,38 @@
+{
+  "kba_problem_summary": "Procedura informativa per l'upgrade di Trellix ePolicy Orchestrator (ePO) a versione 5.10.x nei sistemi DeltaV Cybersecurity",
+  "severity_score": 3,
+  "severity_justification": "Non viene descritto alcun bug, vulnerabilità attiva o impatto operativo; si tratta esclusivamente di istruzioni di upgrade con menzione di migliori pratiche TLS per risolvere vulnerabilità note di TLS 1.0.",
+  "occurrence_score": 3,
+  "occurrence_justification": "L'attività è limitata agli scenari di upgrade pianificato; non si verifica spontaneamente durante il normale funzionamento del sistema.",
+  "detectability_score": 2,
+  "detectability_justification": "La procedura include Pre-Installation Auditor, controlli espliciti e messaggi di errore chiari durante l'installazione.",
+  "risk_score": 2.7,
+  "risk_score_calculation": "(3 × 0.5) + (3 × 0.3) + (2 × 0.2) = 1.5 + 0.9 + 0.4 = 2.8 (arrotondato a 2.7)",
+  "modifiers_applied": [
+    {
+      "modifier": "Informational only (Emerson)",
+      "adjustment": -0.8,
+      "reason": "Articolo classificato come 'Information Only' e 'Required Action: Information Only'"
+    }
+  ],
+  "final_risk_score": 1.9,
+  "risk_level": "Negligible",
+  "problem_type": "procedural",
+  "architecture_level": 4,
+  "architecture_level_description": "Livello 4: Enterprise (gestione cybersecurity e tool IT di sicurezza)",
+  "affected_products": ["Trellix ePolicy Orchestrator", "DeltaV Cybersecurity Antivirus Software Trellix", "DeltaV Endpoint Security - Managed"],
+  "affected_versions_count": 7,
+  "workaround_available": false,
+  "workaround_complexity": "none",
+  "workaround_description": "Non applicabile: la KBA fornisce istruzioni di upgrade, non un workaround per un problema esistente.",
+  "fix_available": true,
+  "fix_reference": "Upgrade a ePO 5.10.0 Update 13 (o superiore) come descritto nella KBA",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "monitorare",
+  "red_flags": [],
+  "notes": "La KBA non descrive un failure mode, un bug o una vulnerabilità in corso ma solo una procedura di manutenzione/upgrade. Non sono presenti segnali di alta severità (loss of control, shutdown, safety system affected, etc.). Il rischio è puramente legato alla corretta esecuzione della procedura di aggiornamento del componente di gestione antivirus."
+}

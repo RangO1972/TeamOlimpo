@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Errori IOP non-disruptive possono comparire sui nodi CIOC/CIOC2 dopo l'applicazione del bundle hotfix contenente TFSB1234101",
+  "severity_score": 3,
+  "severity_justification": "Errori esplicitamente definiti 'non-disruptive' che non causano perdita di controllo, shutdown o impatto sulla produzione/sicurezza.",
+  "occurrence_score": 4,
+  "occurrence_justification": "Si manifesta solo dopo l'applicazione di uno specifico hotfix (TFSB1234101); non è un comportamento generale ma è stato osservato sul campo.",
+  "detectability_score": 2,
+  "detectability_justification": "Gli errori appaiono chiaramente nel Condition Summary del nodo, rendendoli immediatamente visibili tramite strumenti di diagnostica standard.",
+  "risk_score": 3.1,
+  "risk_score_calculation": "(3 × 0.5) + (4 × 0.3) + (2 × 0.2) = 3.1",
+  "modifiers_applied": [
+    {
+      "modifier": "Coinvolge livelli 0-1 (campo/controllo base)",
+      "adjustment": 1,
+      "reason": "CIOC è componente hardware di I/O del livello di controllo"
+    },
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -0.5,
+      "reason": "Ispezione rete + reseating IOP possibile, anche se condizionato"
+    }
+  ],
+  "final_risk_score": 3.6,
+  "risk_level": "Informational",
+  "problem_type": "bug_software",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori (S-series, M-series), schede I/O",
+  "affected_products": ["SE6502 Redundant CIOC", "SE6504 Redundant CIOC2"],
+  "affected_versions_count": 8,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Ispezionare prima la rete (KBA NK-1300-0015); se sana, reseat gli IOP uno alla volta solo se il processo lo consente (gli errori possono riapparire)",
+  "fix_available": false,
+  "fix_reference": "Nessuna soluzione per v14.x; in sviluppo per v15.x (KBA verrà aggiornata)",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "Mancano dettagli quantitativi sulla frequenza reale degli errori e sul possibile impatto indiretto di falsi allarmi sugli operatori.",
+  "operational_recommendation": "monitorare",
+  "red_flags": ["Nessuna fix per versioni v14.x", "Reseating IOP richiede intervento fisico condizionato dal processo"],
+  "notes": "Continuazione della KBA NK-2400-0565. La classificazione Emerson 'Next Service Interval' è coerente con il basso rischio assegnato."
+}

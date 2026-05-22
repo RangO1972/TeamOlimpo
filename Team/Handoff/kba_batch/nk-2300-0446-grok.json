@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Degradazione del regolatore di tensione in CIOC/CIOC2 ridondanti (non rilevabile) può causare perdita di alimentazione del CHARM bus e disrupzione del processo quando l'unità sana viene rimossa dal carrier",
+  "severity_score": 7,
+  "severity_justification": "Rischio di disrupzione del processo a livello di I/O (Livello 1) durante manutenzione su coppia ridondante, con potenziale impatto sulla produzione.",
+  "occurrence_score": 3,
+  "occurrence_justification": "Molto raramente segnalato sul campo, richiede degradazione dopo 8-9 anni ad alte temperature + rimozione specifica dell'unità sana.",
+  "detectability_score": 9,
+  "detectability_justification": "Il degrado del regolatore non è rilevato da nessuna diagnostica DeltaV; nessun allarme o indicazione prima dell'evento.",
+  "risk_score": 6.2,
+  "risk_score_calculation": "(7 × 0.5) + (3 × 0.3) + (9 × 0.2) = 3.5 + 0.9 + 1.8 = 6.2",
+  "modifiers_applied": [
+    {
+      "modifier": "Coinvolge livelli 0-1 (campo/controllo base)",
+      "adjustment": 1,
+      "reason": "Interessa direttamente le schede I/O CHARM (Livello 1)"
+    },
+    {
+      "modifier": "Workaround complesso/parziale",
+      "adjustment": -0.5,
+      "reason": "Richiede tool dedicato ordinabile solo tramite supporto tecnico e procedura di installazione specifica"
+    }
+  ],
+  "final_risk_score": 6.7,
+  "risk_level": "Warning",
+  "problem_type": "hardware",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori (S-series, M-series), schede I/O",
+  "affected_products": ["SE6502 Redundant CIOC", "SE6504 Redundant CIOC2"],
+  "affected_versions_count": 8,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Utilizzare il CIOC Service Tool (SE6500) per iniettare alimentazione esterna al CHARM bus durante la sostituzione di un'unità",
+  "fix_available": true,
+  "fix_reference": "CIOC Service Tool (SE6500) + sostituzione con hardware revisioni 2019 o successive (X152/X032 o superiori)",
+  "emerson_category": "Advisory",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": ["Degrado non rilevabile dalle diagnostiche DeltaV", "Obbligo di non rimuovere unità durante processo attivo", "Richiede tool dedicato e chiamata al supporto"],
+  "notes": "Il problema è confinato alle unità prodotte prima del 2019 in ambienti ad alta temperatura. Non coinvolge SIS. Il tool non è compatibile con IS CHARMs."
+}

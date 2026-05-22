@@ -1,0 +1,54 @@
+{
+  "kba_problem_summary": "Uploads simultanei su più control modules causano script multipli rifiutati dal controller, con upload prolungati (>5 min), warning eccessivi nell'Event Viewer del ProPlus e possibile perdita temporanea di ridondanza durante download concomitanti",
+  "severity_score": 6,
+  "severity_justification": "Degrado operativo con impatto su disponibilità (temporanea perdita ridondanza) e operazioni di manutenzione, senza però perdita di controllo o impatto safety.",
+  "occurrence_score": 5,
+  "occurrence_justification": "Richiede azione specifica di upload simultaneo su più moduli, operazione plausibile durante attività di ingegneria o manutenzione ma non casuale.",
+  "detectability_score": 4,
+  "detectability_justification": "Genera warning visibili nell'Event Viewer e log telnet/IFS riconoscibili, anche se non si tratta di allarmi critici o bloccanti immediati.",
+  "risk_score": 5.3,
+  "risk_score_calculation": "(6 × 0.5) + (5 × 0.3) + (4 × 0.2) = 5.3",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround banale disponibile",
+      "adjustment": -1.5,
+      "reason": "Basta caricare un modulo alla volta invece di multiple upload simultanee"
+    },
+    {
+      "modifier": "Nessuna patch/fix disponibile",
+      "adjustment": 1,
+      "reason": "Emerson indica che una soluzione software non è attualmente disponibile"
+    },
+    {
+      "modifier": "Coinvolge livelli 0-1 (campo/controllo base)",
+      "adjustment": 1,
+      "reason": "Interessa direttamente i controllori DeltaV (Level 1)"
+    }
+  ],
+  "final_risk_score": 5.8,
+  "risk_level": "Advisory",
+  "problem_type": "bug_software",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori (S-series, M-series), schede I/O",
+  "affected_products": [
+    "DeltaV Controller & I/O Hardware (CE3007, CE3008, PK0xxxxx, RRE3007, RRE3008, RSE3007, RSE3008, RSS3001, SE3007, SE3008, SE4100, SE4101, SS3001, VE3007, VE3008)"
+  ],
+  "affected_versions_count": 3,
+  "workaround_available": true,
+  "workaround_complexity": "simple",
+  "workaround_description": "Eseguire l'upload su un solo control module alla volta invece che su più moduli simultaneamente",
+  "fix_available": false,
+  "fix_reference": "N/A - Potrebbe essere considerato per una release futura",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": [
+    "Possibile perdita temporanea di ridondanza del controller",
+    "Nessuna fix software attualmente disponibile",
+    "Upload prolungati che interferiscono con download successivi"
+  ],
+  "notes": "L'articolo classifica l'azione come \"Next Service Interval\". Il sistema recupera autonomamente. Il problema è limitato all'operazione di upload multiplo e non si manifesta in condizioni normali di esercizio."
+}

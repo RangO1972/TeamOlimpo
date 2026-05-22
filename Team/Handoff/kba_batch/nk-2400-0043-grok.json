@@ -1,0 +1,38 @@
+{
+  "kba_problem_summary": "DeltaV System Registration Utility fails to collect registration data on Independent DeltaV Domain Controller (IDDC) when AMS Device Manager Domain Controller Setup is installed, showing WMI connection error",
+  "severity_score": 4,
+  "severity_justification": "Il problema impatta solo il processo di registrazione del sistema per servizi Emerson/supporto, senza alcun effetto su produzione, controllo, safety o integrità dati operativi.",
+  "occurrence_score": 4,
+  "occurrence_justification": "Si verifica solo in una configurazione specifica (IDDC + AMS Device Manager Domain Controller Setup) su versione v14.LTS.",
+  "detectability_score": 2,
+  "detectability_justification": "Errore esplicito e dettagliato visualizzato immediatamente dall'utility di registrazione quando viene eseguita.",
+  "risk_score": 3.4,
+  "risk_score_calculation": "(4 × 0.5) + (4 × 0.3) + (2 × 0.2) = 3.4",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -1,
+      "reason": "Workaround documentato con passi chiari di modifica file di configurazione"
+    }
+  ],
+  "final_risk_score": 2.4,
+  "risk_level": "Informational",
+  "problem_type": "configuration",
+  "architecture_level": 3,
+  "architecture_level_description": "Livello 3: Ingegneria e gestione (DeltaV Explorer, storico dati, batch, infrastruttura di dominio)",
+  "affected_products": ["Independent DeltaV Domain Controller (IDDC)", "VE210x-00 DeltaV Registration Utility"],
+  "affected_versions_count": 1,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Modificare SystemRegistration.exe.config rimuovendo il valore AMS su nodo IDDC e su nodo ProPlus, poi rilanciare l'utility",
+  "fix_available": false,
+  "fix_reference": "N/A",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": ["Configurazione specifica IDDC + AMS", "Modifica manuale di file .config richiesta"],
+  "notes": "L'articolo indica 'Required Action: Next Service Interval'. Il workaround è stato aggiornato ad Agosto 2024. Nessun impatto operativo o di sicurezza dichiarato."
+}

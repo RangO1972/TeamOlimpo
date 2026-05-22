@@ -40,7 +40,7 @@ Usati nella pipeline di analisi e gestione KBA Emerson DeltaV.
 uv run python -m tools.consulto --provider grok --model grok-4.20-0309-reasoning `
   --system ".claude/agents/dike.md" `
   --prompt "Team/Prompts/kba/analisi-rischio-kba.md" `
-  --input "Library/documents/<slug>.md" --output "Library/Fucina/Handoff/kba_batch/"
+  --input "Library/documents/<slug>.md" --output "Team/Handoff/kba_batch/"
 ```
 
 ---
@@ -126,7 +126,7 @@ Usati da Hermes per la gestione del ciclo di vita degli agenti del Team Olimpo.
 ```powershell
 uv run python -m tools.consulto --provider grok --model grok-4.20-0309-reasoning `
   --prompt "Team/Prompts/team/valutazione-ricerca.md" `
-  --input "Library/Fucina/YYYY-MM-DD_ricerca_MEMBRO_vN.md" --output "Library/Fucina/"
+  --input "Team/Fucina/analyses/YYYY-MM-DD_ricerca_MEMBRO_vN.md" --output "Team/Fucina/analyses/"
 ```
 
 ---
@@ -145,8 +145,8 @@ uv run python -m tools.consulto --provider grok --model grok-4.20-0309-reasoning
 ```powershell
 uv run python -m tools.consulto --provider grok --model grok-4.20-0309-reasoning `
   --prompt "Team/Prompts/team/valutazione-profilo.md" `
-  --input ".claude/agents/MEMBRO.md" "Library/Fucina/YYYY-MM-DD_profilo_MEMBRO_vN.md" `
-  --merge --output "Library/Fucina/"
+  --input ".claude/agents/MEMBRO.md" "Team/Fucina/analyses/YYYY-MM-DD_profilo_MEMBRO_vN.md" `
+  --merge --output "Team/Fucina/analyses/"
 ```
 
 ---

@@ -1,0 +1,41 @@
+{
+  "kba_problem_summary": "Guida procedurale per l'installazione e l'upgrade di SQL Express 2019 per supportare Trellix ePO in ambienti DeltaV Cybersecurity",
+  "severity_score": 2,
+  "severity_justification": "La KBA non descrive alcun bug, vulnerabilità, incompatibilità o guasto, ma fornisce solo istruzioni di installazione. Nessun impatto su produzione, safety o integrità dati.",
+  "occurrence_score": 2,
+  "occurrence_justification": "Non esiste un evento o condizione di fallimento descritta; si tratta di una procedura di setup standard.",
+  "detectability_score": 1,
+  "detectability_justification": "Eventuali errori durante l'installazione guidata sarebbero immediatamente visibili attraverso i wizard di SQL Server.",
+  "risk_score": 1.8,
+  "risk_score_calculation": "(2 × 0.5) + (2 × 0.3) + (1 × 0.2) = 1.8",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround banale disponibile",
+      "adjustment": -0.8,
+      "reason": "La KBA stessa è la procedura corretta; non esiste un problema da mitigare"
+    }
+  ],
+  "final_risk_score": 1.0,
+  "risk_level": "Negligible",
+  "problem_type": "procedural",
+  "architecture_level": 3,
+  "architecture_level_description": "Livello 3: Ingegneria e gestione (sistemi di supporto cybersecurity e management server)",
+  "affected_products": [
+    "DeltaV Cybersecurity - Antivirus Software Trellix Endpoint Security",
+    "DeltaV Cybersecurity - Antivirus Software Trellix Application Whitelisting"
+  ],
+  "affected_versions_count": 0,
+  "workaround_available": false,
+  "workaround_complexity": "none",
+  "workaround_description": "Non applicabile - la KBA è essa stessa una guida di installazione",
+  "fix_available": false,
+  "fix_reference": "N/A",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "monitorare",
+  "red_flags": [],
+  "notes": "Questa KBA non descrive alcun failure mode, bug o vulnerabilità. È documentazione puramente informativa su come installare SQL Express 2019 per Trellix ePO. Il framework FMEA è stato applicato in modo forzato in assenza di un problema tecnico."
+}

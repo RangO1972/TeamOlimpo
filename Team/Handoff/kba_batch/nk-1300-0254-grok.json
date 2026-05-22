@@ -1,0 +1,38 @@
+{
+  "kba_problem_summary": "Il Batch Historian interrompe la raccolta dei dati batch quando perde la sincronizzazione con il Batch Executive dopo sostituzione/reinstallazione di macchine senza arresto corretto o fermo prolungato del servizio",
+  "severity_score": 6,
+  "severity_justification": "Degrado dell'integrità dei dati di produzione (batch records) senza impatto su controllo real-time, safety o disponibilità immediata dell'impianto",
+  "occurrence_score": 4,
+  "occurrence_justification": "Si verifica solo in condizioni specifiche di manutenzione (reinstallazione senza procedura corretta) o fermo prolungato del servizio Historian",
+  "detectability_score": 7,
+  "detectability_justification": "Non genera allarmi automatici; richiede controllo manuale tramite SQL (Sequence table) e confronto con file TransState.dat",
+  "risk_score": 5.6,
+  "risk_score_calculation": "(6 × 0.5) + (4 × 0.3) + (7 × 0.2) = 5.6",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround complesso disponibile",
+      "adjustment": -0.5,
+      "reason": "Procedura di recovery dettagliata ma complessa che richiede competenze SQL, Batch e gestione file"
+    }
+  ],
+  "final_risk_score": 5.1,
+  "risk_level": "Advisory",
+  "problem_type": "procedural",
+  "architecture_level": 3,
+  "architecture_level_description": "Livello 3: Ingegneria e gestione (DeltaV Explorer, storico dati, batch)",
+  "affected_products": ["VE2124 Batch Historian", "VE2125 Batch Executive"],
+  "affected_versions_count": 10,
+  "workaround_available": true,
+  "workaround_complexity": "complex",
+  "workaround_description": "Arresto servizi, kill processo, cancellazione cartella Working, spostamento selettivo file .EVT, reset manuale del sequence number a zero nel database SQL",
+  "fix_available": false,
+  "fix_reference": "",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "La KBA non quantifica la quantità di dati potenzialmente persi né specifica se esiste un meccanismo di recupero automatico parziale",
+  "operational_recommendation": "monitorare",
+  "red_flags": ["Modifica diretta del database SQL richiesta", "Procedura che richiede conoscenza specialistica", "Condizione persistente dopo reinstallazioni non corrette"],
+  "notes": "Si tratta di una limitazione procedurale nota da molti anni (dal 2014) che interessa tutte le versioni da v6.x a v15.FP3. Non è un bug software vero e proprio ma una mancanza di robustezza nella gestione della sincronizzazione."
+}

@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Smart Commissioning non imposta automaticamente il valore di default HARTDEV_FP nel campo Faceplate per dispositivi HART in IO Studio/Asset Studio",
+  "severity_score": 4,
+  "severity_justification": "Si tratta di un'inconvenienza di configurazione durante la fase di commissioning che richiede intervento manuale, senza alcun impatto su operazioni runtime, controllo o safety.",
+  "occurrence_score": 8,
+  "occurrence_justification": "Il problema si verifica in modo sistematico ogni volta che si commissiona un dispositivo HART tramite Smart Commissioning nelle versioni interessate.",
+  "detectability_score": 3,
+  "detectability_justification": "Il campo Faceplate risulta visibilmente vuoto nelle proprietà del dispositivo subito dopo il commissioning, rendendo il problema facilmente identificabile.",
+  "risk_score": 5.0,
+  "risk_score_calculation": "(4 × 0.5) + (8 × 0.3) + (3 × 0.2) = 2.0 + 2.4 + 0.6 = 5.0",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -1.0,
+      "reason": "Bulk Edit o configurazione manuale sono metodi diretti e non complessi"
+    },
+    {
+      "modifier": "Fix disponibile",
+      "adjustment": -0.5,
+      "reason": "Hotfix già disponibile per v15.LTS; fix in sviluppo per le FP"
+    }
+  ],
+  "final_risk_score": 3.5,
+  "risk_level": "Informational",
+  "problem_type": "bug_software",
+  "architecture_level": 3,
+  "architecture_level_description": "Livello 3: Ingegneria e gestione (DeltaV Explorer, storico dati, batch)",
+  "affected_products": ["DeltaV Workstation Software", "IO Studio"],
+  "affected_versions_count": 4,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Utilizzare Bulk Edit oppure configurare manualmente il campo Faceplate nella scheda Alarms & Displays delle proprietà del dispositivo",
+  "fix_available": true,
+  "fix_reference": "Per v15.LTS: hotfix bundle in KBA NK-2200-0460 (TFSB1089856). Per v15.FPx: fix in sviluppo.",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": [],
+  "notes": "Il problema è confinato alla fase di ingegneria/commissioning e non ha impatto sul controllo di processo o sulla sicurezza. Emerson classifica l'azione come 'Next Service Interval', coerente con bassa priorità."
+}

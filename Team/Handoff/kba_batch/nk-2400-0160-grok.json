@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Unneeded and unsupported Visual C++ 2010 x86 Redistributable and OpenSLP 2.0.0.0 x86 are included in recovery images of specific DeltaV workstation hardware, increasing the cybersecurity attack surface.",
+  "severity_score": 4,
+  "severity_justification": "Presence of unsupported software raises potential cybersecurity risk on operator workstations, but no active exploit, loss of control, or production impact is stated.",
+  "occurrence_score": 7,
+  "occurrence_justification": "The software is bundled by default in recovery images for numerous listed Dell-based DeltaV workstation models, making it likely present after reimaging.",
+  "detectability_score": 2,
+  "detectability_justification": "Easily detected and removed via standard Windows Apps & features; clear uninstall steps are provided.",
+  "risk_score": 4.8,
+  "risk_score_calculation": "(4 × 0.5) + (7 × 0.3) + (2 × 0.2) = 4.8",
+  "modifiers_applied": [
+    {"modifier": "Workaround semplice disponibile", "adjustment": -1.0, "reason": "Procedura di disinstallazione documentata e banale tramite interfaccia Windows standard"},
+    {"modifier": "Immagine di recovery rivista disponibile", "adjustment": -0.5, "reason": "Nuove immagini corrette pubblicate sul portale Guardian"}
+  ],
+  "final_risk_score": 3.3,
+  "risk_level": "Informational",
+  "problem_type": "configuration",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": [
+    "SE2537 Precision T5810 Tower Workstation",
+    "SE2602C01 DeltaV Dual/Quad Monitor Workstation",
+    "SE2603C01 DeltaV Rack Mount Workstation",
+    "SE2612C01-C06 Precision T5820 Tower Workstation",
+    "SE2613C01-C06 Precision R7920 Rack Mount Workstation",
+    "SE2640C01 Dell Precision T5860XL Tower Workstation"
+  ],
+  "affected_versions_count": 6,
+  "workaround_available": true,
+  "workaround_complexity": "simple",
+  "workaround_description": "Disinstallazione manuale tramite Windows Apps & features di Visual C++ 2010 x86 Redistributable e OpenSLP 2.0.0.0 x86 (richiede riavvio).",
+  "fix_available": true,
+  "fix_reference": "Immagine di recovery rivista disponibile sul portale Guardian",
+  "fix_versions": [],
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": [],
+  "notes": "La KBA è di tipo 'Information Only'. Il rischio è puramente preventivo e legato alla superficie di attacco. Non coinvolge componenti safety (SIS) né livelli 0-1. Il workaround è semplice ma richiede test se sono presenti applicazioni terze."
+}

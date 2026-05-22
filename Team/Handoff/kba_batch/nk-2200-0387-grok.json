@@ -1,0 +1,38 @@
+{
+  "kba_problem_summary": "Guida di integrazione per Orolia SecureSync 2400 GPS NTP server con sistemi DeltaV (non descrive un difetto)",
+  "severity_score": 4,
+  "severity_justification": "Nessun bug, vulnerabilità o perdita di controllo descritta; solo guida di setup. Una errata configurazione può causare problemi di sincronizzazione temporale (impatto su SOE e correlazione dati) ma DeltaV ha meccanismi di fallback interni.",
+  "occurrence_score": 4,
+  "occurrence_justification": "Richiede una configurazione specifica del dispositivo third-party; plausibile solo in progetti che scelgono di implementare NTP esterno GPS.",
+  "detectability_score": 3,
+  "detectability_justification": "Lo stato NTP è visibile in DeltaV Diagnostics (NTPServer, NTPStratum, NTPStatus); eventuali problemi sono rilevabili con controlli periodici.",
+  "risk_score": 3.8,
+  "risk_score_calculation": "(4 × 0.5) + (4 × 0.3) + (3 × 0.2) = 3.8",
+  "modifiers_applied": [
+    {
+      "modifier": "Article is Information Only",
+      "adjustment": -1.0,
+      "reason": "KBA non descrive un problema tecnico ma fornisce istruzioni di integrazione qualificata"
+    }
+  ],
+  "final_risk_score": 2.8,
+  "risk_level": "Informational",
+  "problem_type": "procedural",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore) e rete di controllo",
+  "affected_products": ["DeltaV Network", "DeltaV Workstation Software - Network Time Protocol (NTP)"],
+  "affected_versions_count": 3,
+  "workaround_available": false,
+  "workaround_complexity": "none",
+  "workaround_description": "N/A - l'intera KBA costituisce la guida di configurazione corretta",
+  "fix_available": false,
+  "fix_reference": "N/A",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "La KBA non descrive un failure mode ma solo istruzioni di integrazione; applicazione del framework FMEA è parzialmente forzata",
+  "operational_recommendation": "monitorare",
+  "red_flags": ["Dispositivo third-party con supporto Emerson limitato", "Possibile single point of failure se non si usa configurazione ridondata"],
+  "notes": "La KBA documenta la qualificazione del SecureSync 2400 e i cambiamenti di comportamento NTP da DeltaV v14.LTS in poi (da broadcast a request/response). Evidenzia che Emerson non esegue test di regressione su versioni future."
+}

@@ -1,0 +1,44 @@
+{
+  "kba_problem_summary": "Windows 'Signing out' screen can remain active for 15+ minutes during logoff on DeltaV workstations (local, remote, thin client or Terminal Server sessions) due to hanging processes or modal dialogs",
+  "severity_score": 4,
+  "severity_justification": "Minor usability degradation limited to the logoff phase; no impact on process control, production, data integrity or safety systems.",
+  "occurrence_score": 5,
+  "occurrence_justification": "Requires specific conditions (certain applications running, ShellExperienceHost.exe behavior, remote/thin client usage) that are plausible but not guaranteed in all sessions.",
+  "detectability_score": 2,
+  "detectability_justification": "The persistent 'Signing out' screen makes the issue immediately visible to the operator attempting to log off.",
+  "risk_score": 3.9,
+  "risk_score_calculation": "(4 × 0.5) + (5 × 0.3) + (2 × 0.2) = 3.9",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -1,
+      "reason": "Multiple documented workarounds (Ctrl+Alt+End and PowerShell logoff script via Group Policy)"
+    }
+  ],
+  "final_risk_score": 2.9,
+  "risk_level": "Informational",
+  "problem_type": "bug_software",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": [
+    "SE2519 Dell Wyse Z90DE7 Thin Client (various models)",
+    "SE2549V1 Dell Wyse 5070 Thin Client",
+    "Pepperl+Fuchs Industrial Box Thin Client",
+    "VE210x DeltaV Workstation",
+    "VE210x-32 Workstation - Terminal Server/Remote Clients"
+  ],
+  "affected_versions_count": 5,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Press Ctrl+Alt+End to access options and close hanging apps, or deploy PowerShell script to kill ShellExperienceHost.exe on logoff via Local/Domain Group Policy",
+  "fix_available": false,
+  "fix_reference": "N/A - only workarounds provided",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "Emerson classifies this as 'General Product Technical Information' with 'Required Action: As Needed', which aligns with an Informational risk level",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": [],
+  "notes": "Issue has been tracked since 2018 and remains applicable through DeltaV v15.FP3. No safety-related components or field/control layer (levels 0-1) are involved."
+}

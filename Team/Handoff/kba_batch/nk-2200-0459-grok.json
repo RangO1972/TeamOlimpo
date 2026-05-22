@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Release notes per DeltaV v15.LTS contenenti istruzioni di upgrade, considerazioni pre/post-upgrade, limitazioni di migrazione (es. PK Standalone v14, MX/MQ da v13, Batch Historian hotfix) e note su compatibilità hardware/software",
+  "severity_score": 5,
+  "severity_justification": "Possibile degrado o fallimento di upgrade con impatto su produzione/dati se le istruzioni non vengono seguite, ma nessun impatto su sistemi già operativi o safety diretta",
+  "occurrence_score": 4,
+  "occurrence_justification": "Si verifica solo durante upgrade in presenza di configurazioni specifiche (es. controller legacy, hotfix Batch Historian, PK v14) e non in sistemi nuovi o già conformi",
+  "detectability_score": 3,
+  "detectability_justification": "Ampia documentazione di warning, prerequisiti e link a KBAs correlate; problemi evidenti durante l'esecuzione del DeltaV Upgrade Wizard o in fase di verifica pre-upgrade",
+  "risk_score": 4.3,
+  "risk_score_calculation": "(5 × 0.5) + (4 × 0.3) + (3 × 0.2) = 2.5 + 1.2 + 0.6 = 4.3",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround banale disponibile",
+      "adjustment": -1.5,
+      "reason": "L'intero documento fornisce istruzioni dettagliate, percorsi di migrazione, KBAs correlate e checklist pre/post-upgrade"
+    },
+    {
+      "modifier": "Coinvolge livelli 0-1 (campo/controllo base)",
+      "adjustment": 0.7,
+      "reason": "Include controller (MX/MQ, PK, firewall) e I/O che richiedono attenzione specifica durante upgrade"
+    }
+  ],
+  "final_risk_score": 3.5,
+  "risk_level": "Informational",
+  "problem_type": "procedural",
+  "architecture_level": 3,
+  "architecture_level_description": "Livello 3: Ingegneria e gestione (DeltaV Explorer, upgrade procedures, storico dati)",
+  "affected_products": ["DeltaV v15.LTS", "General Workstation Products", "Offline/Online Upgrade Service", "DeltaV PK Controller", "DeltaV SIS"],
+  "affected_versions_count": 25,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Seguire le istruzioni di migrazione, verificare prerequisiti (OS, hotfix, firmware firewall, licenze), usare Upgrade Wizard e consultare KBAs correlate prima dell'upgrade",
+  "fix_available": true,
+  "fix_reference": "DeltaV v15.LTS stesso (release notes + hotfix bundle NK-2200-0460)",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "La classificazione Emerson 'Information Only' e 'Required Action: Information Only' è coerente con la valutazione di basso rischio operativo per sistemi già stabili",
+  "confidence_level": "medium",
+  "confidence_note": "Il documento è release notes generali e non una KBA su un singolo bug/vulnerabilità; i 'known issues' sono in spreadsheet esterni non forniti, creando incertezza sulla gravità di singoli TFSB",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": ["Limitazioni di upgrade PK Standalone v14", "Incompatibilità Batch Historian con hotfix specifici", "Requisiti firmware firewall per multicast", "Controller MX/MQ da v13 richiedono workaround"],
+  "notes": "Documento focalizzato su migrazione sicura piuttosto che su un difetto attivo. Toccati aspetti di sicurezza (ISASecure SSA, whitelisting, SoftPhase Security Fix) ma come enhancement. Nessun impatto safety diretto su SIS (non richiede upgrade firmware)."
+}

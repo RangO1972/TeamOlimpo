@@ -31,7 +31,8 @@ SCOPE_PATHS: dict[str, list[str]] = {
     "wiki": ["Library/Wiki/"],
     "docs": ["Library/documents/"],
     "wiki+docs": ["Library/Wiki/", "Library/documents/"],
-    "all": ["Library/"],
+    "all": ["Library/", "Team/Handoff/"],
+    "handoff": ["Team/Handoff/"],
 }
 
 VALID_SCOPES = frozenset(SCOPE_PATHS)

@@ -1,0 +1,56 @@
+{
+  "kba_problem_summary": "CIOC IOP reports various MAINT and ADVISE errors related to CIOC-to-IOP communication issues (even when communication is not actually lost with copper IOPs)",
+  "severity_score": 5,
+  "severity_justification": "Genera allarmi MAINT/ADVISE che creano confusione operativa e richiedono intervento, senza però causare perdita di controllo, shutdown o impatto safety.",
+  "occurrence_score": 5,
+  "occurrence_justification": "Si verifica in configurazioni ridondanti CIOC con IOP specifici; plausibile ma non universale, richiede condizioni hardware particolari.",
+  "detectability_score": 3,
+  "detectability_justification": "Gli errori sono chiaramente visibili nella Condition Summary con allarmi MAINT e ADVISE, rendendoli immediatamente evidenti.",
+  "risk_score": 4.6,
+  "risk_score_calculation": "(5 × 0.5) + (5 × 0.3) + (3 × 0.2) = 2.5 + 1.5 + 0.6 = 4.6",
+  "modifiers_applied": [
+    {
+      "modifier": "Coinvolge livelli 0-1 (campo/controllo base)",
+      "adjustment": 1,
+      "reason": "CIOC e IOP sono componenti hardware di Livello 1"
+    },
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -0.5,
+      "reason": "Reseat IOP è efficace ma condizionato ('only when the process allows')"
+    },
+    {
+      "modifier": "Patch/fix disponibile",
+      "adjustment": -1,
+      "reason": "Hotfix disponibili per tutte le versioni indicate"
+    }
+  ],
+  "final_risk_score": 4.1,
+  "risk_level": "Advisory",
+  "problem_type": "bug_software",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori e schede I/O",
+  "affected_products": [
+    "RSE6502 Redundant CIOC",
+    "SE6502 Redundant CIOC",
+    "SE6504 Redundant CIOC2",
+    "SE6505Txx Charm I/O Card 2"
+  ],
+  "affected_versions_count": 6,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Reseat the IOP (solo quando il processo lo consente) per cancellare gli allarmi prima del flashing",
+  "fix_available": true,
+  "fix_reference": "Hotfix bundle per TFSB970866 (KBA NK-1900-0840, NK-2000-0448, NK-2100-0184, NK-2200-0045, NK-2200-0460, NK-2300-0348)",
+  "emerson_category": "Product Issues",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": [
+    "Allarmi potenzialmente fuorvianti (comunicazione non sempre compromessa)",
+    "Intervento fisico su IOP richiesto"
+  ],
+  "notes": "L'articolo sottolinea che con IOP in rame la comunicazione può rimanere attiva nonostante gli errori segnalati. L'azione richiesta da Emerson è 'Next Service Interval'."
+}

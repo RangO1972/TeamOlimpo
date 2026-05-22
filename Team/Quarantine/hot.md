@@ -47,7 +47,7 @@ Ultimo aggiornamento: 2026-05-16
 
 - [[Library/Wiki/index.md]]
 - [[Library/Wiki/log.md]]
-- [[Library/Fucina/Hermes/Scratchpad.md]]
+- [[Team/Hermes/Scratchpad.md]]
 - [[Handoff/2026-05-11_metis-hermes_analisi-costi-benefici-llm-wiki.md]]
 - [[Handoff/2026-05-11_proteo-hermes_ricerca_llm-wiki-team-olimpo.md]]
 - [[AGENTS.md]]

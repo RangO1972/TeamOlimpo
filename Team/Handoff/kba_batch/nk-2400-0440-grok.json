@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "DOPCHDA1.exe might crash or fail to start (exit code -1073741571) after DvCH Server restart, introduced by previous fix B859623",
+  "severity_score": 4,
+  "severity_justification": "Degrado del servizio di storicizzazione dati (historian) dopo riavvio, recuperabile con un semplice restart; nessun impatto su controllo real-time, safety o produzione immediata",
+  "occurrence_score": 4,
+  "occurrence_justification": "Il problema si manifesta solo in seguito al riavvio del DvCH Server, operazione non quotidiana ma tipica di manutenzione",
+  "detectability_score": 5,
+  "detectability_justification": "Il crash genera un exit code specifico ma non è immediatamente visibile agli operatori senza monitoraggio dedicato dello stato dell'historian",
+  "risk_score": 4.3,
+  "risk_score_calculation": "(4 × 0.5) + (4 × 0.3) + (5 × 0.2) = 2.0 + 1.2 + 1.0 = 4.2 (arrotondato 4.3)",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround banale disponibile",
+      "adjustment": -1.0,
+      "reason": "Riavvio del DvCH Server risolve il problema in modo semplice e immediato"
+    },
+    {
+      "modifier": "Fix disponibile (parziale)",
+      "adjustment": -0.5,
+      "reason": "Hotfix disponibili per v15; per v14 solo upgrade consigliato"
+    }
+  ],
+  "final_risk_score": 2.8,
+  "risk_level": "Informational",
+  "problem_type": "bug_software",
+  "architecture_level": 3,
+  "architecture_level_description": "Livello 3: Ingegneria e gestione (storico dati)",
+  "affected_products": ["VE210x-011 Workstation - Continuous Historian", "VE2227 OPC History Server"],
+  "affected_versions_count": 8,
+  "workaround_available": true,
+  "workaround_complexity": "simple",
+  "workaround_description": "Riavviare nuovamente il DeltaV Continuous Historian (DvCH) Server",
+  "fix_available": true,
+  "fix_reference": "Hotfix bundle per v15 (TFSB1093320) in NK-2200-0460, NK-2300-0348, NK-2400-0144; upgrade a v15 per v14",
+  "emerson_category": "Advisory",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "La KBA non specifica l'impatto reale sulla raccolta dati (es. perdita di campioni storici) né se esistono allarmi visibili all'operatore",
+  "operational_recommendation": "monitorare",
+  "red_flags": [],
+  "notes": "Il problema è stato introdotto da una correzione precedente (B859623). Non coinvolge livelli di controllo 0-1 né sistemi SIS. Per le versioni v14 non esiste fix diretto."
+}

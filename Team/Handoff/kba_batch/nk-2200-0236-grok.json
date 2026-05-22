@@ -1,0 +1,58 @@
+{
+  "kba_problem_summary": "DeltaV Diagnostics non riporta stato \"BAD\" per le comunicazioni ACN Primary di controller con CIOCs assegnati quando la Primary ACN viene disconnessa",
+  "severity_score": 6,
+  "severity_justification": "Rischio di mancata rilevazione di un singolo guasto di rete che può portare a outage non pianificato in caso di secondo guasto sulla secondary ACN, con impatto sulla continuità produttiva.",
+  "occurrence_score": 5,
+  "occurrence_justification": "Richiede disconnessione o guasto della rete ACN Primary su sistemi con controller e CIOCs assegnati: condizione plausibile ma non automatica.",
+  "detectability_score": 7,
+  "detectability_justification": "Gli allarmi standard e la vista Diagnostics non segnalano correttamente il guasto (OInteg rimane GOOD); è necessario usare ping, log eventi o configurazione custom.",
+  "risk_score": 5.9,
+  "risk_score_calculation": "(6 × 0.5) + (5 × 0.3) + (7 × 0.2) = 5.9",
+  "modifiers_applied": [
+    {
+      "modifier": "Livello 1 (campo/controllo) coinvolto",
+      "adjustment": 1,
+      "reason": "Interessa controller e CIOCs (Livello 1 dell'architettura DeltaV)"
+    },
+    {
+      "modifier": "Fix disponibile",
+      "adjustment": -1,
+      "reason": "Hotfix disponibili per tutte le versioni v14 LTS/FPx"
+    },
+    {
+      "modifier": "Workaround complesso/parziale",
+      "adjustment": -0.5,
+      "reason": "Richiede configurazione custom di modulo con OCINTEG (non banale)"
+    }
+  ],
+  "final_risk_score": 5.4,
+  "risk_level": "Advisory",
+  "problem_type": "bug_software",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori (S-series, M-series), schede I/O",
+  "affected_products": [
+    "CE3007 MX Controller",
+    "SE3008 SQ Controller",
+    "RSE6502 Redundant CIOC",
+    "VE3007 MX Controller",
+    "SE6501T02 Redundant CIOC2",
+    "Multiple PK, SX, SQ, MQ Controllers and I/O Cards"
+  ],
+  "affected_versions_count": 4,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Configurare un modulo custom che monitora il parametro OCINTEG (/COMM/PRI/OCINTEG) per generare allarmi nella Alarm List",
+  "fix_available": true,
+  "fix_reference": "Hotfix bundles per TFSB676202 (rif. NK-1900-0840, NK-2000-0448, NK-2100-0184, NK-2200-0045)",
+  "emerson_category": "Product Issues",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": [
+    "Mancata segnalazione guasto ACN Primary nei sistemi con CIOCs assegnati",
+    "Rischio di doppia failure di rete non rilevata che porta a outage non pianificato"
+  ],
+  "notes": "Il problema si manifesta solo dopo l'assegnazione dei CIOCs al controller. Se gli smart switch sono \"locked\", alcuni indicatori visivi rimangono disponibili. L'articolo Emerson indica \"Next Service Interval\"."
+}

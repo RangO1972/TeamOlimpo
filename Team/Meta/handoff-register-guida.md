@@ -9,20 +9,20 @@ tags: [meta, strumenti, handoff, registro, archiviazione, guida]
 ## Cos'è
 
 `handoff_register` è il modulo Python del Team Olimpo che automatizza due operazioni critiche del sistema handoff:
-1. **Archiviazione** dei file con `stato: completato` da `Library/Fucina/Handoff/` a `Library/Fucina/Handoff/Archivio/`
-2. **Rigenerazione** di `Library/Fucina/Handoff/Registro.md` — indice centrale di tutti i handoff attivi e completati
+1. **Archiviazione** dei file con `stato: completato` da `Team/Handoff/` a `Team/Handoff/Archivio/`
+2. **Rigenerazione** di `Team/Handoff/Registro.md` — indice centrale di tutti i handoff attivi e completati
 
 **Percorso nel repository**: `tools/handoff_register/`
 **Versione**: 0.1.0
 **Responsabile**: Efesto
-**Registro gestito**: `Library/Fucina/Handoff/Registro.md`
+**Registro gestito**: `Team/Handoff/Registro.md`
 
 ### Cosa permette di fare
 
 `handoff_register` consente di:
-- Leggere il frontmatter YAML da tutti i file handoff presenti in `Library/Fucina/Handoff/`
+- Leggere il frontmatter YAML da tutti i file handoff presenti in `Team/Handoff/`
 - Identificare i file con `stato: completato`
-- Spostare automaticamente questi file in `Library/Fucina/Handoff/Archivio/`
+- Spostare automaticamente questi file in `Team/Handoff/Archivio/`
 - Rigenerare il `Registro.md` con due tabelle: una per i file attivi, una per quelli archiviati
 - Mantenere la coerenza tra file sorgente e indice senza modificare mai i file originali
 - Gestire correttamente i file legacy che non seguono le convenzioni attuali
@@ -55,14 +55,14 @@ uv add pyyaml loguru rich
 
 ### Strutture di input e output
 
-**Input**: File handoff in `Library/Fucina/Handoff/`
+**Input**: File handoff in `Team/Handoff/`
 - Ogni file `.md` con frontmatter YAML
 - Campi richiesti: `data`, `mittente`, `destinatario`, `tipo`, `stato`
 - Campi opzionali: `priorita`, `titolo`, `processato_da`, `processato_il`
 
 **Output**:
-- File completati spostati in `Library/Fucina/Handoff/Archivio/`
-- `Library/Fucina/Handoff/Registro.md` rigenerato con indice aggiornato
+- File completati spostati in `Team/Handoff/Archivio/`
+- `Team/Handoff/Registro.md` rigenerato con indice aggiornato
 - Log dettagliato in `Library/data/handoff_register.log`
 
 ---
@@ -217,7 +217,7 @@ uv run python -m tools.handoff_register -v archivia
 
 ## Gestione dei file legacy
 
-La cartella `Library/Fucina/Handoff/` contiene file storici che non seguono le naming convention e il frontmatter attuale. Esempi:
+La cartella `Team/Handoff/` contiene file storici che non seguono le naming convention e il frontmatter attuale. Esempi:
 - `feedback-efesto-loguru-missing.md`
 - `profilo-competenze-hermes.md`
 - File senza frontmatter YAML
@@ -226,7 +226,7 @@ La cartella `Library/Fucina/Handoff/` contiene file storici che non seguono le n
 
 Lo script **non crasha** su file legacy e applica la seguente **policy read-only**:
 
-1. **Scansione**: legge ogni file `.md` in `Library/Fucina/Handoff/`
+1. **Scansione**: legge ogni file `.md` in `Team/Handoff/`
 2. **Parsing**: estrae il frontmatter se presente
 3. **Warnings**: emette WARNING su stderr per ogni campo mancante (es. "campo 'data' mancante")
 4. **Inclusione nel Registro**: include i file legacy nel Registro.md con `—` nei campi assenti
@@ -239,7 +239,7 @@ WARNING | feedback-efesto-loguru-missing.md: campo 'tipo' mancante
 WARNING | profilo-competenze-hermes.md: campo 'destinatario' mancante
 ```
 
-I file legacy rimangono in `Library/Fucina/Handoff/` e sono visibili nel Registro con metadati incompleti.
+I file legacy rimangono in `Team/Handoff/` e sono visibili nel Registro con metadati incompleti.
 
 ---
 
@@ -248,17 +248,17 @@ I file legacy rimangono in `Library/Fucina/Handoff/` e sono visibili nel Registr
 Il sistema handoff si basa su questi principi inviolabili:
 
 1. **Always read-only sui sorgenti**: nessun file handoff viene mai modificato dallo script
-2. **Template ignorato**: la cartella `Library/Fucina/Handoff/templates/` è sempre esclusa dalla scansione
-3. **Registro.md escluso**: il file `Library/Fucina/Handoff/Registro.md` non viene mai scansionato come sorgente (avoid loops)
-4. **No overwrite in Archivio**: se un file con lo stesso nome esiste già in `Library/Fucina/Handoff/Archivio/`, lo spostamento viene saltato con WARNING
-5. **Creazione automatica di directory**: `Library/Fucina/Handoff/Archivio/` è creata automaticamente se non esiste
+2. **Template ignorato**: la cartella `Team/Handoff/templates/` è sempre esclusa dalla scansione
+3. **Registro.md escluso**: il file `Team/Handoff/Registro.md` non viene mai scansionato come sorgente (avoid loops)
+4. **No overwrite in Archivio**: se un file con lo stesso nome esiste già in `Team/Handoff/Archivio/`, lo spostamento viene saltato con WARNING
+5. **Creazione automatica di directory**: `Team/Handoff/Archivio/` è creata automaticamente se non esiste
 6. **Idempotenza**: eseguire il comando due volte ha lo stesso effetto di eseguirlo una volta
 
 ---
 
 ## Formato del Registro.md
 
-Il `Registro.md` è un file markdown indicizzato in `Library/Fucina/Handoff/` con due sezioni:
+Il `Registro.md` è un file markdown indicizzato in `Team/Handoff/` con due sezioni:
 
 ### Struttura
 
@@ -370,7 +370,7 @@ processato_il: 2026-03-26
 
 4. **Script**:
    - Legge `stato: completato`
-   - Sposta il file in `Library/Fucina/Handoff/Archivio/`
+   - Sposta il file in `Team/Handoff/Archivio/`
    - Rigenera il Registro con il file archiviato
 
 ### Caso 2: Audit senza modifiche
@@ -409,11 +409,11 @@ Output su stderr mostra ogni step, ogni file scansionato, ogni warning.
 
 ## Gestione degli errori
 
-### "Nessun file handoff trovato in Library/Fucina/Handoff/"
+### "Nessun file handoff trovato in Team/Handoff/"
 
 **Causa**: La directory non esiste o è vuota.
 
-**Soluzione**: Verifica che `Library/Fucina/Handoff/` esista e contenga almeno un file `.md`.
+**Soluzione**: Verifica che `Team/Handoff/` esista e contenga almeno un file `.md`.
 
 ### File con frontmatter incompleto
 
@@ -423,11 +423,11 @@ Lo script **non crasha**. Emette WARNING:
 WARNING | file.md: campo 'tipo' mancante
 ```
 
-Il file rimane in `Library/Fucina/Handoff/` e viene incluso nel Registro con `—` nel campo mancante.
+Il file rimane in `Team/Handoff/` e viene incluso nel Registro con `—` nel campo mancante.
 
 ### "File gia' presente in Archivio/ — skip spostamento"
 
-**Causa**: Un file con lo stesso nome esiste già in `Library/Fucina/Handoff/Archivio/`.
+**Causa**: Un file con lo stesso nome esiste già in `Team/Handoff/Archivio/`.
 
 **Soluzione**: Verifica manualmente in Archivio/ quale versione è la più recente, poi decidi se sovrascrivere manualmente.
 
@@ -490,10 +490,10 @@ Hermes coordina:
 ### Flusso con i Membri (Proteo, Atena, Efesto, Clio, Dike)
 
 Ogni membro:
-1. Riceve un handoff (file `.md` in `Library/Fucina/Handoff/`)
+1. Riceve un handoff (file `.md` in `Team/Handoff/`)
 2. Elabora il contenuto
 3. Aggiorna il frontmatter con `stato: completato`, `processato_da: <nome>`, `processato_il: <data>`
-4. Il file rimane in `Library/Fucina/Handoff/` fino a quando `handoff_register` non lo sposta
+4. Il file rimane in `Team/Handoff/` fino a quando `handoff_register` non lo sposta
 
 ---
 

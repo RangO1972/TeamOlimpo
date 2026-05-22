@@ -1,0 +1,58 @@
+{
+  "kba_problem_summary": "I valori di segnale Modbus dell'EIOC o PK Controller possono togglare temporaneamente a zero o valori casuali quando ricevono una risposta Modbus frammentata dal server",
+  "severity_score": 7,
+  "severity_justification": "Interessano valori di ingresso usati nel controllo (livello 1) con rischio di azioni di controllo errate o perturbazioni di processo, anche se temporanee.",
+  "occurrence_score": 5,
+  "occurrence_justification": "Richiede una configurazione specifica (dimensione risposta server sufficientemente grande da causare frammentazione TCP), condizione plausibile in impianti con dataset Modbus estesi.",
+  "detectability_score": 6,
+  "detectability_justification": "Le fluttuazioni sono visibili in Control Studio ma la causa radice (frammentazione della risposta) non è evidente senza analisi di rete (es. Wireshark).",
+  "risk_score": 6.2,
+  "risk_score_calculation": "(7 × 0.5) + (5 × 0.3) + (6 × 0.2) = 3.5 + 1.5 + 1.2 = 6.2",
+  "modifiers_applied": [
+    {
+      "modifier": "Componente livello 1 (campo/controllo)",
+      "adjustment": 1,
+      "reason": "Interessa direttamente PK Controller ed EIOC (Level 1)"
+    },
+    {
+      "modifier": "Workaround complesso",
+      "adjustment": -0.75,
+      "reason": "Richiede suddivisione dei segnali in multiple LDT e possibile analisi Wireshark"
+    },
+    {
+      "modifier": "Fix/hotfix disponibile",
+      "adjustment": -1,
+      "reason": "Hotfix disponibili per tutte le versioni indicate tramite bundle dedicati"
+    }
+  ],
+  "final_risk_score": 5.45,
+  "risk_level": "Advisory",
+  "problem_type": "bug_software",
+  "architecture_level": 1,
+  "architecture_level_description": "Livello 1: Controllori (PK Controller) e schede I/O (EIOC)",
+  "affected_products": [
+    "PK Controller & I/O Hardware Modbus",
+    "PK0xxxxx Controller PK Hardware (Standalone)",
+    "PK0xxxxx Controller PK Hardware (BoP)",
+    "SE4100 Simplex Ethernet I/O Card (EIOC)",
+    "SE4101 Redundant Ethernet I/O Card (EIOC)",
+    "VE4103 MODBUS TCP Interface for Ethernet I/O Card (EIOC)"
+  ],
+  "affected_versions_count": 8,
+  "workaround_available": true,
+  "workaround_complexity": "complex",
+  "workaround_description": "Suddividere i segnali dell'LDT impattato in più LDT più piccoli per evitare risposte frammentate (possibile ispezione con Wireshark)",
+  "fix_available": true,
+  "fix_reference": "Hotfix bundle per v14.LTS, v15.LTS, v15.FP1, v15.FP2, v15.FP3 (riferimento TFSB1108390)",
+  "emerson_category": "Product Issues",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "La KBA non specifica l'entità dell'impatto sul processo (nessun riferimento a loss of control o safety impact), rendendo la valutazione di severità parzialmente soggettiva.",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": [
+    "Valori di segnale che togglano a zero o valori casuali",
+    "Interessa direttamente il livello di controllo (EIOC/PK Controller)"
+  ],
+  "notes": "Emerson classifica come 'Next Service Interval'. Non sono presenti segnali di alta severità (no shutdown, no safety system affected, no data loss permanente)."
+}

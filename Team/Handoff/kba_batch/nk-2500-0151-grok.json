@@ -1,0 +1,38 @@
+{
+  "kba_problem_summary": "La cartella 'logs' non viene creata automaticamente quando Process History View (PHV) si connette al Continuous Historian Server con un utente non-admin a causa di permessi insufficienti",
+  "severity_score": 4,
+  "severity_justification": "Causa possibile lentezza di PHV (degrado prestazioni) senza alcun impatto su controllo di processo, safety o perdita di dati.",
+  "occurrence_score": 6,
+  "occurrence_justification": "Si manifesta in modo consistente con account non-admin, pratica comune e raccomandata per sicurezza operativa.",
+  "detectability_score": 6,
+  "detectability_justification": "Non genera errori visibili o allarmi; il sintomo di lentezza è generico e non collega immediatamente alla cartella mancante.",
+  "risk_score": 5.0,
+  "risk_score_calculation": "(4 × 0.5) + (6 × 0.3) + (6 × 0.2) = 5.0",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround banale disponibile",
+      "adjustment": -1,
+      "reason": "Creazione manuale della cartella o utilizzo di account admin è semplice e può essere fatto anche remotamente"
+    }
+  ],
+  "final_risk_score": 4.0,
+  "risk_level": "Informational",
+  "problem_type": "configuration",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["DeltaV Workstation Software", "VE2145PHV History View (PHV)"],
+  "affected_versions_count": 5,
+  "workaround_available": true,
+  "workaround_complexity": "simple",
+  "workaround_description": "Eseguire PHV come admin oppure creare manualmente la cartella 'logs' sotto DeltaVHistorianData con un account amministratore",
+  "fix_available": false,
+  "fix_reference": "N/A - Nessuna soluzione fornita",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "L'impatto prestazionale è descritto in modo vago ('may cause sluggish') senza esempi o metriche quantitative.",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": ["Nessuna soluzione permanente disponibile", "Interessa un ampio range di versioni (v11.x-v15.x)"],
+  "notes": "Il problema è legato a impostazioni di permessi Windows per i gruppi utenti standard di DeltaV. Non coinvolge livelli di controllo né SIS."
+}

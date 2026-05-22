@@ -1,0 +1,53 @@
+{
+  "kba_problem_summary": "SI dongle required on redundant Application Stations or Interzone Servers after switchover to restore good redundancy status, especially after upgrades performed with SI dongle",
+  "severity_score": 5,
+  "severity_justification": "Degrada lo stato di redundancy (status e availability) su stazioni applicative ridondanti dopo switchover, richiedendo intervento, senza tuttavia causare perdita di controllo, shutdown o impatto su safety.",
+  "occurrence_score": 5,
+  "occurrence_justification": "Si verifica in configurazioni ridondanti di Application Station/Interzone Server dopo upgrade eseguiti con SI dongle seguito da switchover: condizione specifica ma realistica in impianti con ridondanza a livello workstation.",
+  "detectability_score": 4,
+  "detectability_justification": "Lo stato di redundancy viene visualizzato come non 'good' dopo lo switchover; rilevabile tramite diagnostica di sistema durante verifiche periodiche o post-switchover.",
+  "risk_score": 4.8,
+  "risk_score_calculation": "(5 × 0.5) + (5 × 0.3) + (4 × 0.2) = 4.8",
+  "modifiers_applied": [
+    {
+      "modifier": "Fix disponibile",
+      "adjustment": -1,
+      "reason": "Hotfix bundle disponibili per v15.LTS, v15.FP2 e v15.FP3"
+    },
+    {
+      "modifier": "Workaround complesso",
+      "adjustment": -0.5,
+      "reason": "Recovery richiede clear di entrambe le stazioni e total download"
+    }
+  ],
+  "final_risk_score": 3.3,
+  "risk_level": "Informational",
+  "problem_type": "bug_software",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": [
+    "VE210x-35 Workstation - DeltaV Inter-Zone",
+    "VE2201-23 Appstation - OPC",
+    "VE2212RED Redundant OPC Mirror",
+    "VE2224RED Redundant OPC DA Server",
+    "VE2238RED Redundant Batch Executive"
+  ],
+  "affected_versions_count": 5,
+  "workaround_available": true,
+  "workaround_complexity": "complex",
+  "workaround_description": "Evitare di usare SI dongle durante l'upgrade; per recovery: clear di entrambe le stazioni e total download con customer dongle",
+  "fix_available": true,
+  "fix_reference": "Hotfix bundle in NK-2200-0460 (v15.LTS), NK-2400-0144 (v15.FP2), NK-2400-0598 (v15.FP3); soluzione in sviluppo per v15.FP1 e v16.LTS",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "Incertezza sul reale impatto funzionale della 'bad redundancy status' (solo indicazione o effettiva perdita di disponibilità della ridondanza)",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": [
+    "Affects redundancy status and availability",
+    "Recovery procedure complessa (clear + total download)",
+    "Problema introdotto da procedura di upgrade con SI dongle"
+  ],
+  "notes": "Emerson classifica come 'Next Service Interval'. Il problema non coinvolge controllori o livelli 0-1 e non ha implicazioni di sicurezza."
+}

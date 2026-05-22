@@ -1,0 +1,50 @@
+{
+  "kba_problem_summary": "Procedura per installare aggiornamenti Microsoft Security approvati sui Thin Clients DeltaV (Wyse/Lenovo/Amulet) tramite batch file",
+  "severity_score": 5,
+  "severity_justification": "Rischio di sicurezza su dispositivi HMI isolati, mitigato da Unified Write Filter e architettura di rete; nessun impatto su controllo o safety",
+  "occurrence_score": 5,
+  "occurrence_justification": "Aggiornamenti Microsoft mensili richiedono azione deliberata di download e installazione; non si verificano spontaneamente",
+  "detectability_score": 7,
+  "detectability_justification": "Mancanza di aggiornamenti non genera allarmi operativi; rilevabile solo tramite verifica Guardian o controllo manuale",
+  "risk_score": 5.4,
+  "risk_score_calculation": "(5 × 0.5) + (5 × 0.3) + (7 × 0.2) = 5.4",
+  "modifiers_applied": [
+    {
+      "modifier": "Patch/fix disponibile",
+      "adjustment": -1,
+      "reason": "Batch file e aggiornamenti approvati Emerson forniti mensilmente"
+    },
+    {
+      "modifier": "Workaround banale disponibile",
+      "adjustment": -1,
+      "reason": "Procedura documentata da eseguire al prossimo intervallo di servizio"
+    }
+  ],
+  "final_risk_score": 3.4,
+  "risk_level": "Informational",
+  "problem_type": "procedural",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": [
+    "Dell Wyse 7010",
+    "Dell Wyse 7020",
+    "Dell Wyse 5070",
+    "Amulet Hotkey DX1600",
+    "Amulet Hotkey DX1550",
+    "Lenovo M70"
+  ],
+  "affected_versions_count": 17,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Disabilitare FBWF, eseguire batch file da USB, riavviare, riabilitare FBWF seguendo la procedura dettagliata",
+  "fix_available": true,
+  "fix_reference": "Link ai file ZIP con batch (All-inclusive e Monthly) nella sezione 5 della KBA",
+  "emerson_category": "Advisory",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "La KBA è principalmente procedurale/manutentiva piuttosto che descrittiva di un bug o vulnerabilità specifica, rendendo l'applicazione diretta del modello FMEA parzialmente ambigua",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": [],
+  "notes": "KBA aggiornata mensilmente con nuovi aggiornamenti. Thin clients godono di isolamento e write filter, riducendo l'urgenza. Riferimenti a NK-2200-0042 (DCOM) e altri KBA correlati."
+}

@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Gestione e approvazione di aggiornamenti di sicurezza Microsoft mensili per workstation DeltaV al fine di mitigare vulnerabilità OS mantenendo compatibilità con il software DeltaV",
+  "severity_score": 6,
+  "severity_justification": "Rischio di compromissione di sicurezza a livello di workstation (integrità dati e accesso non autorizzato) senza impatto diretto su controllo di processo o safety.",
+  "occurrence_score": 5,
+  "occurrence_justification": "Aggiornamenti Microsoft mensili che richiedono valutazione specifica Emerson; plausibile su sistemi non aggiornati ma non avviene automaticamente.",
+  "detectability_score": 7,
+  "detectability_justification": "Vulnerabilità OS solitamente silenziose fino a scansione esterna o exploit; scanner possono dare falsi positivi sui rollup.",
+  "risk_score": 5.9,
+  "risk_score_calculation": "(6 × 0.5) + (5 × 0.3) + (7 × 0.2) = 3.0 + 1.5 + 1.4 = 5.9",
+  "modifiers_applied": [
+    {
+      "modifier": "Patch/fix disponibile",
+      "adjustment": -1,
+      "reason": "Aggiornamenti Microsoft testati e approvati elencati nella KBA e nello spreadsheet"
+    },
+    {
+      "modifier": "Workaround disponibile",
+      "adjustment": -0.5,
+      "reason": "Procedure dettagliate, batch installer e workaround specifici (es. registry per CVE-2020-1350)"
+    }
+  ],
+  "final_risk_score": 4.4,
+  "risk_level": "Advisory",
+  "problem_type": "security_vulnerability",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": ["DeltaV Workstation Software", "IDDC Independent DeltaV Domain Controller", "VE210x DeltaV Workstation"],
+  "affected_versions_count": 25,
+  "workaround_available": true,
+  "workaround_complexity": "medium",
+  "workaround_description": "Installazione guidata degli aggiornamenti approvati tramite spreadsheet, batch files e procedure speciali per certi KB",
+  "fix_available": true,
+  "fix_reference": "Microsoft KB elencati nello spreadsheet (es. KB5075999, KB5075904, ecc.) scaricabile da Guardian",
+  "emerson_category": "Advisory",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "medium",
+  "confidence_note": "La KBA è un documento aggregato e in continua evoluzione (mensile) piuttosto che la descrizione di un singolo difetto specifico, rendendo la valutazione FMEA più generica.",
+  "operational_recommendation": "applicare_patch",
+  "red_flags": ["Supporto terminato per versioni legacy Windows 7/2008", "Alcuni aggiornamenti richiedono prerequisiti e sequenza precisa di installazione", "Possibili impatti su prodotti complementari (es. Trellix SIEM, OPC classico)"],
+  "notes": "Si tratta di una guida di manutenzione di sicurezza piuttosto che di un bug DeltaV. Rispetta il requisito 'Next Service Interval'. Include note importanti su DCOM, Meltdown/Spectre, Print Spooler e altre vulnerabilità note."
+}

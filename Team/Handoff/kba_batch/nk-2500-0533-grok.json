@@ -1,0 +1,38 @@
+{
+  "kba_problem_summary": "Remote Logon e Remote Logoff events appaiono in DeltaV Alarms & Events durante periodi di idle e all'apertura di applicazioni DeltaV (comportamento previsto dal design)",
+  "severity_score": 2,
+  "severity_justification": "Nessun impatto su produzione, controllo o sicurezza: si tratta di eventi di logging previsti dal design del sistema per tracciare connessioni di applicazioni e database.",
+  "occurrence_score": 7,
+  "occurrence_justification": "Gli eventi si generano in modo sistematico all'apertura di applicazioni DeltaV (Explorer, Control Studio, PHV, OPC Client) e con integrazioni come AMS Device Manager.",
+  "detectability_score": 2,
+  "detectability_justification": "Gli eventi sono immediatamente visibili nel journal Alarms & Events, rendendo il fenomeno evidente all'operatore o all'ingegnere.",
+  "risk_score": 3.5,
+  "risk_score_calculation": "(2 × 0.5) + (7 × 0.3) + (2 × 0.2) = 1 + 2.1 + 0.4 = 3.5",
+  "modifiers_applied": [
+    {
+      "modifier": "No workaround available",
+      "adjustment": 0.5,
+      "reason": "KBA dichiara esplicitamente che non esiste workaround né soluzione software"
+    }
+  ],
+  "final_risk_score": 4.0,
+  "risk_level": "Informational",
+  "problem_type": "procedural",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore) e applicazioni di ingegneria",
+  "affected_products": ["DeltaV General Workstation Products"],
+  "affected_versions_count": 13,
+  "workaround_available": false,
+  "workaround_complexity": "none",
+  "workaround_description": "Nessun workaround disponibile: il comportamento è previsto dal design del sistema",
+  "fix_available": false,
+  "fix_reference": "N/A",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "monitorare",
+  "red_flags": [],
+  "notes": "La KBA ha scopo prevalentemente esplicativo. Non si tratta di un bug ma di un comportamento intenzionale di logging. Gli unici eventi potenzialmente problematici citati rimandano ad altre KBAs (NK-1300-0094, AK-1000-0021, NK-1800-0850)."
+}

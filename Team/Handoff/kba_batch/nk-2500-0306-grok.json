@@ -1,0 +1,50 @@
+{
+  "kba_problem_summary": "Creazione e abilitazione automatica e non desiderata di task di aggiornamento Microsoft Edge (MicrosoftEdgeUpdateTaskMachineCore e MicrosoftEdgeUpdateTaskMachineUA) nel Windows Task Scheduler su sistemi DeltaV v15.x",
+  "severity_score": 5,
+  "severity_justification": "Comporta violazione delle policy di aggiornamento controllato in ambiente OT; i task automatici non sono accettabili ma non causano perdita di controllo, shutdown o impatto diretto su produzione/sicurezza.",
+  "occurrence_score": 9,
+  "occurrence_justification": "Il fenomeno si verifica sistematicamente sia su sistemi migrati che su nuove installazioni di DeltaV v15.x, sia fisiche che virtuali.",
+  "detectability_score": 7,
+  "detectability_justification": "Nessun allarme o indicazione visibile all'interno di DeltaV; richiede ispezione manuale del Task Scheduler di Windows.",
+  "risk_score": 6.7,
+  "risk_score_calculation": "(5 × 0.5) + (9 × 0.3) + (7 × 0.2) = 2.5 + 2.7 + 1.4 = 6.6 (arrotondato a 6.7)",
+  "modifiers_applied": [
+    {
+      "modifier": "Workaround banale disponibile",
+      "adjustment": -1.5,
+      "reason": "Disabilitare o cancellare i task è un'operazione semplice e immediata tramite Task Scheduler"
+    },
+    {
+      "modifier": "Nessun fix disponibile",
+      "adjustment": 0.5,
+      "reason": "Emerson dichiara che il problema è ancora sotto indagine per tutte le release v15.x"
+    }
+  ],
+  "final_risk_score": 5.7,
+  "risk_level": "Advisory",
+  "problem_type": "bug_software",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": [
+    "DeltaV General Workstation",
+    "DeltaV Workstation Software VE210x-19",
+    "DeltaV Upgrade Services"
+  ],
+  "affected_versions_count": 4,
+  "workaround_available": true,
+  "workaround_complexity": "simple",
+  "workaround_description": "Disabilitare o eliminare i due task MicrosoftEdgeUpdateTaskMachineCore e MicrosoftEdgeUpdateTaskMachineUA direttamente dal Windows Task Scheduler",
+  "fix_available": false,
+  "fix_reference": "N/A (in fase di indagine)",
+  "emerson_category": "N/A",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "applicare_workaround",
+  "red_flags": [
+    "Task di aggiornamento automatici abilitati in ambiente OT",
+    "Required Action: Mandatory nonostante workaround semplice"
+  ],
+  "notes": "Il problema è puramente di igiene di configurazione OT. Non coinvolge livelli di controllo (0-1) né sistemi SIS. L'assenza di fix permanente è l'aspetto più rilevante da monitorare."
+}

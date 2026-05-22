@@ -1,0 +1,43 @@
+{
+  "kba_problem_summary": "Documento informativo sulla matrice di compatibilità e istruzioni di installazione dei sistemi operativi Windows supportati dalle varie release di DeltaV",
+  "severity_score": 1,
+  "severity_justification": "La KBA non descrive alcun bug, vulnerabilità, incompatibilità pericolosa o guasto, ma fornisce unicamente informazioni di riferimento su OS supportati.",
+  "occurrence_score": 1,
+  "occurrence_justification": "Non si tratta di un evento o di un problema che può verificarsi, bensì di documentazione tecnica statica.",
+  "detectability_score": 1,
+  "detectability_justification": "Il documento è esplicito, pubblicato ufficialmente e facilmente consultabile; non esiste alcun rischio nascosto.",
+  "risk_score": 1.0,
+  "risk_score_calculation": "(1 × 0.5) + (1 × 0.3) + (1 × 0.2) = 1.0",
+  "modifiers_applied": [
+    {
+      "modifier": "Contenuto puramente informativo",
+      "adjustment": -0.5,
+      "reason": "Required Action: Information Only, nessun problema tecnico riportato"
+    }
+  ],
+  "final_risk_score": 0.5,
+  "risk_level": "Negligible",
+  "problem_type": "procedural",
+  "architecture_level": 2,
+  "architecture_level_description": "Livello 2: Supervisione (HMI, workstation operatore)",
+  "affected_products": [
+    "DeltaV Workstation Software",
+    "DeltaV Upgrade",
+    "DeltaV Offline Upgrade Service",
+    "DeltaV Online Upgrade Service"
+  ],
+  "affected_versions_count": 22,
+  "workaround_available": false,
+  "workaround_complexity": "none",
+  "workaround_description": "",
+  "fix_available": false,
+  "fix_reference": "",
+  "emerson_category": "Informational",
+  "divergence_from_emerson": false,
+  "divergence_explanation": "",
+  "confidence_level": "high",
+  "confidence_note": "",
+  "operational_recommendation": "monitorare",
+  "red_flags": [],
+  "notes": "La KBA è un documento di riferimento per la corretta scelta e installazione del sistema operativo. Non contiene segnali di alta severità, non coinvolge livelli 0-1 né sistemi SIS. È una guida di compatibilità aggiornata fino a DeltaV v15.FP3 (per v16+ fare riferimento ad AP1000-0070)."
+}

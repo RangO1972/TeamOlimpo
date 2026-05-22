@@ -94,10 +94,10 @@ def _find_project_root() -> Path:
     2. Fall back to ``Path(__file__)`` based resolution (parent of ``tools/``).
     3. If not found, raise ``FileNotFoundError``.
     """
-    cwd = Path.cwd()
+    cwd = Path.cwd().resolve()
     for candidate in [cwd, *cwd.parents]:
         if (candidate / "tools" / "config.yaml").is_file():
-            return candidate
+            return candidate.resolve()
 
     # Fallback: from this file's location: tools/handoff/cli.py → tools/ → root
     file_based = Path(__file__).resolve().parent.parent.parent
@@ -590,7 +590,7 @@ def list_handoffs(  # noqa: PLR0913 — function name avoids shadowing built-in 
         help="Enable DEBUG-level logging to stderr.",
     ),
 ) -> None:
-    """List and filter handoff files from Library/Fucina/Handoff/YYYY/MM/.
+    """List and filter handoff files from Team/Handoff/YYYY/MM/.
 
     Supports filtering by agent, date range, type, task_id, and full-text
     search. Results are sorted newest-first. Use ``--paths`` to get a
@@ -634,7 +634,7 @@ def list_handoffs(  # noqa: PLR0913 — function name avoids shadowing built-in 
     except typer.Exit:
         raise
 
-    handoff_root = (project_root / config["handoff"]["handoff_root"]).resolve()
+    handoff_root = (project_root / config["handoff"]["handoff_root"])
     logger.debug(f"Handoff root: {handoff_root}")
 
     # ── Determine scan directories ──
@@ -770,7 +770,7 @@ def main(
     except typer.Exit:
         raise  # already logged
 
-    handoff_root = (project_root / config["handoff"]["handoff_root"]).resolve()
+    handoff_root = (project_root / config["handoff"]["handoff_root"])
     logger.debug(f"Handoff root: {handoff_root}")
 
     # ------------------------------------------------------------------
