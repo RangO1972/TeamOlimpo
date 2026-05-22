@@ -61,6 +61,15 @@ Library/
 # Team/Fucina — working file temporanei, non versionare
 Team/Fucina/
 
+# Team/Handoff — migrato in Library/Handoff/ (privato)
+Team/Handoff/
+
+# Team/Hermes — migrato in Library/System/Hermes/ (privato)
+Team/Hermes/
+
+# Team/Quarantine — migrato in Library/Quarantine/ (privato)
+Team/Quarantine/
+
 # Log strumenti
 tools/migrate-email-vault.log
 

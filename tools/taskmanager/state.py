@@ -94,13 +94,13 @@ class StateStore:
 
         Args:
             path: Explicit path to state.yaml. If ``None``, auto-detect
-                  from ``Team/Hermes/state.yaml`` relative to project root.
+                  from ``Library/System/Hermes/state.yaml`` relative to project root.
         """
         if path is not None:
             self._path = path.resolve()
         else:
             project_root = _find_project_root()
-            self._path = (project_root / "Library" / "Fucina" / "Hermes" / "state.yaml").resolve()
+            self._path = (project_root / "Library" / "System" / "Hermes" / "state.yaml").resolve()
         self._lock_path = self._path.with_name(f".{self._path.name}.lock")
         self._data: dict[str, Any] | None = None
         self._lock_fd: int | None = None

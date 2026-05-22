@@ -13,14 +13,14 @@ email_processor:
 
 handoff:
   # Directory base per handoff (relativa a PROJECT_ROOT)
-  handoff_root: Team/Handoff
+  handoff_root: Library/Handoff
 
 knowledge_base:
   # Directory da includere nella ricerca (path relativi a PROJECT_ROOT)
   search_paths:
     - Library/Wiki/
     - Library/documents/
-    - Team/Handoff/
+    - Library/Handoff/
     - Library/emails/
     - Library/deliverables/
 
