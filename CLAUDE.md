@@ -75,7 +75,7 @@ This repository is compatible with **both OpenCode and Claude Code**.
 
 1. **Invoke Hermes as your entry point**: Every request should use `@hermes` to access the full team routing
 2. **Hermes will route to specialists**: Once invoked, Hermes knows which agent (Atena, Efesto, Proteo, etc.) is best suited
-3. **MCP servers are configured** in `.claude/settings.json` and will auto-connect to the same 5 backend services
+3. **MCP servers are configured** in `.mcp.json` (project scope, shared with team) and auto-connect to all 5 backend services (handoff, email_processor, taskmanager, knowledge_base, session_memory)
 
 ### Generated Artifacts
 
@@ -89,8 +89,23 @@ To sync after agent edits:
 uv run python tools/sync_agents.py
 ```
 
+### Testing MCP Servers
+
+Inside Claude Code, run:
+```
+/mcp
+```
+
+Shows connection status and tool count per server. If a server shows "disconnected", debug by running:
+```bash
+uv run python -m tools.session_memory.server  # example
+```
+
+Check stderr for errors.
+
 ### Limitations
 
 - Claude Code does not support the automatic `mode: primary` routing that OpenCode provides — you must invoke `@hermes` explicitly
 - Permission rules are less granular in Claude Code; the sync script does a best-effort conversion
 - `opencode/big-pickle` model is mapped to `sonnet` in Claude Code
+- MCP configuration **must** be in `.mcp.json` (not `.claude/settings.json`), which is committed to git and shared

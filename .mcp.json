@@ -1,0 +1,40 @@
+{
+  "mcpServers": {
+    "handoff": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "tools.handoff.server"],
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      }
+    },
+    "email_processor": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "tools.email_processor.server"],
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      }
+    },
+    "taskmanager": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "tools.taskmanager.server"],
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      }
+    },
+    "knowledge_base": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "tools.knowledge_base.server"],
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      }
+    },
+    "session_memory": {
+      "command": "uv",
+      "args": ["run", "python", "-m", "tools.session_memory.server"],
+      "env": {
+        "PYTHONUNBUFFERED": "1",
+        "SESSION_DB_PATH": "Library/System/Hermes/session.db"
+      }
+    }
+  }
+}
