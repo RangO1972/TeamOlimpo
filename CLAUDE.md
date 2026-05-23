@@ -73,9 +73,12 @@ This repository is compatible with **both OpenCode and Claude Code**.
 
 ### How to Use with Claude Code
 
-1. **Invoke Hermes as your entry point**: Every request should use `@hermes` to access the full team routing
-2. **Hermes will route to specialists**: Once invoked, Hermes knows which agent (Atena, Efesto, Proteo, etc.) is best suited
-3. **MCP servers are configured** in `.mcp.json` (project scope, shared with team) and auto-connect to all 5 backend services (handoff, email_processor, taskmanager, knowledge_base, session_memory)
+Claude Code starts with **Hermes as the main agent** (configured in `.claude/settings.json`). Hermes automatically:
+1. Receives all your requests
+2. Routes them to the best specialist (Atena for design, Efesto for Python, Proteo for research, etc.)
+3. Tracks state and synthesizes results
+
+**MCP servers** are configured in `.mcp.json` (project scope, shared with team) and auto-connect to all 5 backend services (handoff, email_processor, taskmanager, knowledge_base, session_memory)
 
 ### Generated Artifacts
 
