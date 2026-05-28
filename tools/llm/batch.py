@@ -39,6 +39,7 @@ _PLACEHOLDER_DATE = "{{date}}"
 # Parsing template
 # ---------------------------------------------------------------------------
 
+
 def extract_prompt_section(template_text: str) -> str:
     """
     Estrae il contenuto della sezione '## Prompt' da un file Markdown.
@@ -68,7 +69,7 @@ def extract_prompt_section(template_text: str) -> str:
         )
 
     # Testo dopo la heading
-    after_heading = template_text[match.end():]
+    after_heading = template_text[match.end() :]
 
     # Trova la prossima heading di livello 1 o 2
     next_heading = re.search(r"^#{1,2}\s", after_heading, re.MULTILINE)
@@ -83,6 +84,7 @@ def extract_prompt_section(template_text: str) -> str:
 # ---------------------------------------------------------------------------
 # Rendering template
 # ---------------------------------------------------------------------------
+
 
 def render_template(
     template: str,
@@ -122,6 +124,7 @@ def render_template(
 # ---------------------------------------------------------------------------
 # Espansione input
 # ---------------------------------------------------------------------------
+
 
 def expand_inputs(raw_inputs: list[str]) -> list[Path]:
     """
@@ -194,9 +197,7 @@ def expand_inputs(raw_inputs: list[str]) -> list[Path]:
                 result.append(match)
 
     if not result:
-        raise ValueError(
-            f"Nessun file trovato per i pattern: {', '.join(raw_inputs)}"
-        )
+        raise ValueError(f"Nessun file trovato per i pattern: {', '.join(raw_inputs)}")
 
     return result
 
@@ -204,6 +205,7 @@ def expand_inputs(raw_inputs: list[str]) -> list[Path]:
 # ---------------------------------------------------------------------------
 # Esecuzione batch
 # ---------------------------------------------------------------------------
+
 
 def run_merge(
     provider: "ProviderProtocol",

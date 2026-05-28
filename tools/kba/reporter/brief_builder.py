@@ -16,6 +16,7 @@ def _kba_to_slug(kba_number: str) -> str:
 def _extract_section(body: str, section: str) -> str:
     """Estrae il testo di una sezione ## dal body Markdown. Ritorna stringa vuota se assente."""
     import re
+
     pattern = rf"^## {re.escape(section)}\s*\n(.*?)(?=^## |\Z)"
     m = re.search(pattern, body, re.MULTILINE | re.DOTALL)
     if m:
@@ -36,17 +37,17 @@ def _read_catalog_meta(slug: str) -> dict:
                 meta = yaml.safe_load(parts[1]) or {}
                 body = parts[2]
                 return {
-                    "found":            True,
-                    "analyzed_at":      str(meta.get("analyzed_at", "")),
-                    "source":           str(meta.get("source", "")),
-                    "risk_score":       meta.get("risk_score", ""),
-                    "risk_level":       str(meta.get("risk_level", "")),
-                    "workaround":       bool(meta.get("workaround_available", False)),
-                    "fix_reference":    str(meta.get("fix_reference", "")),
-                    "sintesi":          _extract_section(body, "Sintesi"),
-                    "workaround_text":  _extract_section(body, "Workaround"),
-                    "raccomandazione":  _extract_section(body, "Raccomandazione"),
-                    "note":             _extract_section(body, "Note"),
+                    "found": True,
+                    "analyzed_at": str(meta.get("analyzed_at", "")),
+                    "source": str(meta.get("source", "")),
+                    "risk_score": meta.get("risk_score", ""),
+                    "risk_level": str(meta.get("risk_level", "")),
+                    "workaround": bool(meta.get("workaround_available", False)),
+                    "fix_reference": str(meta.get("fix_reference", "")),
+                    "sintesi": _extract_section(body, "Sintesi"),
+                    "workaround_text": _extract_section(body, "Workaround"),
+                    "raccomandazione": _extract_section(body, "Raccomandazione"),
+                    "note": _extract_section(body, "Note"),
                 }
             except Exception:
                 pass
@@ -83,21 +84,23 @@ def build_wip_brief(wip_rows: list[dict], max_age_days: int = ANALYSIS_MAX_AGE_D
             except Exception:
                 stato = "ANALIZZA"
 
-        result.append({
-            "kba_number":       kba,
-            "title":            data["title"],
-            "sites":            sorted(data["sites"]),
-            "risk_level":       meta.get("risk_level") or data["risk_level"],
-            "risk_score":       meta.get("risk_score", ""),
-            "stato":            stato,
-            "analyzed_at":      meta.get("analyzed_at", ""),
-            "source":           meta.get("source", ""),
-            "sintesi":          meta.get("sintesi", ""),
-            "workaround_text":  meta.get("workaround_text", ""),
-            "raccomandazione":  meta.get("raccomandazione", ""),
-            "note":             meta.get("note", ""),
-            "fix_reference":    meta.get("fix_reference", ""),
-        })
+        result.append(
+            {
+                "kba_number": kba,
+                "title": data["title"],
+                "sites": sorted(data["sites"]),
+                "risk_level": meta.get("risk_level") or data["risk_level"],
+                "risk_score": meta.get("risk_score", ""),
+                "stato": stato,
+                "analyzed_at": meta.get("analyzed_at", ""),
+                "source": meta.get("source", ""),
+                "sintesi": meta.get("sintesi", ""),
+                "workaround_text": meta.get("workaround_text", ""),
+                "raccomandazione": meta.get("raccomandazione", ""),
+                "note": meta.get("note", ""),
+                "fix_reference": meta.get("fix_reference", ""),
+            }
+        )
 
     result.sort(key=lambda x: (x["stato"] == "SKIP", x["kba_number"]))
     logger.info(

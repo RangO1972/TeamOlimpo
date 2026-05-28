@@ -114,8 +114,14 @@ def merge_rows(rows: list[dict[str, Any]], headers: list[str]) -> list[dict[str,
     """
     # Verifica che le colonne attese esistano
     required = [
-        "KBA Number", "Published", "Category", "Disposition Status",
-        "Title", "System Name (ID)", "Node Name / Node Assignment", "User Notes",
+        "KBA Number",
+        "Published",
+        "Category",
+        "Disposition Status",
+        "Title",
+        "System Name (ID)",
+        "Node Name / Node Assignment",
+        "User Notes",
     ]
     missing = [c for c in required if c not in headers]
     if missing:
@@ -163,16 +169,18 @@ def merge_rows(rows: list[dict[str, Any]], headers: list[str]) -> list[dict[str,
         nodes_sorted = sorted(entry["_nodes"])
         notes_merged = _merge_notes(entry["_notes_raw"])
 
-        result.append({
-            "KBA Number": entry["KBA Number"],
-            "Published": entry["Published"],
-            "Category": entry["Category"],
-            "Disposition Status": entry["Disposition Status"],
-            "Title": entry["Title"],
-            "Site": entry["Site"],
-            "Node Name / Node Assignment": "\n".join(nodes_sorted),
-            "User Notes": notes_merged,
-        })
+        result.append(
+            {
+                "KBA Number": entry["KBA Number"],
+                "Published": entry["Published"],
+                "Category": entry["Category"],
+                "Disposition Status": entry["Disposition Status"],
+                "Title": entry["Title"],
+                "Site": entry["Site"],
+                "Node Name / Node Assignment": "\n".join(nodes_sorted),
+                "User Notes": notes_merged,
+            }
+        )
 
     logger.debug(f"Merge completato: {len(rows)} righe input -> {len(result)} righe output")
     return result

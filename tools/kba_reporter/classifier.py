@@ -22,18 +22,20 @@ def load_excel(path: Path) -> list[dict]:
         if not any(row):
             continue
         r = dict(zip(headers, row))
-        rows.append({
-            "kba_number":  str(r.get("KBA Number") or "").strip(),
-            "title":       str(r.get("Title") or "").strip(),
-            "site":        str(r.get("Site") or "").strip(),
-            "node":        str(r.get("Node Name / Node Assignment") or "").strip(),
-            "user_notes":  str(r.get("User Notes") or "").strip(),
-            "risk_score":  r.get("Risk Score") or "",
-            "risk_level":  str(r.get("Risk Level") or "").strip(),
-            "emerson_cat": str(r.get("Emerson Category") or "").strip(),
-            "fis_notes":      str(r.get("FIS Notes") or "").strip(),
-            "stefano_notes":  str(r.get("Stefano's Notes") or "").strip(),
-        })
+        rows.append(
+            {
+                "kba_number": str(r.get("KBA Number") or "").strip(),
+                "title": str(r.get("Title") or "").strip(),
+                "site": str(r.get("Site") or "").strip(),
+                "node": str(r.get("Node Name / Node Assignment") or "").strip(),
+                "user_notes": str(r.get("User Notes") or "").strip(),
+                "risk_score": r.get("Risk Score") or "",
+                "risk_level": str(r.get("Risk Level") or "").strip(),
+                "emerson_cat": str(r.get("Emerson Category") or "").strip(),
+                "fis_notes": str(r.get("FIS Notes") or "").strip(),
+                "stefano_notes": str(r.get("Stefano's Notes") or "").strip(),
+            }
+        )
     wb.close()
     logger.info(f"Lette {len(rows)} righe da {path.name}")
     return rows

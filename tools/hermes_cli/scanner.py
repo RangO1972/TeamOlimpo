@@ -55,12 +55,22 @@ def read_scratchpad(path: Path = SCRATCHPAD_PATH) -> Scratchpad:
         return sp
 
     if not text.startswith("---"):
-        sp.warnings.append({"type": "no_frontmatter", "description": "File non inizia con '---' — frontmatter YAML assente"})
+        sp.warnings.append(
+            {
+                "type": "no_frontmatter",
+                "description": "File non inizia con '---' — frontmatter YAML assente",
+            }
+        )
         return sp
 
     end_marker = text.find("\n---", 3)
     if end_marker == -1:
-        sp.errors.append({"type": "yaml_unclosed", "description": "Frontmatter YAML non chiuso (marker '---' di chiusura assente)"})
+        sp.errors.append(
+            {
+                "type": "yaml_unclosed",
+                "description": "Frontmatter YAML non chiuso (marker '---' di chiusura assente)",
+            }
+        )
         return sp
 
     yaml_block = text[3:end_marker].strip()
@@ -74,16 +84,20 @@ def read_scratchpad(path: Path = SCRATCHPAD_PATH) -> Scratchpad:
             sp.yaml_error_line = mark.line + 1
         sp.yaml_error = str(exc)
         problem = getattr(exc, "problem", str(exc))
-        sp.errors.append({
-            "type": "yaml_parse",
-            "line": sp.yaml_error_line or 0,
-            "description": f"YAML malformato (riga ~{sp.yaml_error_line}): {problem}",
-        })
+        sp.errors.append(
+            {
+                "type": "yaml_parse",
+                "line": sp.yaml_error_line or 0,
+                "description": f"YAML malformato (riga ~{sp.yaml_error_line}): {problem}",
+            }
+        )
         logger.debug(f"YAML parse error in scratchpad: {exc}")
         return sp
 
     if not isinstance(parsed, dict):
-        sp.errors.append({"type": "yaml_not_dict", "description": "Il frontmatter non è un mapping YAML valido"})
+        sp.errors.append(
+            {"type": "yaml_not_dict", "description": "Il frontmatter non è un mapping YAML valido"}
+        )
         return sp
 
     sp.parsed = True
@@ -91,11 +105,23 @@ def read_scratchpad(path: Path = SCRATCHPAD_PATH) -> Scratchpad:
 
     raw_tasks = parsed.get("active_tasks", [])
     if not isinstance(raw_tasks, list):
-        sp.warnings.append({"type": "wrong_type", "field": "active_tasks", "description": "active_tasks non è una lista"})
+        sp.warnings.append(
+            {
+                "type": "wrong_type",
+                "field": "active_tasks",
+                "description": "active_tasks non è una lista",
+            }
+        )
     else:
         for i, t in enumerate(raw_tasks):
             if not isinstance(t, dict):
-                sp.warnings.append({"type": "wrong_type", "field": f"active_tasks[{i}]", "description": f"Elemento {i} non è un oggetto"})
+                sp.warnings.append(
+                    {
+                        "type": "wrong_type",
+                        "field": f"active_tasks[{i}]",
+                        "description": f"Elemento {i} non è un oggetto",
+                    }
+                )
                 continue
             task = Task(
                 id=str(t.get("id", "")),
@@ -112,11 +138,19 @@ def read_scratchpad(path: Path = SCRATCHPAD_PATH) -> Scratchpad:
 
     raw_decisions = parsed.get("decisions", [])
     if not isinstance(raw_decisions, list):
-        sp.warnings.append({"type": "wrong_type", "field": "decisions", "description": "decisions non è una lista"})
+        sp.warnings.append(
+            {"type": "wrong_type", "field": "decisions", "description": "decisions non è una lista"}
+        )
     else:
         for i, d in enumerate(raw_decisions):
             if not isinstance(d, dict):
-                sp.warnings.append({"type": "wrong_type", "field": f"decisions[{i}]", "description": f"Elemento {i} non è un oggetto"})
+                sp.warnings.append(
+                    {
+                        "type": "wrong_type",
+                        "field": f"decisions[{i}]",
+                        "description": f"Elemento {i} non è un oggetto",
+                    }
+                )
                 continue
             decision = Decision(
                 id=str(d.get("id", "")),
@@ -128,7 +162,9 @@ def read_scratchpad(path: Path = SCRATCHPAD_PATH) -> Scratchpad:
             )
             sp.decisions.append(decision)
 
-    logger.debug(f"Scratchpad letto: {len(sp.tasks)} task, {len(sp.decisions)} decisioni, {len(sp.errors)} errori, {len(sp.warnings)} warning")
+    logger.debug(
+        f"Scratchpad letto: {len(sp.tasks)} task, {len(sp.decisions)} decisioni, {len(sp.errors)} errori, {len(sp.warnings)} warning"
+    )
     return sp
 
 
@@ -164,4 +200,4 @@ def read_handoff_body(path: Path) -> str:
     end_marker = text.find("\n---", 3)
     if end_marker == -1:
         return text
-    return text[end_marker + 5:]
+    return text[end_marker + 5 :]

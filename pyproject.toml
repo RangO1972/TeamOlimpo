@@ -56,6 +56,9 @@ dependencies = [
     "thefuzz",
     "python-levenshtein",
     "mcp>=1.27.1",
+    # Embedding search
+    "sentence-transformers>=3.0",
+    "sqlite-vec>=0.1.9",
 ]
 
 [project.optional-dependencies]
@@ -97,6 +100,7 @@ ignore = [
     "ANN101", # self non annotato (deprecato in ruff recenti)
     "ANN102", # cls non annotato
 ]
+per-file-ignores = { "tests/*" = ["ANN201", "ANN001", "ANN401"] }
 
 [tool.ruff.lint.isort]
 known-first-party = ["tools"]
@@ -123,6 +127,10 @@ addopts = "-v --tb=short"
 
 [dependency-groups]
 dev = [
+    "mypy>=1.20.2",
     "pytest>=9.0.3",
     "ruff>=0.15.12",
+    "types-python-dateutil>=2.9.0.20260518",
+    "types-pyyaml>=6.0.12.20260408",
+    "types-requests>=2.33.0.20260408",
 ]

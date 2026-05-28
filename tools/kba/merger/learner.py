@@ -1,9 +1,9 @@
 """
 Subcommand learn: legge un Excel revisionato (con FIS Notes compilate),
-costruisce/aggiorna il prontuario in Library/data/kba_prontuario/.
+costruisce/aggiorna il prontuario in lib/data/kba_prontuario/.
 
 Struttura prontuario:
-  Library/data/kba_prontuario/
+  lib/data/kba_prontuario/
     cases/         — un file .md per ogni KBA revisionata
     index.yaml     — statistiche aggregate
     rules.md       — regole apprese dai disaccordi (generato da LLM se disponibile)
@@ -27,17 +27,17 @@ from tools.kba.merger.config import PROJECT_ROOT
 # Costanti
 # ---------------------------------------------------------------------------
 
-PRONTUARIO_DIR: Path = PROJECT_ROOT / "Library" / "data" / "kba_prontuario"
+PRONTUARIO_DIR: Path = PROJECT_ROOT / "lib" / "data" / "kba_prontuario"
 CASES_DIR: Path = PRONTUARIO_DIR / "cases"
 
 # Pattern tag in FIS Notes: {SIGLA keyword}
 # Es: {RS done}, {FIS na}, {Mario std}
-TAG_PATTERN = re.compile(r'\{(\w+)\s+(std|done|na|defer)\}', re.IGNORECASE)
+TAG_PATTERN = re.compile(r"\{(\w+)\s+(std|done|na|defer)\}", re.IGNORECASE)
 
 TAG_TO_ACTION: dict[str, str] = {
-    "std":   "In-Progress",
-    "done":  "Action Complete",
-    "na":    "Not Applicable",
+    "std": "In-Progress",
+    "done": "Action Complete",
+    "na": "Not Applicable",
     "defer": "Deferred",
 }
 
@@ -45,6 +45,7 @@ TAG_TO_ACTION: dict[str, str] = {
 # ---------------------------------------------------------------------------
 # Parsing tag FIS Notes
 # ---------------------------------------------------------------------------
+
 
 def parse_fis_tag(fis_notes: str) -> tuple[str, str, str]:
     """
@@ -86,6 +87,7 @@ def parse_fis_tag(fis_notes: str) -> tuple[str, str, str]:
 # ---------------------------------------------------------------------------
 # Lettura Excel revisionato
 # ---------------------------------------------------------------------------
+
 
 def _read_merged_excel(xlsx_path: Path) -> list[dict[str, Any]]:
     """
@@ -147,6 +149,7 @@ def _read_merged_excel(xlsx_path: Path) -> list[dict[str, Any]]:
 # Scrittura case file
 # ---------------------------------------------------------------------------
 
+
 def _case_slug(kba_id: str, site: str) -> str:
     """
     Genera uno slug univoco per il file case.
@@ -194,7 +197,7 @@ def _write_case_file(
     """
     CASES_DIR.mkdir(parents=True, exist_ok=True)
 
-    agreement = (ai_action == human_action)
+    agreement = ai_action == human_action
 
     # Frontmatter YAML
     fm: dict[str, Any] = {
@@ -226,6 +229,7 @@ def _write_case_file(
 # ---------------------------------------------------------------------------
 # Aggiornamento index.yaml
 # ---------------------------------------------------------------------------
+
 
 def _update_index(cases_data: list[dict[str, Any]]) -> None:
     """
@@ -270,6 +274,7 @@ def _update_index(cases_data: list[dict[str, Any]]) -> None:
 # Rigenerazione rules.md
 # ---------------------------------------------------------------------------
 
+
 def _regen_rules(
     disagreements: list[dict[str, Any]],
     provider: Any,
@@ -290,7 +295,7 @@ def _regen_rules(
     Returns:
         True se rules.md e' stato riscritto, False in caso di errore.
     """
-    learn_prompt_path = PROJECT_ROOT / "Library" / "Prompts" / "kba" / "estrai-regole-prontuario.md"
+    learn_prompt_path = PROJECT_ROOT / "lib" / "Prompts" / "kba" / "estrai-regole-prontuario.md"
     if not learn_prompt_path.exists():
         logger.warning(f"Prompt learn non trovato: {learn_prompt_path}")
         return False
@@ -298,6 +303,7 @@ def _regen_rules(
     # Estrae sezione ## Prompt
     content = learn_prompt_path.read_text(encoding="utf-8")
     import re as _re
+
     match = _re.search(r"^## Prompt\s*\n([\s\S]*?)(?=\n## |\Z)", content, _re.MULTILINE)
     if not match:
         logger.warning("Sezione '## Prompt' non trovata nel prompt learn")
@@ -366,6 +372,7 @@ def _write_rules_placeholder(total_cases: int, agreement_rate: float) -> None:
 # ---------------------------------------------------------------------------
 # Entry point principale
 # ---------------------------------------------------------------------------
+
 
 def run_learn(
     input_xlsx: Path,
@@ -498,8 +505,14 @@ def run_learn(
 
     # Report stderr
     disagree_pct = f"({disagree_count / total_cases * 100:.0f}%)" if total_cases else ""
-    rules_status = "rules.md rigenerato" if rules_regenerated else (
-        "rules.md non rigenerato (provider non disponibile)" if disagree_cases else "rules.md invariato"
+    rules_status = (
+        "rules.md rigenerato"
+        if rules_regenerated
+        else (
+            "rules.md non rigenerato (provider non disponibile)"
+            if disagree_cases
+            else "rules.md invariato"
+        )
     )
 
     sys.stderr.write(

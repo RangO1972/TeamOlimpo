@@ -25,6 +25,7 @@ import typer
 from loguru import logger
 from rich.console import Console
 
+from tools.common.paths import resolve_absolute
 from tools.kba.merger.config import LOG_FILE, OUTPUT_DIR, PROJECT_ROOT
 
 console = Console()
@@ -39,6 +40,7 @@ app = typer.Typer(
 # ---------------------------------------------------------------------------
 # Configurazione logging
 # ---------------------------------------------------------------------------
+
 
 def _setup_logging(verbose: bool = False) -> None:
     """
@@ -72,6 +74,7 @@ def _setup_logging(verbose: bool = False) -> None:
 # Callback globale (verbose)
 # ---------------------------------------------------------------------------
 
+
 @app.callback()
 def common(
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Output debug su stderr."),
@@ -83,6 +86,7 @@ def common(
 # ---------------------------------------------------------------------------
 # Utilita' lettura Excel input
 # ---------------------------------------------------------------------------
+
 
 def _read_deltav_excel(path: Path) -> tuple[list[str], list[dict[str, Any]]]:
     """
@@ -134,6 +138,7 @@ def _read_deltav_excel(path: Path) -> tuple[list[str], list[dict[str, Any]]]:
 # Risoluzione path input
 # ---------------------------------------------------------------------------
 
+
 def _resolve_input(raw: Path) -> Path:
     """
     Risolve il path di input relativo rispetto a PROJECT_ROOT.
@@ -144,14 +149,13 @@ def _resolve_input(raw: Path) -> Path:
     Returns:
         Path assoluto risolto.
     """
-    if not raw.is_absolute():
-        raw = PROJECT_ROOT / raw
-    return raw.resolve()
+    return resolve_absolute(raw)
 
 
 # ---------------------------------------------------------------------------
 # Helper provider
 # ---------------------------------------------------------------------------
+
 
 def _init_provider(provider_name: str, model_override: str | None) -> Any:
     """
@@ -188,12 +192,15 @@ def _init_provider(provider_name: str, model_override: str | None) -> Any:
 # Comando: merge
 # ---------------------------------------------------------------------------
 
+
 @app.command()
 def merge(
     input: Path = typer.Argument(..., help="File Excel KBA_Guardian export.", exists=True),
     output: Path = typer.Option(None, "--output", "-o", help="Path output Excel."),
     no_enrich: bool = typer.Option(False, "--no-enrich", help="Disabilita enrichment."),
-    no_ai: bool = typer.Option(False, "--no-ai", help="Disabilita AI enrichment per Suggested Notes."),
+    no_ai: bool = typer.Option(
+        False, "--no-ai", help="Disabilita AI enrichment per Suggested Notes."
+    ),
     provider: str = typer.Option("grok", "--provider", help="Provider LLM per Suggested Notes."),
     model: str = typer.Option(None, "--model", help="Override modello LLM."),
 ) -> None:
@@ -258,10 +265,7 @@ def merge(
     # Output path
     output_path: Path | None = None
     if output:
-        raw_out = output
-        if not raw_out.is_absolute():
-            raw_out = PROJECT_ROOT / raw_out
-        output_path = raw_out.resolve()
+        output_path = resolve_absolute(output)
 
     # Scrittura
     try:
@@ -288,6 +292,7 @@ def merge(
 # ---------------------------------------------------------------------------
 # Comando: learn
 # ---------------------------------------------------------------------------
+
 
 @app.command()
 def learn(
@@ -324,10 +329,13 @@ def learn(
 # Comando: gap
 # ---------------------------------------------------------------------------
 
+
 @app.command()
 def gap(
     input: Path = typer.Argument(..., help="File Excel KBA_Guardian export.", exists=True),
-    recursive: bool = typer.Option(False, "--recursive", "-r", help="Espande check ricorsivo via fix_reference."),
+    recursive: bool = typer.Option(
+        False, "--recursive", "-r", help="Espande check ricorsivo via fix_reference."
+    ),
 ) -> None:
     """Gap check: classifica KBA mancanti nel catalogo."""
     from tools.kba.merger.gap import compute_gap
@@ -366,9 +374,9 @@ def gap(
 
     # Riepilogo
     direct_rows = [r for r in gap_rows if not r.get("referenced_by")]
-    ref_rows    = [r for r in gap_rows if r.get("referenced_by")]
-    total       = len(direct_rows)
-    ok          = sum(1 for r in direct_rows if r["stato"] == "ok")
+    ref_rows = [r for r in gap_rows if r.get("referenced_by")]
+    total = len(direct_rows)
+    ok = sum(1 for r in direct_rows if r["stato"] == "ok")
     da_analizzare = sum(1 for r in direct_rows if r["stato"] == "da_analizzare")
     da_convertire = sum(1 for r in direct_rows if r["stato"] == "da_convertire")
 
@@ -385,10 +393,7 @@ def gap(
         for r in ref_rows:
             if r["stato"] != "ok":
                 parents = ", ".join(r["referenced_by"])
-                console.print(
-                    f"    [red]{r['kba_number']}[/red]  [{r['stato']}]  "
-                    f"<- {parents}"
-                )
+                console.print(f"    [red]{r['kba_number']}[/red]  [{r['stato']}]  <- {parents}")
     elif recursive:
         console.print("\n  [green]Nessuna KBA referenziata mancante.[/green]")
 

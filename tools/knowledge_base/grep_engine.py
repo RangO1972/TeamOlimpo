@@ -23,15 +23,17 @@ from typing import Any
 import yaml
 from loguru import logger
 
+from tools.common.paths import resolve_relative
+
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
 
 SCOPE_PATHS: dict[str, list[str]] = {
     "wiki": ["Library/Wiki/"],
-    "docs": ["Library/documents/"],
-    "wiki+docs": ["Library/Wiki/", "Library/documents/"],
-    "all": ["Library/", "Team/Handoff/"],
+    "docs": ["lib/documents/"],
+    "wiki+docs": ["Library/Wiki/", "lib/documents/"],
+    "all": ["lib/", "Team/Handoff/"],
     "handoff": ["Team/Handoff/"],
 }
 
@@ -153,19 +155,19 @@ def resolve_search_paths(
 ) -> list[Path]:
     """Resolve search paths for the given *scope*.
 
-    Returns a list of absolute ``Path`` objects that exist on disk.
+    Returns a list of ``Path`` objects relative to *project_root*.
+    Uses the symlink path (``lib/``) directly — does NOT resolve
+    symlinks, so ``relative_to()`` calls downstream work correctly.
+
     Raises ``ValueError`` if *scope* is invalid.
     """
     if scope not in VALID_SCOPES:
-        raise ValueError(
-            f"Invalid scope '{scope}'. "
-            f"Use one of: {', '.join(sorted(VALID_SCOPES))}."
-        )
+        raise ValueError(f"Invalid scope '{scope}'. Use one of: {', '.join(sorted(VALID_SCOPES))}.")
 
     rel_paths = SCOPE_PATHS[scope]
     resolved: list[Path] = []
     for rel in rel_paths:
-        p = (project_root / rel).resolve()
+        p = project_root / rel
         if p.is_dir():
             resolved.append(p)
         else:
@@ -315,8 +317,9 @@ def parse_search_output(
         if not rel_path.lower().endswith(".md"):
             continue
 
-        # Resolve the full path
-        file_path = (project_root / rel_path).resolve()
+        # Resolve the full path (use resolve_relative to preserve symlink,
+        # so relative_to() calls downstream work correctly)
+        file_path = resolve_relative(rel_path)
         if not file_path.is_file():
             continue
 
@@ -364,12 +367,14 @@ def parse_search_output(
         # ---- Frontmatter for output ----
         fm = get_frontmatter(file_path, project_root)
 
-        results.append({
-            "path": rel_path,
-            "line": line_num,
-            "snippet": snippet,
-            "frontmatter": fm,
-        })
+        results.append(
+            {
+                "path": rel_path,
+                "line": line_num,
+                "snippet": snippet,
+                "frontmatter": fm,
+            }
+        )
 
         if len(results) >= max_results:
             break
@@ -441,9 +446,7 @@ def search(
         logger.warning(f"max_results clamped from {max_results} to {MAX_RESULTS_LIMIT}")
         max_results = MAX_RESULTS_LIMIT
     if context_lines > MAX_CONTEXT_LINES:
-        logger.warning(
-            f"context_lines clamped from {context_lines} to {MAX_CONTEXT_LINES}"
-        )
+        logger.warning(f"context_lines clamped from {context_lines} to {MAX_CONTEXT_LINES}")
         context_lines = MAX_CONTEXT_LINES
 
     logger.info(f"search: query='{query[:80]}', scope={scope}, engine={engine_name}")

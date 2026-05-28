@@ -63,7 +63,7 @@ All checks reference `agent-design-methodology.md` and `agent-creation-flow.md` 
 
 ## How to report
 
-Produce a handoff via `handoff_create` with:
+Produce a handoff via `synapsis_hf(act="new", ...)` with:
 
 - **type**: `analysis` (gap analysis) or `report` (conformity check)
 - **title**: `<Agent name> review — <phase>`

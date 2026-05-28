@@ -77,7 +77,9 @@ def _scan_directory(directory: Path, recursive: bool) -> tuple[Counter[str], int
     return ext_counter, total_files, total_dirs
 
 
-def _print_report(ext_counter: Counter[str], total_files: int, total_dirs: int, directory: Path) -> None:
+def _print_report(
+    ext_counter: Counter[str], total_files: int, total_dirs: int, directory: Path
+) -> None:
     """Stampa il report delle estensioni su stdout.
 
     Args:

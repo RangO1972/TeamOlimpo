@@ -26,6 +26,7 @@ from loguru import logger
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
 
+from tools.common.paths import resolve_absolute
 from tools.kba_pipeline.config import LOG_FILE, PROJECT_ROOT, RECORDS_DIR
 from tools.kba_pipeline import __version__
 from tools.consulto.config import KNOWN_PRICES
@@ -56,10 +57,12 @@ def _stats_line(response: object) -> str:
     inp_tok = getattr(response, "input_tokens", None)
     out_tok = getattr(response, "output_tokens", None)
     if inp_tok or out_tok:
+
         def _fmt(n: int | None) -> str:
             if n is None:
                 return "?"
             return f"{n / 1000:.1f}k" if n >= 1000 else str(n)
+
         parts.append(f"↑{_fmt(inp_tok)} ↓{_fmt(out_tok)} tok")
 
     model_id = getattr(response, "model_used", "") or ""
@@ -79,6 +82,7 @@ def _stats_line(response: object) -> str:
 # ---------------------------------------------------------------------------
 # Advisor modelli
 # ---------------------------------------------------------------------------
+
 
 def _show_model_advisor(records_dir: Path, current_model: str, excel_path: Path) -> None:
     """
@@ -129,6 +133,7 @@ def _show_model_advisor(records_dir: Path, current_model: str, excel_path: Path)
 # Configurazione logging
 # ---------------------------------------------------------------------------
 
+
 def _setup_logging(verbose: bool = False) -> None:
     """
     Configura loguru: handler su file + stderr.
@@ -161,6 +166,7 @@ def _setup_logging(verbose: bool = False) -> None:
 # Callback globale (verbose)
 # ---------------------------------------------------------------------------
 
+
 @app.callback()
 def common(
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Output debug su stderr."),
@@ -173,6 +179,7 @@ def common(
 # Comando principale: run
 # ---------------------------------------------------------------------------
 
+
 @app.command()
 def run(
     excel: Path = typer.Argument(
@@ -182,7 +189,8 @@ def run(
     ),
     inbox: Path = typer.Option(
         None,
-        "--inbox", "-i",
+        "--inbox",
+        "-i",
         help=f"Cartella sorgente PDF (default: Inbox/).",
     ),
     provider: str = typer.Option(
@@ -227,7 +235,8 @@ def run(
     ),
     force: bool = typer.Option(
         False,
-        "--force", "-f",
+        "--force",
+        "-f",
         help="Forza la riconversione dei PDF gia' presenti nel database (step 1).",
     ),
 ) -> None:
@@ -254,11 +263,12 @@ def run(
         console.print("[dim](modalita' dry-run: nessuna modifica verra' apportata)[/dim]")
 
     # --- Risolvi path Excel ---
-    excel_path = excel if excel.is_absolute() else (PROJECT_ROOT / excel)
-    excel_path = excel_path.resolve()
+    excel_path = resolve_absolute(excel)
 
     if not excel_path.exists():
-        console.print(f"[bold red]Errore:[/bold red] file Excel non trovato: {excel_path}", stderr=True)
+        console.print(
+            f"[bold red]Errore:[/bold red] file Excel non trovato: {excel_path}", stderr=True
+        )
         raise typer.Exit(1)
 
     if excel_path.suffix.lower() != ".xlsx":
@@ -270,8 +280,7 @@ def run(
 
     # --- Risolvi inbox ---
     if inbox is not None:
-        inbox_path = inbox if inbox.is_absolute() else (PROJECT_ROOT / inbox)
-        inbox_path = inbox_path.resolve()
+        inbox_path = resolve_absolute(inbox)
     else:
         inbox_path = _DEFAULT_INBOX
 
@@ -295,7 +304,9 @@ def run(
             )
         except Exception as exc:
             logger.error(f"Step 1 fallito: {exc}")
-            console.print(f"      [bold red]ERRORE critico nello step 1:[/bold red] {exc}", stderr=True)
+            console.print(
+                f"      [bold red]ERRORE critico nello step 1:[/bold red] {exc}", stderr=True
+            )
             raise typer.Exit(1)
     else:
         console.print("\n[bold][1/4][/bold] Conversione PDF... [dim](saltato)[/dim]")
@@ -307,20 +318,29 @@ def run(
 
     if not skip_analyze:
         console.print("\n[bold][2/4][/bold] Analisi AI documenti nuovi...")
-        def _on_kba_progress(i: int, total: int, slug: str, status: str, response, error: str | None) -> None:
+
+        def _on_kba_progress(
+            i: int, total: int, slug: str, status: str, response, error: str | None
+        ) -> None:
             if status == "start":
                 pass  # il timer live in step2_analyze gestisce il display
             elif status == "ok":
                 if response:
                     _step2_responses.append(response)
                 stats = _stats_line(response) if response else ""
-                console.print(f"      [[dim]{i}/{total}[/dim]] [cyan]{slug}[/cyan]  [green]ok[/green]  [dim]{stats}[/dim]")
+                console.print(
+                    f"      [[dim]{i}/{total}[/dim]] [cyan]{slug}[/cyan]  [green]ok[/green]  [dim]{stats}[/dim]"
+                )
             elif status == "error":
-                console.print(f"      [[dim]{i}/{total}[/dim]] [cyan]{slug}[/cyan]  [red]ERRORE[/red]: {error}")
+                console.print(
+                    f"      [[dim]{i}/{total}[/dim]] [cyan]{slug}[/cyan]  [red]ERRORE[/red]: {error}"
+                )
 
         try:
             r2 = step2_analyze(
-                provider, model_analyze, dry_run=dry_run,
+                provider,
+                model_analyze,
+                dry_run=dry_run,
                 on_progress=_on_kba_progress,
                 force_analyze=force_analyze,
             )
@@ -332,7 +352,9 @@ def run(
             )
         except Exception as exc:
             logger.error(f"Step 2 fallito: {exc}")
-            console.print(f"      [bold red]ERRORE critico nello step 2:[/bold red] {exc}", stderr=True)
+            console.print(
+                f"      [bold red]ERRORE critico nello step 2:[/bold red] {exc}", stderr=True
+            )
             raise typer.Exit(1)
     else:
         console.print("\n[bold][2/4][/bold] Analisi AI... [dim](saltato)[/dim]")
@@ -377,9 +399,13 @@ def run(
         elif status == "ai":
             stats = _stats_line(response) if response else ""
             _s4_responses.append(response)
-            console.print(f"      [[dim]{i}/{total}[/dim]] [cyan]{kba}[/cyan]  [green]AI[/green]  [dim]{stats}[/dim]")
+            console.print(
+                f"      [[dim]{i}/{total}[/dim]] [cyan]{kba}[/cyan]  [green]AI[/green]  [dim]{stats}[/dim]"
+            )
         elif status == "ai_error":
-            console.print(f"      [[dim]{i}/{total}[/dim]] [cyan]{kba}[/cyan]  [red]AI ERRORE[/red]: {error}")
+            console.print(
+                f"      [[dim]{i}/{total}[/dim]] [cyan]{kba}[/cyan]  [red]AI ERRORE[/red]: {error}"
+            )
         elif status == "fallback":
             console.print(f"      [[dim]{i}/{total}[/dim]] [cyan]{kba}[/cyan]  [dim]fallback[/dim]")
 

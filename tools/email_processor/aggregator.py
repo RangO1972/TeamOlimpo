@@ -20,6 +20,8 @@ from pathlib import Path
 
 from loguru import logger
 
+from tools.common.paths import resolve_absolute
+
 
 # ---------------------------------------------------------------------------
 # Aggregator
@@ -87,8 +89,7 @@ class Aggregator:
             entry["sources"].append(str(source))
 
         logger.debug(
-            f"Aggregatore: {device} / {problem} "
-            f"(totale: {entry['count']}) → {daily_path.name}"
+            f"Aggregatore: {device} / {problem} (totale: {entry['count']}) → {daily_path.name}"
         )
 
     def flush(self) -> int:
@@ -180,7 +181,7 @@ class Aggregator:
 
         # Pattern: "Problem: DEVICE in errore"
         m = re.search(
-            r'problem:\s*(.+?)\s+(?:in errore|has just been restarted|is not ok)',
+            r"problem:\s*(.+?)\s+(?:in errore|has just been restarted|is not ok)",
             subject,
             re.IGNORECASE,
         )
@@ -202,7 +203,7 @@ class Aggregator:
 
         # Pattern: "Predictive failure for Disk X ... of DEVICE"
         m = re.search(
-            r'predictive failure.*?(?:of|in)\s+([^\s,]+)',
+            r"predictive failure.*?(?:of|in)\s+([^\s,]+)",
             subject,
             re.IGNORECASE,
         )
@@ -213,7 +214,7 @@ class Aggregator:
 
         # Pattern: "BACKUP FAILED/NOT RESPONDING"
         m = re.search(
-            r'(backup\s+(?:failed|is\s+not\s+responding|manuali\s+non\s+eseguiti))',
+            r"(backup\s+(?:failed|is\s+not\s+responding|manuali\s+non\s+eseguiti))",
             subject,
             re.IGNORECASE,
         )
@@ -229,7 +230,7 @@ class Aggregator:
             return device, problem
 
         # Fallback: estrai possibile device dal subject (prima parola uppercase mista)
-        m = re.search(r'\b([A-Z][A-Z0-9_-]+(?:[.-][A-Z0-9]+)*)\b', subject)
+        m = re.search(r"\b([A-Z][A-Z0-9_-]+(?:[.-][A-Z0-9]+)*)\b", subject)
         if m:
             device = m.group(1)
 
@@ -250,7 +251,7 @@ class Aggregator:
             return "unknown"
 
         # Cerca email nel formato nome@hostname.dominio
-        m = re.search(r'[\w.+-]+@([\w-]+(?:\.[\w-]+)+)', sender)
+        m = re.search(r"[\w.+-]+@([\w-]+(?:\.[\w-]+)+)", sender)
         if m:
             # Prendi il primo segmento del nome host
             host = m.group(1).split(".")[0]
@@ -316,7 +317,7 @@ class Aggregator:
 
                 # Estrai conteggio dalla cella "Oggi" (es. "24 alert" → 24)
                 count_cell = parts[3].strip()
-                count_match = re.search(r'\d+', count_cell)
+                count_match = re.search(r"\d+", count_cell)
                 count = int(count_match.group()) if count_match else 0
 
                 device_key = f"{device}||{problem}"
@@ -363,16 +364,12 @@ class Aggregator:
                 # Preserva data più antica
                 existing_first = merged[key].get("first_seen", "")
                 new_first = entry.get("first_seen", "")
-                if new_first and (
-                    not existing_first or (new_first < existing_first)
-                ):
+                if new_first and (not existing_first or (new_first < existing_first)):
                     merged[key]["first_seen"] = new_first
                 # Aggrega sorgenti
                 existing_sources = merged[key].get("sources", [])
                 new_sources = entry.get("sources", [])
-                merged[key]["sources"] = list(
-                    set(existing_sources + new_sources)
-                )
+                merged[key]["sources"] = list(set(existing_sources + new_sources))
             else:
                 merged[key] = dict(entry)
 
@@ -414,21 +411,15 @@ class Aggregator:
         unique_devices = len(set(e["device"] for e in sorted_entries))
 
         lines.append(f"## Nuovi problemi ({len(sorted_entries)})")
-        lines.append(
-            "| Device | Problema | Prima segnalazione | Oggi |"
-        )
-        lines.append(
-            "|--------|----------|--------------------|------|"
-        )
+        lines.append("| Device | Problema | Prima segnalazione | Oggi |")
+        lines.append("|--------|----------|--------------------|------|")
 
         for entry in sorted_entries:
             device = entry["device"][:60]
             problem = entry["problem"][:60]
             first_seen = entry.get("first_seen", "—")
             count_display = f"{entry['count']} alert"
-            lines.append(
-                f"| {device} | {problem} | {first_seen} | {count_display} |"
-            )
+            lines.append(f"| {device} | {problem} | {first_seen} | {count_display} |")
 
         lines.append("")
         lines.append("## Statistiche")

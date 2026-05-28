@@ -36,8 +36,8 @@ htmlcov/
 Thumbs.db
 
 # Database e log (rigenerabili, binari o temporanei)
-Library/data/pdf_index.db
-Library/data/*.log
+lib/data/pdf_index.db
+lib/data/*.log
 
 # Memoria privata agenti (non condividere)
 .claude/agent-memory/
@@ -55,8 +55,8 @@ Legacy/
 vaults/
 
 # Library — symlink verso repo privato, non tracciare
-Library
-Library/
+lib
+lib/
 
 # Team/Fucina — working file temporanei, non versionare
 Team/Fucina/
@@ -74,8 +74,8 @@ Team/Quarantine/
 tools/migrate-email-vault.log
 
 # Database e log KBA
-Library/data/*.db
-Library/data/*.log
+lib/data/*.db
+lib/data/*.log
 
 # Lockfile uv
 uv.lock

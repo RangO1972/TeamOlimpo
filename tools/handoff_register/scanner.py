@@ -24,6 +24,7 @@ from tools.handoff_register.config import HANDOFF_DIR, REGISTRO_PATH, SKIP_DIRS
 # Struttura dati di un handoff
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class HandoffRecord:
     """Rappresenta i metadati di un singolo file handoff."""
@@ -59,6 +60,7 @@ class HandoffRecord:
 # ---------------------------------------------------------------------------
 # Lettura frontmatter
 # ---------------------------------------------------------------------------
+
 
 def _read_frontmatter(path: Path) -> tuple[dict[str, Any], list[str]]:
     """
@@ -165,6 +167,7 @@ def _build_record(path: Path) -> HandoffRecord:
 # ---------------------------------------------------------------------------
 # Scan ricorsivo
 # ---------------------------------------------------------------------------
+
 
 def _is_scannable(path: Path) -> bool:
     if path.suffix.lower() != ".md":

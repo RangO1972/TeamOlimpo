@@ -18,7 +18,7 @@ Utilizzo:
   python -m tools.llm --stdin < file.txt
   python -m tools.llm models
   python -m tools.llm models --provider grok
-  python -m tools.llm --prompt Team/Prompts/kba/analisi-rischio.md --input Library/documents/*.md
+  python -m tools.llm --prompt Team/Prompts/kba/analisi-rischio.md --input lib/documents/*.md
   python -m tools.llm -i
 """
 
@@ -60,6 +60,7 @@ app_models = typer.Typer(
 # Configurazione logging
 # ---------------------------------------------------------------------------
 
+
 def _setup_logging(verbose: bool = False) -> None:
     """
     Configura loguru per il tool consulto.
@@ -83,6 +84,7 @@ def _setup_logging(verbose: bool = False) -> None:
 # ---------------------------------------------------------------------------
 # Helper dry-run
 # ---------------------------------------------------------------------------
+
 
 def _print_dry_run(system: str | None, user_prompt: str, n_files: int = 1) -> None:
     """
@@ -108,6 +110,7 @@ def _print_dry_run(system: str | None, user_prompt: str, n_files: int = 1) -> No
 # ---------------------------------------------------------------------------
 # Formato prezzi modelli
 # ---------------------------------------------------------------------------
+
 
 def _format_price(model_id: str) -> str:
     """
@@ -156,10 +159,12 @@ def _format_stats(response: Any) -> str:
     inp = response.input_tokens
     out = response.output_tokens
     if inp is not None or out is not None:
+
         def _fmt(n: int | None) -> str:
             if n is None:
                 return "?"
             return f"{n / 1000:.1f}k" if n >= 1000 else str(n)
+
         parts.append(f"↑{_fmt(inp)} ↓{_fmt(out)} tok")
 
     # Costo stimato
@@ -178,9 +183,12 @@ def _format_stats(response: Any) -> str:
 # Subcommand: models (app separata, invocata da __main__.py)
 # ---------------------------------------------------------------------------
 
+
 @app_models.command()
 def cmd_models(
-    provider: Optional[str] = typer.Option(None, "--provider", "-p", help="Filtra per provider."),
+    provider: Optional[str] = typer.Option(
+        None, "--provider", "-p", help="Filtra per provider (grok, gemini, openrouter)."
+    ),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Output debug su stderr."),
 ) -> None:
     """Elenca i modelli disponibili per provider."""
@@ -199,6 +207,7 @@ def cmd_models(
     provider_display = {
         "grok": "GROK (xAI)",
         "gemini": "GEMINI (Google)",
+        "openrouter": "OPENROUTER",
     }
 
     any_error = False
@@ -241,10 +250,13 @@ def cmd_models(
 # Comando principale (app)
 # ---------------------------------------------------------------------------
 
+
 @app.command()
 def main(
     prompt_text: Optional[str] = typer.Argument(None, help="Testo del prompt (opzionale)."),
-    provider: str = typer.Option(DEFAULT_PROVIDER, "--provider", "-p", help="Provider LLM."),
+    provider: str = typer.Option(
+        DEFAULT_PROVIDER, "--provider", "-p", help="Provider LLM (grok, gemini, openrouter)."
+    ),
     model: Optional[str] = typer.Option(None, "--model", "-m", help="Override modello."),
     system: Optional[str] = typer.Option(None, "--system", help="System prompt o path a file."),
     stdin: bool = typer.Option(False, "--stdin", help="Legge prompt da stdin."),
@@ -254,9 +266,17 @@ def main(
     output: Optional[Path] = typer.Option(None, "--output", help="Cartella output batch."),
     merge: bool = typer.Option(False, "--merge", help="Merge file in singolo call."),
     skip_existing: bool = typer.Option(False, "--skip-existing", help="Salta output esistenti."),
-    var: Optional[List[str]] = typer.Option(None, "--var", metavar="KEY=VALUE", help="Variabile template (ripetibile)."),
-    agent_count: int = typer.Option(4, "--agent-count", help="Numero agenti per modelli multi-agent (4 o 16). Ignorato per modelli standard."),
-    web_search: bool = typer.Option(False, "--web-search", help="Abilita ricerca web (solo Grok, Responses API)."),
+    var: Optional[List[str]] = typer.Option(
+        None, "--var", metavar="KEY=VALUE", help="Variabile template (ripetibile)."
+    ),
+    agent_count: int = typer.Option(
+        4,
+        "--agent-count",
+        help="Numero agenti per modelli multi-agent (4 o 16). Ignorato per modelli standard.",
+    ),
+    web_search: bool = typer.Option(
+        False, "--web-search", help="Abilita ricerca web (solo Grok, Responses API)."
+    ),
     dry_run: bool = typer.Option(False, "--dry-run", help="Mostra payload senza chiamare API."),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Output debug su stderr."),
     version: bool = typer.Option(False, "--version", help="Mostra versione ed esce."),
@@ -266,15 +286,11 @@ def main(
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     else:
-        sys.stdout = io.TextIOWrapper(
-            sys.stdout.buffer, encoding="utf-8", errors="replace"
-        )
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
     if hasattr(sys.stderr, "reconfigure"):
         sys.stderr.reconfigure(encoding="utf-8", errors="replace")
     else:
-        sys.stderr = io.TextIOWrapper(
-            sys.stderr.buffer, encoding="utf-8", errors="replace"
-        )
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
     if version:
         print(f"llm {TOOL_VERSION}")
@@ -300,13 +316,10 @@ def main(
     _setup_logging(verbose=verbose)
 
     # --- Modalita' interattiva ---
-    no_input = (
-        not prompt_text
-        and not stdin
-        and not prompt_file
-    )
+    no_input = not prompt_text and not stdin and not prompt_file
     if interactive or no_input:
         from tools.llm.interactive import run_interactive
+
         result = run_interactive(
             providers_map=PROVIDERS,
             get_api_key_fn=get_api_key,
@@ -411,6 +424,7 @@ def main(
     else:
         # Fallback: interattiva
         from tools.llm.interactive import run_interactive
+
         result = run_interactive(
             providers_map=PROVIDERS,
             get_api_key_fn=get_api_key,

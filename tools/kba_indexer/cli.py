@@ -23,6 +23,7 @@ from loguru import logger
 from rich.console import Console
 from rich.table import Table
 
+from tools.common.paths import resolve_absolute
 from tools.kba_indexer.config import (
     BATCH_DIR,
     INDEX_FILE,
@@ -51,6 +52,7 @@ class SortField(str, Enum):
 # ---------------------------------------------------------------------------
 # Configurazione logging
 # ---------------------------------------------------------------------------
+
 
 def _setup_logging(verbose: bool = False) -> None:
     """
@@ -84,6 +86,7 @@ def _setup_logging(verbose: bool = False) -> None:
 # Callback globale (verbose)
 # ---------------------------------------------------------------------------
 
+
 @app.callback()
 def common(
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Output debug su stderr."),
@@ -95,6 +98,7 @@ def common(
 # ---------------------------------------------------------------------------
 # Risoluzione input path
 # ---------------------------------------------------------------------------
+
 
 def _resolve_input_path(raw: Path) -> Path:
     """
@@ -108,9 +112,7 @@ def _resolve_input_path(raw: Path) -> Path:
     Returns:
         Path assoluto risolto.
     """
-    if not raw.is_absolute():
-        raw = PROJECT_ROOT / raw
-    return raw.resolve()
+    return resolve_absolute(raw)
 
 
 def _collect_batch_files(input_path: Path) -> list[Path]:
@@ -146,6 +148,7 @@ def _collect_batch_files(input_path: Path) -> list[Path]:
 # Comando: index
 # ---------------------------------------------------------------------------
 
+
 @app.command(name="index")
 def cmd_index(
     input: Path = typer.Option(BATCH_DIR, "--input", "-i", help="Dir, file o glob pattern."),
@@ -172,6 +175,7 @@ def cmd_index(
         try:
             import re as _re
             import yaml as _yaml
+
             raw = file_path.read_text(encoding="utf-8")
             fm_match = _re.match(r"\A---\s*\n([\s\S]*?)\n---\s*\n", raw, _re.MULTILINE)
             kba_display = file_path.stem
@@ -201,8 +205,7 @@ def cmd_index(
             record = parse_batch_file(file_path)
         except Exception as exc:
             console.print(
-                f"{prefix} [cyan]{kba_display:<20}[/cyan] "
-                f"[bold red]-> ERRORE[/bold red]  ({exc})"
+                f"{prefix} [cyan]{kba_display:<20}[/cyan] [bold red]-> ERRORE[/bold red]  ({exc})"
             )
             logger.error(f"Errore parsing {file_path.name}: {exc}")
             errors += 1
@@ -213,10 +216,7 @@ def cmd_index(
 
         if dry_run:
             action = "[yellow]-> dry-run[/yellow]"
-            console.print(
-                f"{prefix} [cyan]{kba_display:<20}[/cyan] "
-                f"{action}   ({level}, {score})"
-            )
+            console.print(f"{prefix} [cyan]{kba_display:<20}[/cyan] {action}   ({level}, {score})")
             indexed += 1
             continue
 
@@ -258,6 +258,7 @@ def cmd_index(
 # Comando: list
 # ---------------------------------------------------------------------------
 
+
 @app.command(name="list")
 def cmd_list(
     limit: int = typer.Option(50, "--limit", "-n", help="Numero max record."),
@@ -269,9 +270,7 @@ def cmd_list(
         return
 
     try:
-        index_data: dict[str, Any] = yaml.safe_load(
-            INDEX_FILE.read_text(encoding="utf-8")
-        ) or {}
+        index_data: dict[str, Any] = yaml.safe_load(INDEX_FILE.read_text(encoding="utf-8")) or {}
     except Exception as exc:
         console.print(f"[bold red]Errore lettura index.yaml:[/bold red] {exc}")
         raise typer.Exit(code=1)
@@ -291,7 +290,13 @@ def cmd_list(
     elif sort_key == "score":
         entries = sorted(entries, key=lambda e: float(e.get("score", 0.0)), reverse=reverse)
     elif sort_key == "level":
-        level_order = {"critical": 0, "warning": 1, "advisory": 2, "informational": 3, "negligible": 4}
+        level_order = {
+            "critical": 0,
+            "warning": 1,
+            "advisory": 2,
+            "informational": 3,
+            "negligible": 4,
+        }
         entries = sorted(
             entries,
             key=lambda e: level_order.get(str(e.get("level", "")).lower(), 99),
@@ -338,6 +343,7 @@ def cmd_list(
 # Comando: stats
 # ---------------------------------------------------------------------------
 
+
 @app.command()
 def stats() -> None:
     """Statistiche aggregate del catalogo."""
@@ -346,9 +352,7 @@ def stats() -> None:
         return
 
     try:
-        index_data: dict[str, Any] = yaml.safe_load(
-            INDEX_FILE.read_text(encoding="utf-8")
-        ) or {}
+        index_data: dict[str, Any] = yaml.safe_load(INDEX_FILE.read_text(encoding="utf-8")) or {}
     except Exception as exc:
         console.print(f"[bold red]Errore lettura index.yaml:[/bold red] {exc}")
         raise typer.Exit(code=1)

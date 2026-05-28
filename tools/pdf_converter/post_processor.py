@@ -86,7 +86,7 @@ def _normalize_headings(text: str) -> str:
     def _promote_heading(match: re.Match) -> str:
         hashes = match.group(1)
         new_level = max(1, len(hashes) - promotion)
-        return "#" * new_level + match.group(0)[len(hashes):]
+        return "#" * new_level + match.group(0)[len(hashes) :]
 
     return heading_pattern.sub(_promote_heading, text)
 
@@ -171,16 +171,16 @@ def _fix_image_paths(text: str, md_path: Path, images_dir: Path | None) -> str:
     text = text.replace(abs_images_str, rel_images)
 
     # Sostituisce i path CWD-relativi generati da pymupdf4llm.
-    # Esempio: "Library/assets/images/<slug>/" oppure "Library\assets\images\<slug>\"
+    # Esempio: "lib/assets/images/<slug>/" oppure "Library\assets\images\<slug>\"
     # La CWD del processo e' la root del progetto, quindi il path CWD-relativo
     # e' la porzione di abs_images_str che segue il prefisso assoluto.
-    # Lo ricaviamo cercando il marker "Library/" nel path assoluto posix.
+    # Lo ricaviamo cercando il marker "lib/" nel path assoluto posix.
     try:
-        marker = "Library/"
+        marker = "lib/"
         marker_idx = abs_images_str.find(marker)
         if marker_idx != -1:
-            cwd_rel_posix = abs_images_str[marker_idx:]          # es. Library/assets/images/slug/
-            cwd_rel_win = cwd_rel_posix.replace("/", "\\")       # es. Library\assets\images\slug\
+            cwd_rel_posix = abs_images_str[marker_idx:]  # es. lib/assets/images/slug/
+            cwd_rel_win = cwd_rel_posix.replace("/", "\\")  # es. Library\assets\images\slug\
             text = text.replace(cwd_rel_win, rel_images)
             text = text.replace(cwd_rel_posix, rel_images)
     except Exception:
@@ -216,12 +216,14 @@ def _build_frontmatter(result: ConversionResult) -> str:
     if re.match(r"^[a-z]{2}-\d{4}-\d{4}$", meta.slug):
         frontmatter_data["kba_id"] = meta.slug.upper()
 
-    frontmatter_data.update({
-        "source_pdf": meta.filename,
-        "converted_at": result.converted_at,
-        "num_pages": meta.num_pages,
-        "tags": [],
-    })
+    frontmatter_data.update(
+        {
+            "source_pdf": meta.filename,
+            "converted_at": result.converted_at,
+            "num_pages": meta.num_pages,
+            "tags": [],
+        }
+    )
 
     # Aggiunge autore solo se presente nei metadati
     if meta.author:
@@ -273,7 +275,9 @@ def post_process(
         ConversionResult aggiornato con la dimensione MD finale
     """
     if not result.success or result.md_path is None:
-        logger.debug(f"Post-processing saltato per {result.metadata.filename} (status: {result.status})")
+        logger.debug(
+            f"Post-processing saltato per {result.metadata.filename} (status: {result.status})"
+        )
         return result
 
     if not result.md_path.exists():

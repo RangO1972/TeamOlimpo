@@ -15,7 +15,6 @@ import re
 from pathlib import Path
 from typing import Any
 
-import yaml
 from loguru import logger
 
 from tools.taskmanager.models import (
@@ -25,7 +24,6 @@ from tools.taskmanager.models import (
     now_iso,
 )
 from tools.taskmanager.state import DEFAULT_STATE, StateStore
-
 
 # ---------------------------------------------------------------------------
 # Scratchpad path
@@ -37,7 +35,7 @@ def _find_scratchpad(project_root: Path) -> Path | None:
 
     Returns the path, or ``None`` if the file does not exist.
     """
-    path = project_root / "Library" / "Fucina" / "Hermes" / "Scratchpad.md"
+    path = project_root / "lib" / "Fucina" / "Hermes" / "Scratchpad.md"
     if path.is_file():
         return path
     return None
@@ -110,11 +108,13 @@ def _parse_active_tasks(fm_text: str) -> list[dict[str, Any]]:
                 if abs(id_indent - subtask_indent) <= 2:
                     # This is another subtask in the current list
                     sub_id = id_match.group(2)
-                    current_subs.append({
-                        "id": sub_id,
-                        "_line": raw_line,
-                        "_indent": id_indent,
-                    })
+                    current_subs.append(
+                        {
+                            "id": sub_id,
+                            "_line": raw_line,
+                            "_indent": id_indent,
+                        }
+                    )
                     current_task["subtasks"] = current_subs  # type: ignore[union-attr]
                     continue
 
@@ -247,13 +247,15 @@ def _parse_body_tasks(body: str, known_ids: set[str]) -> list[dict[str, Any]]:
                 status = mapped_status
                 break
 
-        results.append({
-            "id": task_id,
-            "description": description,
-            "status": status,
-            "priority": "medium",
-            "owner": "Hermes",
-        })
+        results.append(
+            {
+                "id": task_id,
+                "description": description,
+                "status": status,
+                "priority": "medium",
+                "owner": "Hermes",
+            }
+        )
     return results
 
 
@@ -325,8 +327,7 @@ def migrate_from_scratchpad(store: StateStore) -> dict[str, Any]:
 
     if scratchpad_path is None:
         raise FileNotFoundError(
-            f"Scratchpad.md not found in {project_root / 'Team' / 'Hermes'}. "
-            "Cannot run migration."
+            f"Scratchpad.md not found in {project_root / 'Team' / 'Hermes'}. Cannot run migration."
         )
 
     logger.info(f"Starting migration from {scratchpad_path}")
@@ -394,7 +395,9 @@ def migrate_from_scratchpad(store: StateStore) -> dict[str, Any]:
             sub_id = sub_entry["id"]
             known_ids.add(sub_id)
             sub_status_raw = sub_entry.get("status", "pending")
-            sub_status = _normalize_status(sub_status_raw) if isinstance(sub_status_raw, str) else "pending"
+            sub_status = (
+                _normalize_status(sub_status_raw) if isinstance(sub_status_raw, str) else "pending"
+            )
 
             tasks_dict[sub_id] = {
                 "id": sub_id,
@@ -459,8 +462,8 @@ def migrate_from_scratchpad(store: StateStore) -> dict[str, Any]:
 
     logger.info(
         f"Migration complete: {len(tasks_dict)} tasks imported "
-                        f"({with_parent} with parent), "
-                        f"{len(counters)} areas tracked"
+        f"({with_parent} with parent), "
+        f"{len(counters)} areas tracked"
     )
     return state
 

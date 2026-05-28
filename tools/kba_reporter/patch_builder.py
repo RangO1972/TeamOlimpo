@@ -7,21 +7,25 @@ from collections import defaultdict
 from loguru import logger
 
 from tools.kba_reporter.config import (
-    DOCUMENTS_DIR, DELTAV_VERSIONS, VERSION_PATTERNS,
-    RI_PATTERNS, UNIVERSAL_PATTERNS, NODE_TYPES,
+    DOCUMENTS_DIR,
+    DELTAV_VERSIONS,
+    VERSION_PATTERNS,
+    RI_PATTERNS,
+    UNIVERSAL_PATTERNS,
+    NODE_TYPES,
 )
 
 # Regex per estrarre nomi file installabili dal testo Markdown
 FILE_REGEX = re.compile(
-    r'\b('
-    r'DeltaV_[\w.]+(?:_CSS|\.zip)?'
-    r'|v1[45][A-Za-z0-9]+_64bit_\w+\.zip'
-    r'|HyperV\w+\.zip'
-    r'|Intel_\w+\.zip'
-    r'|DVS\w+'
-    r'|Dell\s+OpenManage\s+\S+\s+\d+'
-    r'|KB\d{6,}'
-    r')\b',
+    r"\b("
+    r"DeltaV_[\w.]+(?:_CSS|\.zip)?"
+    r"|v1[45][A-Za-z0-9]+_64bit_\w+\.zip"
+    r"|HyperV\w+\.zip"
+    r"|Intel_\w+\.zip"
+    r"|DVS\w+"
+    r"|Dell\s+OpenManage\s+\S+\s+\d+"
+    r"|KB\d{6,}"
+    r")\b",
     re.IGNORECASE,
 )
 
@@ -52,10 +56,7 @@ def _is_compatible(filename: str, version: str) -> bool:
         if filename.startswith(p) or p.lower() in filename.lower():
             # Esclude file dell'altra versione
             other_patterns = [
-                pp
-                for v, pps in VERSION_PATTERNS.items()
-                if v != version
-                for pp in pps
+                pp for v, pps in VERSION_PATTERNS.items() if v != version for pp in pps
             ]
             if any(filename.startswith(op) for op in other_patterns):
                 return False
@@ -68,7 +69,7 @@ def _is_compatible(filename: str, version: str) -> bool:
 
 def _deduplicate_files(files: set[str]) -> set[str]:
     """Per ogni base bundle, tieni solo la versione numerica più alta."""
-    pattern = re.compile(r'^(.+?)_(\d{1,3})_CSS$')
+    pattern = re.compile(r"^(.+?)_(\d{1,3})_CSS$")
     grouped: dict[str, list[tuple[int, str]]] = defaultdict(list)
     non_versioned: set[str] = set()
     for f in files:
@@ -87,7 +88,7 @@ def _deduplicate_files(files: set[str]) -> set[str]:
 def _collapse_ms_patches(files: set[str]) -> set[str]:
     """Collassa varianti OS (Win10/S2016/S2022) in unica voce _ALL_."""
     os_pattern = re.compile(
-        r'(v\d+[A-Za-z0-9]+_64bit_)(Windows10LTSC_\w+|Windows10|S2016|S2022)(_\w+\.zip)'
+        r"(v\d+[A-Za-z0-9]+_64bit_)(Windows10LTSC_\w+|Windows10|S2016|S2022)(_\w+\.zip)"
     )
     result: set[str] = set()
     collapsed: dict[str, str] = {}
@@ -150,21 +151,22 @@ def build_patch_list(defer_rows: list[dict]) -> dict:
             raw_nodes = [n.strip() for n in row["node"].split("\n") if n.strip()]
             files_for_kba = _extract_files_from_doc(slug)
             compatible = _deduplicate_files(
-                _collapse_ms_patches(
-                    {f for f in files_for_kba if _is_compatible(f, version)}
-                )
+                _collapse_ms_patches({f for f in files_for_kba if _is_compatible(f, version)})
             )
 
             for f in compatible:
-                is_ri   = any(p in f for p in RI_PATTERNS)
-                is_srv  = any(p.lower() in f.lower() for p in ["HyperV", "Intel_", "DVS"])
+                is_ri = any(p in f for p in RI_PATTERNS)
+                is_srv = any(p.lower() in f.lower() for p in ["HyperV", "Intel_", "DVS"])
                 is_ctrl = any(x in f for x in ["_CTRL_", "_EIOC_", "_WIOC_", "_RIOZ"])
 
                 if not raw_nodes:
                     # Nessun nodo esplicito: firmware RI va senza lista nodi
                     if is_ri or is_ctrl:
                         if f not in firmware:
-                            firmware[f] = {"type": "controller" if is_ctrl else "io", "nodes": set()}
+                            firmware[f] = {
+                                "type": "controller" if is_ctrl else "io",
+                                "nodes": set(),
+                            }
                     continue
 
                 for node in raw_nodes:
@@ -174,7 +176,10 @@ def build_patch_list(defer_rows: list[dict]) -> dict:
                             srv_ms[f].add(node)
                     elif is_ri or is_ctrl:
                         if f not in firmware:
-                            firmware[f] = {"type": "controller" if is_ctrl else "io", "nodes": set()}
+                            firmware[f] = {
+                                "type": "controller" if is_ctrl else "io",
+                                "nodes": set(),
+                            }
                         if node_type == "controller":
                             firmware[f]["nodes"].add(node)
                     elif "64bit" in f or "_WS_" in f:
@@ -184,10 +189,9 @@ def build_patch_list(defer_rows: list[dict]) -> dict:
 
         result[site] = {
             "workstation_ms": {f: sorted(nodes) for f, nodes in ws_ms.items()},
-            "server_ms":      {f: sorted(nodes) for f, nodes in srv_ms.items()},
-            "firmware":       {
-                f: {"type": v["type"], "nodes": sorted(v["nodes"])}
-                for f, v in firmware.items()
+            "server_ms": {f: sorted(nodes) for f, nodes in srv_ms.items()},
+            "firmware": {
+                f: {"type": v["type"], "nodes": sorted(v["nodes"])} for f, v in firmware.items()
             },
         }
         logger.info(

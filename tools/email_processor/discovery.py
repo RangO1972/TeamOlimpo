@@ -23,28 +23,29 @@ from loguru import logger
 #   - mixed uppercase+digit tokens length >= 5 (MM_Z1_ZSERVZ1, IT_MM-W19-DV-CYB01)
 #   - pure uppercase tokens length >= 4
 _RE_DEVICE_TOKEN = re.compile(
-    r"\b[A-Za-z0-9]{4,}(?:[-_.][A-Za-z0-9]+)+\b"   # token con separatori interni
-    r"|\b(?=\w*[A-Z])(?=\w*\d)\w{5,}\b"             # misto uppercase+digit >=5
-    r"|\b[A-Z][A-Z0-9]{3,}\b",                       # uppercase stringa >=4
+    r"\b[A-Za-z0-9]{4,}(?:[-_.][A-Za-z0-9]+)+\b"  # token con separatori interni
+    r"|\b(?=\w*[A-Z])(?=\w*\d)\w{5,}\b"  # misto uppercase+digit >=5
+    r"|\b[A-Z][A-Z0-9]{3,}\b",  # uppercase stringa >=4
 )
 
-_RE_EXTERNAL = re.compile(r'^\[(?:external|ext|ext\.?)\]\s*', re.IGNORECASE)
+_RE_EXTERNAL = re.compile(r"^\[(?:external|ext|ext\.?)\]\s*", re.IGNORECASE)
 _RE_THREAD_PREFIX = re.compile(
-    r'^(?:re|r|fw|fwd|rif|oggi|tr|vs|aw|antw|wg):\s*', re.IGNORECASE,
+    r"^(?:re|r|fw|fwd|rif|oggi|tr|vs|aw|antw|wg):\s*",
+    re.IGNORECASE,
 )
-_RE_NUMBERS = re.compile(r'\b\d[\d,.:]*\d\b|\b\d\b')
-_RE_HEX_HASH = re.compile(r'\b[0-9a-f]{8,}\b', re.IGNORECASE)
-_RE_PERCENT = re.compile(r'\d+%')
-_RE_EMAIL_ADDR = re.compile(r'[\w.+-]+@[\w-]+\.[\w.]+')
+_RE_NUMBERS = re.compile(r"\b\d[\d,.:]*\d\b|\b\d\b")
+_RE_HEX_HASH = re.compile(r"\b[0-9a-f]{8,}\b", re.IGNORECASE)
+_RE_PERCENT = re.compile(r"\d+%")
+_RE_EMAIL_ADDR = re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+")
 _RE_DATE_LIKE = re.compile(
-    r'\b\d{1,2}[-/]\d{1,2}[-/]\d{2,4}\b'
-    r'|\b\d{4}[-/]\d{1,2}[-/]\d{1,2}\b'
-    r'|\b\d{1,2}:\d{2}(?::\d{2})?\b',
+    r"\b\d{1,2}[-/]\d{1,2}[-/]\d{2,4}\b"
+    r"|\b\d{4}[-/]\d{1,2}[-/]\d{1,2}\b"
+    r"|\b\d{1,2}:\d{2}(?::\d{2})?\b",
 )
-_RE_MULTI_DEVICE = re.compile(r'\{device\}\s*\{device\}')
-_RE_WS = re.compile(r'\s+')
-_RE_PLACEHOLDER_ONLY = re.compile(r'[\s{}a-z]+')
-_RE_NOT_SLUG = re.compile(r'[^a-z0-9]+')
+_RE_MULTI_DEVICE = re.compile(r"\{device\}\s*\{device\}")
+_RE_WS = re.compile(r"\s+")
+_RE_PLACEHOLDER_ONLY = re.compile(r"[\s{}a-z]+")
+_RE_NOT_SLUG = re.compile(r"[^a-z0-9]+")
 
 
 # ---------------------------------------------------------------------------
@@ -146,11 +147,38 @@ class PatternDiscovery:
         # Fallback: scan original samples for meaningful keywords
         if not subject_contains:
             _STOPWORDS = {
-                "the", "and", "for", "not", "has", "been", "with",
-                "from", "this", "that", "are", "was", "were", "you",
-                "your", "our", "all", "can", "new", "use", "used",
-                "using", "via", "per", "del", "che", "con", "external",
-                "message", "email", "mail", "notification",
+                "the",
+                "and",
+                "for",
+                "not",
+                "has",
+                "been",
+                "with",
+                "from",
+                "this",
+                "that",
+                "are",
+                "was",
+                "were",
+                "you",
+                "your",
+                "our",
+                "all",
+                "can",
+                "new",
+                "use",
+                "used",
+                "using",
+                "via",
+                "per",
+                "del",
+                "che",
+                "con",
+                "external",
+                "message",
+                "email",
+                "mail",
+                "notification",
             }
             for sample in pattern.samples:
                 words = re.findall(r"[A-Za-z][A-Za-z0-9]{3,}", sample)
@@ -171,8 +199,16 @@ class PatternDiscovery:
         # Extract sender username prefix for more specific matching
         for sender in pattern.senders:
             local = sender.split("@")[0].lower()
-            if local and len(local) >= 3 and local not in (
-                "postmaster", "mailer-daemon", "noreply", "no-reply",
+            if (
+                local
+                and len(local) >= 3
+                and local
+                not in (
+                    "postmaster",
+                    "mailer-daemon",
+                    "noreply",
+                    "no-reply",
+                )
             ):
                 from_contains.append(local)
                 break
@@ -204,9 +240,7 @@ class PatternDiscovery:
         total_emails = sum(p.count for p in patterns)
         data = {
             "scan": {
-                "generated_at": datetime.now(timezone.utc).strftime(
-                    "%Y-%m-%dT%H:%M:%S"
-                ),
+                "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
                 "period_start": period_start,
                 "period_end": period_end,
                 "total_emails": total_emails,
@@ -305,11 +339,13 @@ class PatternDiscovery:
             if not subject:
                 continue
 
-            entries.append({
-                "subject": subject,
-                "sender": sender,
-                "date": date or "unknown",
-            })
+            entries.append(
+                {
+                    "subject": subject,
+                    "sender": sender,
+                    "date": date or "unknown",
+                }
+            )
 
         logger.debug(f"Collected {len(entries)} entries from vault scan")
         return entries
@@ -398,8 +434,8 @@ class PatternDiscovery:
         s = _RE_WS.sub(" ", s).strip()
 
         # Trim trailing/leading placeholders
-        s = re.sub(r'^\{device\}\s*', '', s)
-        s = re.sub(r'\s*\{device\}$', '', s)
+        s = re.sub(r"^\{device\}\s*", "", s)
+        s = re.sub(r"\s*\{device\}$", "", s)
 
         # If after normalization only placeholders remain, fallback
         if not _RE_PLACEHOLDER_ONLY.sub("", s) or len(set(s.split())) <= 1:
@@ -426,9 +462,7 @@ class PatternDiscovery:
             normalized = self._normalize_subject(entry["subject"])
             groups[normalized].append(entry)
 
-        logger.debug(
-            f"Clustering: {len(entries)} entries -> {len(groups)} groups"
-        )
+        logger.debug(f"Clustering: {len(entries)} entries -> {len(groups)} groups")
         return groups
 
     def _build_patterns(self, groups: dict[str, list[dict]]) -> list[Pattern]:
@@ -440,25 +474,17 @@ class PatternDiscovery:
         Returns:
             List of :class:`Pattern` sorted by count descending.
         """
-        sorted_groups = sorted(
-            groups.items(), key=lambda x: len(x[1]), reverse=True
-        )
+        sorted_groups = sorted(groups.items(), key=lambda x: len(x[1]), reverse=True)
 
         patterns: list[Pattern] = []
         for idx, (normalized, group) in enumerate(sorted_groups, start=1):
             # Collect dates
-            dates = [
-                e["date"]
-                for e in group
-                if e["date"] not in ("unknown", "", "0000-00-00")
-            ]
+            dates = [e["date"] for e in group if e["date"] not in ("unknown", "", "0000-00-00")]
             min_date = min(dates) if dates else "unknown"
             max_date = max(dates) if dates else "unknown"
 
             # Unique senders
-            senders = sorted(
-                {e["sender"] for e in group if e["sender"]}
-            )
+            senders = sorted({e["sender"] for e in group if e["sender"]})
 
             # Determine primary sender domain
             sender_domain = "unknown"

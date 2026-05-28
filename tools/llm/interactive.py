@@ -35,6 +35,7 @@ _SEPARATOR = "-" * 40
 # Discovery prompt
 # ---------------------------------------------------------------------------
 
+
 def _parse_frontmatter(text: str) -> dict[str, str]:
     """
     Estrae il frontmatter YAML da un file Markdown.
@@ -100,12 +101,14 @@ def discover_prompts(prompts_dir: Path) -> list[dict[str, str]]:
         title = fm.get("title") or label
         description = fm.get("description") or ""
 
-        results.append({
-            "path": str(md_file),
-            "title": title,
-            "description": description,
-            "label": label,
-        })
+        results.append(
+            {
+                "path": str(md_file),
+                "title": title,
+                "description": description,
+                "label": label,
+            }
+        )
 
     return results
 
@@ -113,6 +116,7 @@ def discover_prompts(prompts_dir: Path) -> list[dict[str, str]]:
 # ---------------------------------------------------------------------------
 # Utility I/O
 # ---------------------------------------------------------------------------
+
 
 def _input(prompt_text: str) -> str:
     """
@@ -157,6 +161,7 @@ def _read_multiline(intro: str = "") -> str:
 # ---------------------------------------------------------------------------
 # Menu principale
 # ---------------------------------------------------------------------------
+
 
 def run_interactive(
     providers_map: dict[str, type],
@@ -220,6 +225,7 @@ def run_interactive(
 
         # Estrai sezione ## Prompt
         from tools.llm.batch import extract_prompt_section
+
         try:
             template_text = extract_prompt_section(raw_md)
         except ValueError as exc:
@@ -229,11 +235,12 @@ def run_interactive(
         # --- Input file opzionale ---
         print()
         print("File di input (glob, path, o invio per testo libero):")
-        print("  Esempi: Library/documents/*.md  oppure  Library/documents/nk-2400-0150.md")
+        print("  Esempi: lib/documents/*.md  oppure  lib/documents/nk-2400-0150.md")
         raw_input_path = _input("> ").strip()
 
         if raw_input_path:
             from tools.llm.batch import expand_inputs, render_template
+
             try:
                 input_files = expand_inputs([raw_input_path])
             except ValueError as exc:
@@ -263,6 +270,7 @@ def run_interactive(
                 model_override = _ask_model(provider_instance)
                 print()
                 from tools.llm.batch import run_batch
+
                 errors = run_batch(
                     provider=provider_instance,
                     provider_name=provider_name,
@@ -282,6 +290,7 @@ def run_interactive(
                 print("Nessun testo inserito. Uscita.", file=sys.stderr)
                 return 1
             from tools.llm.batch import render_template
+
             prompt_text = render_template(template_text, kba_text, "input")
 
     elif choice_idx == free_idx:
@@ -333,7 +342,9 @@ def run_interactive(
             print("--- Risposta ---")
             print(response.text)
             print(_SEPARATOR)
-            print(f"(Provider: {provider_name} | Modello: {response.model_used} | Tempo: {elapsed:.1f}s)")
+            print(
+                f"(Provider: {provider_name} | Modello: {response.model_used} | Tempo: {elapsed:.1f}s)"
+            )
             return 0
     else:
         print("Scelta non valida. Uscita.", file=sys.stderr)
@@ -390,6 +401,7 @@ def run_interactive(
 # Helper interni
 # ---------------------------------------------------------------------------
 
+
 def _resolve_provider(
     providers_map: dict[str, type],
     get_api_key_fn: "callable[[str], str]",
@@ -402,9 +414,7 @@ def _resolve_provider(
         Tupla (nome_provider, istanza) oppure (nome, None) in caso di errore
     """
     provider_names = "/".join(sorted(providers_map.keys()))
-    raw = _input(
-        f"Provider [{provider_names}, default: {default_provider}]: "
-    ).strip().lower()
+    raw = _input(f"Provider [{provider_names}, default: {default_provider}]: ").strip().lower()
     provider_name = raw if raw in providers_map else default_provider
 
     try:
@@ -526,7 +536,9 @@ def _run_chat_loop(
         tokens_info = ""
         if response.total_tokens is not None:
             tokens_info = f" | Token: {response.total_tokens}"
-        elapsed_info = f" | Tempo: {response.elapsed_seconds:.1f}s" if response.elapsed_seconds else ""
+        elapsed_info = (
+            f" | Tempo: {response.elapsed_seconds:.1f}s" if response.elapsed_seconds else ""
+        )
         print(f"({response.model_used}{tokens_info}{elapsed_info})")
         print(_SEPARATOR)
 

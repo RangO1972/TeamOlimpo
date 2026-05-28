@@ -9,17 +9,19 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from tools.common.paths import project_root
+
 # ---------------------------------------------------------------------------
-# Root del progetto — tre livelli su rispetto a tools/handoff_register/
+# Root del progetto
 # ---------------------------------------------------------------------------
-PROJECT_ROOT: Path = Path(__file__).resolve().parent.parent.parent
+PROJECT_ROOT: Path = project_root()
 
 # ---------------------------------------------------------------------------
 # Path di lavoro
 # ---------------------------------------------------------------------------
 
 # Cartella handoff
-HANDOFF_DIR: Path = PROJECT_ROOT / "Library" / "Fucina" / "Handoff"
+HANDOFF_DIR: Path = PROJECT_ROOT / "lib" / "Fucina" / "Handoff"
 
 # Cartelle/sottocartelle da ignorare nello scan ricorsivo
 SKIP_DIRS: frozenset[str] = frozenset(
@@ -30,7 +32,7 @@ SKIP_DIRS: frozenset[str] = frozenset(
 REGISTRO_PATH: Path = HANDOFF_DIR / "Registro.md"
 
 # File di log del tool
-LOG_FILE: Path = PROJECT_ROOT / "Library" / "data" / "handoff_register.log"
+LOG_FILE: Path = PROJECT_ROOT / "lib" / "data" / "handoff_register.log"
 
 # ---------------------------------------------------------------------------
 # Valori ammessi nei frontmatter

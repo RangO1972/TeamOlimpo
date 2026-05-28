@@ -66,7 +66,7 @@ def _sanitize_json(raw: str) -> str:
     """
     # Rimuove il segno + unario in contesti numerici (es. +1, +0.5)
     # Pattern: segno + preceduto da separatore JSON (:, ,, [) + whitespace
-    sanitized = re.sub(r'([:,\[]\s*)\+(\d)', r'\1\2', raw)
+    sanitized = re.sub(r"([:,\[]\s*)\+(\d)", r"\1\2", raw)
     return sanitized
 
 
@@ -115,7 +115,7 @@ def _read_document_title(slug: str) -> str:
     """
     Legge il titolo dal frontmatter del documento Markdown convertito.
 
-    Cerca il file Library/documents/<slug>.md e ne estrae il campo 'title'.
+    Cerca il file lib/documents/<slug>.md e ne estrae il campo 'title'.
 
     Args:
         slug: Slug del documento (es. "nk-2400-0150").
@@ -209,10 +209,12 @@ def _parse_json_batch(file_path: Path) -> tuple[str, str, dict[str, Any]]:
     stem = file_path.stem  # es. "nk-2400-0150-grok"
     last_dash = stem.rfind("-")
     if last_dash == -1:
-        raise ValueError(f"Nome file non riconoscibile (atteso <slug>-<provider>.json): {file_path.name}")
+        raise ValueError(
+            f"Nome file non riconoscibile (atteso <slug>-<provider>.json): {file_path.name}"
+        )
 
-    slug = stem[:last_dash]           # es. "nk-2400-0150"
-    provider = stem[last_dash + 1:]   # es. "grok"
+    slug = stem[:last_dash]  # es. "nk-2400-0150"
+    provider = stem[last_dash + 1 :]  # es. "grok"
 
     # Deriva kba_id dallo slug (se segue pattern AA-NNNN-NNNN)
     kba_match = re.match(r"^[a-z]{2}-\d{4}-\d{4}$", slug)
@@ -298,7 +300,7 @@ def parse_batch_file(file_path: Path) -> dict[str, Any]:
         # Identificazione
         "kba_id": kba_id,
         "title": title,
-        "source_file": f"Library/documents/{slug}.md",
+        "source_file": f"lib/documents/{slug}.md",
         "analyzed_at": today,
         # Classificazione
         "emerson_category": str(ai_data.get("emerson_category", "")),

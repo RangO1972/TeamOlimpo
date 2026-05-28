@@ -100,6 +100,7 @@ _DDL_INDEXES = [
 # Classe principale
 # ---------------------------------------------------------------------------
 
+
 class DocumentIndexer:
     """
     Gestisce il database SQLite per l'indicizzazione dei documenti PDF convertiti.

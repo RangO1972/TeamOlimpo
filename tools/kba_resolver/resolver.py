@@ -2,7 +2,7 @@
 Logica di risoluzione dipendenze documentali KBA.
 
 Naviga ricorsivamente i fix_reference di ogni KBA fornita in input
-e produce una mappa delle dipendenze con stato di presenza in Library/documents/.
+e produce una mappa delle dipendenze con stato di presenza in lib/documents/.
 """
 
 from __future__ import annotations
@@ -21,7 +21,7 @@ _KBA_ID_RE = re.compile(r"\b([A-Z]{2}-\d{4}-\d{4})\b")
 
 def _get_status(slug: str) -> str:
     """
-    Determina lo stato di presenza di una KBA in Library/documents/.
+    Determina lo stato di presenza di una KBA in lib/documents/.
 
     Args:
         slug: Identificatore KBA in lowercase (es. 'nk-1000-0109').
@@ -87,8 +87,8 @@ def resolve_dependencies(
                     (solo i nodi raggiunti durante la BFS, incluse le KBA input)
           - 'all_deps': set[str] — tutti gli slug referenziati (le dipendenze,
                         non le KBA input stesse)
-          - 'present': set[str] — slug in all_deps presenti in Library/documents/
-          - 'missing': set[str] — slug in all_deps assenti in Library/documents/
+          - 'present': set[str] — slug in all_deps presenti in lib/documents/
+          - 'missing': set[str] — slug in all_deps assenti in lib/documents/
     """
     # tree mappa ogni nodo visitato alle proprie dipendenze dirette
     tree: dict[str, list[str]] = {}

@@ -1,0 +1,10 @@
+Resolved 133 packages in 2.11s
+   Building olimpo-tools @ file:///home/stra/TeamOlimpo
+      Built olimpo-tools @ file:///home/stra/TeamOlimpo
+Prepared 1 package in 2.07s
+Uninstalled 1 package in 3ms
+Installed 4 packages in 297ms
+ + librt==0.9.0
+ + mypy==1.20.2
+ + mypy-extensions==1.1.0
+ ~ olimpo-tools==0.1.0 (from file:///home/stra/TeamOlimpo)

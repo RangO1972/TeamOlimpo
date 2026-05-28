@@ -69,7 +69,9 @@ def find_next_task_id(sp: Scratchpad, handoff_paths: list[Path] | None = None) -
     if not nums:
         nums = _extract_nums(TASK_ID_RE, task_texts)
 
-    logger.debug(f"find_next_task_id: found {len(nums)} existing T-NNN IDs, max={max(nums) if nums else 'none'}")
+    logger.debug(
+        f"find_next_task_id: found {len(nums)} existing T-NNN IDs, max={max(nums) if nums else 'none'}"
+    )
     return find_next_id(nums, "T")
 
 
@@ -83,11 +85,15 @@ def find_next_decision_id(sp: Scratchpad, handoff_paths: list[Path] | None = Non
     if not nums:
         nums = _extract_nums(DECISION_ID_RE, decision_texts)
 
-    logger.debug(f"find_next_decision_id: found {len(nums)} existing D-NNN IDs, max={max(nums) if nums else 'none'}")
+    logger.debug(
+        f"find_next_decision_id: found {len(nums)} existing D-NNN IDs, max={max(nums) if nums else 'none'}"
+    )
     return find_next_id(nums, "D")
 
 
-def check_duplicate_ids(sp: Scratchpad, handoff_paths: list[Path] | None = None) -> list[dict[str, Any]]:
+def check_duplicate_ids(
+    sp: Scratchpad, handoff_paths: list[Path] | None = None
+) -> list[dict[str, Any]]:
     if handoff_paths is None:
         handoff_paths = scan_handoff_files()
 
@@ -99,7 +105,9 @@ def check_duplicate_ids(sp: Scratchpad, handoff_paths: list[Path] | None = None)
 
     for d in sp.decisions:
         if d.id:
-            id_map.setdefault(d.id, []).append({"source": "scratchpad.decisions", "path": str(sp.path)})
+            id_map.setdefault(d.id, []).append(
+                {"source": "scratchpad.decisions", "path": str(sp.path)}
+            )
 
     for hp in handoff_paths:
         try:

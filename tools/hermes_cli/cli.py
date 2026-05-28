@@ -29,9 +29,11 @@ from tools.hermes_cli.validator import validate_handoff_file, validate_scratchpa
 console = Console(stderr=True)
 out_console = Console()
 
+
 def _emit_json(data: dict) -> None:
     """Output JSON senza wrapping (evita rich word-wrap)."""
     sys.stdout.write(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+
 
 app = typer.Typer(
     name="hermes_cli",
@@ -67,14 +69,16 @@ def common(
 
 
 def _output_json_scratchpad(sp) -> None:
-    _emit_json({
-        "target": sp.rel_path,
-        "valid": len(sp.errors) == 0,
-        "parsed": sp.parsed,
-        "errors": sp.errors,
-        "warnings": sp.warnings,
-        "stats": {"tasks": len(sp.tasks), "decisions": len(sp.decisions)},
-    })
+    _emit_json(
+        {
+            "target": sp.rel_path,
+            "valid": len(sp.errors) == 0,
+            "parsed": sp.parsed,
+            "errors": sp.errors,
+            "warnings": sp.warnings,
+            "stats": {"tasks": len(sp.tasks), "decisions": len(sp.decisions)},
+        }
+    )
 
 
 def _output_text_scratchpad(sp, title_prefix: str = "") -> None:
@@ -98,7 +102,9 @@ def _output_text_scratchpad(sp, title_prefix: str = "") -> None:
         lines.append(f"  [red]\u2717[/red] {e['description']}")
 
     lines.append("")
-    lines.append(f"  Risultato: {len(sp.errors)} errori, {len(sp.warnings)} warning ({len(sp.tasks)} task, {len(sp.decisions)} decisioni)")
+    lines.append(
+        f"  Risultato: {len(sp.errors)} errori, {len(sp.warnings)} warning ({len(sp.tasks)} task, {len(sp.decisions)} decisioni)"
+    )
 
     panel = Panel(
         "\n".join(lines),
@@ -109,22 +115,28 @@ def _output_text_scratchpad(sp, title_prefix: str = "") -> None:
 
 
 def _output_json_handoff(hv) -> None:
-    _emit_json({
-        "path": str(hv.path),
-        "valid": hv.valid,
-        "has_frontmatter": hv.has_frontmatter,
-        "naming_valid": hv.naming_valid,
-        "naming_errors": hv.naming_errors,
-        "errors": hv.errors,
-        "warnings": hv.warnings,
-    })
+    _emit_json(
+        {
+            "path": str(hv.path),
+            "valid": hv.valid,
+            "has_frontmatter": hv.has_frontmatter,
+            "naming_valid": hv.naming_valid,
+            "naming_errors": hv.naming_errors,
+            "errors": hv.errors,
+            "warnings": hv.warnings,
+        }
+    )
 
 
 def _output_text_handoff(hv) -> None:
     lines: list[str] = []
     lines.append(f"  File: {hv.path.name}")
-    lines.append(f"  Frontmatter: {'[green]\u2713 presente[/green]' if hv.has_frontmatter else '[yellow]\u2b1c assente[/yellow]'}")
-    lines.append(f"  Naming: {'[green]\u2713 valido[/green]' if hv.naming_valid else '[red]\u2717 non valido[/red]'}")
+    lines.append(
+        f"  Frontmatter: {'[green]\u2713 presente[/green]' if hv.has_frontmatter else '[yellow]\u2b1c assente[/yellow]'}"
+    )
+    lines.append(
+        f"  Naming: {'[green]\u2713 valido[/green]' if hv.naming_valid else '[red]\u2717 non valido[/red]'}"
+    )
 
     if hv.naming_errors:
         for ne in hv.naming_errors:
@@ -154,6 +166,7 @@ def _output_text_handoff(hv) -> None:
 
 
 # --- validate commands ---
+
 
 @validate_app.command("scratchpad")
 def validate_scratchpad_cmd(
@@ -186,14 +199,19 @@ def validate_handoff_cmd(
         fix_result = fix_handoff_file(file_path)
         if _json_state["json"]:
             # Output combinato
-            _emit_json({"validation": {
-                "path": str(hv.path),
-                "valid": hv.valid,
-                "has_frontmatter": hv.has_frontmatter,
-                "naming_valid": hv.naming_valid,
-                "errors": hv.errors,
-                "warnings": hv.warnings,
-            }, "fix": fix_result})
+            _emit_json(
+                {
+                    "validation": {
+                        "path": str(hv.path),
+                        "valid": hv.valid,
+                        "has_frontmatter": hv.has_frontmatter,
+                        "naming_valid": hv.naming_valid,
+                        "errors": hv.errors,
+                        "warnings": hv.warnings,
+                    },
+                    "fix": fix_result,
+                }
+            )
             return
         if fix_result.get("renamed"):
             out_console.print(f"[green]File rinominato:[/green] {fix_result['new_path']}")
@@ -221,7 +239,9 @@ def validate_handoff_cmd(
 @validate_app.command("handoffs")
 def validate_handoffs_cmd(
     summary: bool = typer.Option(False, "--summary", help="Solo conteggi riassuntivi."),
-    fix: bool = typer.Option(False, "--fix", help="Corregge naming e frontmatter dei file non conformi."),
+    fix: bool = typer.Option(
+        False, "--fix", help="Corregge naming e frontmatter dei file non conformi."
+    ),
 ) -> None:
     paths = scan_handoff_files(HANDOFF_DIR)
     results = []
@@ -236,30 +256,41 @@ def validate_handoffs_cmd(
         else:
             conformi += 1
 
-    logger.debug(f"Validate handoffs: {len(paths)} file, {conformi} conformi, {warning} warning, {errori} errori")
+    logger.debug(
+        f"Validate handoffs: {len(paths)} file, {conformi} conformi, {warning} warning, {errori} errori"
+    )
 
     if fix:
         fix_result = fix_all_handoffs(fix_name=True, fix_frontmatter=True)
         if _json_state["json"]:
-            _emit_json({"validation": {
-                "total": len(paths),
-                "conformi": conformi,
-                "warning": warning,
-                "errori": errori,
-            }, "fix": fix_result})
+            _emit_json(
+                {
+                    "validation": {
+                        "total": len(paths),
+                        "conformi": conformi,
+                        "warning": warning,
+                        "errori": errori,
+                    },
+                    "fix": fix_result,
+                }
+            )
             return
-        console.print(f"[bold]Fix applicato a {fix_result['fixed']}/{fix_result['total']} file.[/bold]")
+        console.print(
+            f"[bold]Fix applicato a {fix_result['fixed']}/{fix_result['total']} file.[/bold]"
+        )
         if fix_result.get("errors", 0) > 0:
             console.print(f"[red]{fix_result['errors']} errori durante il fix.[/red]")
 
     if _json_state["json"]:
-        _emit_json({
-            "target": str(HANDOFF_DIR),
-            "total": len(paths),
-            "conformi": conformi,
-            "warning": warning,
-            "errori": errori,
-        })
+        _emit_json(
+            {
+                "target": str(HANDOFF_DIR),
+                "total": len(paths),
+                "conformi": conformi,
+                "warning": warning,
+                "errori": errori,
+            }
+        )
         return
 
     if summary:
@@ -288,7 +319,9 @@ def validate_handoffs_cmd(
             table.add_row(hv.path.name, fm_status, naming_status, esito, dettaglio_str)
 
         out_console.print(table)
-        out_console.print(f"\nConformi: {conformi} | Warning: {warning} | Errori: {errori} | Totale: {len(paths)}")
+        out_console.print(
+            f"\nConformi: {conformi} | Warning: {warning} | Errori: {errori} | Totale: {len(paths)}"
+        )
 
     if errori > 0:
         raise typer.Exit(code=1)
@@ -312,26 +345,30 @@ def validate_all_cmd() -> None:
             h_conformi += 1
 
     if _json_state["json"]:
-        _emit_json({
-            "scratchpad": {
-                "path": sp.rel_path,
-                "valid": len(sp.errors) == 0,
-                "parsed": sp.parsed,
-                "errors": sp.errors,
-                "warnings": sp.warnings,
-                "stats": {"tasks": len(sp.tasks), "decisions": len(sp.decisions)},
-            },
-            "handoffs": {
-                "target": str(HANDOFF_DIR),
-                "total": len(paths),
-                "conformi": h_conformi,
-                "warning": h_warning,
-                "errori": h_errori,
-            },
-        })
+        _emit_json(
+            {
+                "scratchpad": {
+                    "path": sp.rel_path,
+                    "valid": len(sp.errors) == 0,
+                    "parsed": sp.parsed,
+                    "errors": sp.errors,
+                    "warnings": sp.warnings,
+                    "stats": {"tasks": len(sp.tasks), "decisions": len(sp.decisions)},
+                },
+                "handoffs": {
+                    "target": str(HANDOFF_DIR),
+                    "total": len(paths),
+                    "conformi": h_conformi,
+                    "warning": h_warning,
+                    "errori": h_errori,
+                },
+            }
+        )
     else:
         _output_text_scratchpad(sp, title_prefix="(parte di all)")
-        out_console.print(f"\n[bold]Handoff:[/bold] {len(paths)} file \u2014 {h_conformi} conformi, {h_warning} warning, {h_errori} errori")
+        out_console.print(
+            f"\n[bold]Handoff:[/bold] {len(paths)} file \u2014 {h_conformi} conformi, {h_warning} warning, {h_errori} errori"
+        )
 
     if sp.errors or h_errori > 0:
         raise typer.Exit(code=1)
@@ -339,6 +376,7 @@ def validate_all_cmd() -> None:
 
 
 # --- id commands ---
+
 
 @id_app.command("next")
 def id_next(
@@ -352,7 +390,9 @@ def id_next(
     elif kind == "decision":
         next_id = find_next_decision_id(sp, handoff_paths)
     else:
-        console.print(f"[bold red]ERRORE:[/bold red] Tipo non valido: '{kind}'. Usa 'task' o 'decision'.")
+        console.print(
+            f"[bold red]ERRORE:[/bold red] Tipo non valido: '{kind}'. Usa 'task' o 'decision'."
+        )
         raise typer.Exit(code=2)
 
     if _json_state["json"]:
@@ -394,7 +434,9 @@ app.add_typer(scratchpad_app, name="scratchpad")
 def scratchpad_init(
     agent: str = typer.Option(..., "--agent", help="Nome del nuovo agente."),
     role: str = typer.Option(
-        "Membro del Team Olimpo", "--role", help="Ruolo descrittivo dell'agente.",
+        "Membro del Team Olimpo",
+        "--role",
+        help="Ruolo descrittivo dell'agente.",
     ),
     force: bool = typer.Option(False, "--force", help="Sovrascrive se esiste."),
     dry_run: bool = typer.Option(False, "--dry-run", help="Mostra senza creare."),
@@ -405,9 +447,7 @@ def scratchpad_init(
     if _json_state["json"]:
         _emit_json(result)
     elif result["success"]:
-        out_console.print(
-            f"[green]Creato:[/green] {result['path']}"
-        )
+        out_console.print(f"[green]Creato:[/green] {result['path']}")
         if result.get("warnings"):
             for w in result["warnings"]:
                 console.print(f"[yellow]{w}[/yellow]")
@@ -487,11 +527,11 @@ def report(
             f"{result['tasks']['completed']} completati, "
             f"{result['tasks']['blocked']} bloccati"
         )
-        hf = result['handoffs']
-        dp = hf.get('da-processare', 0)
+        hf = result["handoffs"]
+        dp = hf.get("da-processare", 0)
         hf_info = f"Handoff: {hf['total']} totali, {dp} da-processare"
-        sc_ok = result['conformity']['scratchpad']['errors'] == 0
-        hc = result['conformity']['handoffs']
+        sc_ok = result["conformity"]["scratchpad"]["errors"] == 0
+        hc = result["conformity"]["handoffs"]
         conf_info = (
             f"Conformit\u00e0: scratchpad {'OK' if sc_ok else 'ERR'}, "
             f"handoff {hc['conformi']}/{hc['conformi'] + hc['warning'] + hc['errori']}"
@@ -510,11 +550,14 @@ def report(
 
     t = result["tasks"]
     open_ids = [
-        f"{x['id']}" for x in t["by_agent"].get("hermes", [])
+        f"{x['id']}"
+        for x in t["by_agent"].get("hermes", [])
         if x["status"] not in ("completed", "blocked", "cancelled")
     ]
     lines.append("  [bold]Task:[/bold]")
-    lines.append(f"    Aperti:      {t['open']}" + (f" ({', '.join(open_ids)})" if open_ids else ""))
+    lines.append(
+        f"    Aperti:      {t['open']}" + (f" ({', '.join(open_ids)})" if open_ids else "")
+    )
     lines.append(f"    Completati:  {t['completed']}")
     lines.append(f"    Bloccati:    {t['blocked']}")
     lines.append(f"    Cancellati:  {t['cancelled']}")
@@ -565,7 +608,8 @@ def report(
 @app.command()
 def diff(
     target: str = typer.Argument(
-        "scratchpad", help="Target da analizzare (default: scratchpad).",
+        "scratchpad",
+        help="Target da analizzare (default: scratchpad).",
     ),
     json_output: bool = typer.Option(False, "--json", help="Output in formato JSON."),
 ) -> None:
@@ -573,8 +617,7 @@ def diff(
         _json_state["json"] = True
     if target != "scratchpad":
         console.print(
-            f"[bold red]ERRORE:[/bold red] Target '{target}' non supportato. "
-            "Usa 'scratchpad'."
+            f"[bold red]ERRORE:[/bold red] Target '{target}' non supportato. Usa 'scratchpad'."
         )
         raise typer.Exit(code=2)
 
@@ -605,9 +648,7 @@ def diff(
             lines.append("  [bold]Task con stato diverso:[/bold]")
             for tid, info in result["status_mismatch"].items():
                 match_icon = (
-                    "[green]\u2713[/green]"
-                    if info["fm"] == info["body"]
-                    else "[red]\u2717[/red]"
+                    "[green]\u2713[/green]" if info["fm"] == info["body"] else "[red]\u2717[/red]"
                 )
                 lines.append(
                     f"    - {tid}: frontmatter={info['fm']}, body={info['body']} {match_icon}"
@@ -615,9 +656,7 @@ def diff(
             lines.append("")
 
         if result["aligned"]:
-            lines.append(
-                "  [green]\u2713 Allineato: nessuna discrepanza trovata[/green]"
-            )
+            lines.append("  [green]\u2713 Allineato: nessuna discrepanza trovata[/green]")
         else:
             lines.append(
                 f"  [yellow]\u26a0 Esito: {result['total_discrepancies']} discrepanze trovate[/yellow]"
@@ -638,10 +677,14 @@ def diff(
 @app.command()
 def stats(
     month: str | None = typer.Option(
-        None, "--month", help="Filtra per mese (formato YYYY-MM).",
+        None,
+        "--month",
+        help="Filtra per mese (formato YYYY-MM).",
     ),
     agent: str | None = typer.Option(
-        None, "--agente", help="Filtra per agente mittente.",
+        None,
+        "--agente",
+        help="Filtra per agente mittente.",
     ),
     json_output: bool = typer.Option(False, "--json", help="Output in formato JSON."),
 ) -> None:

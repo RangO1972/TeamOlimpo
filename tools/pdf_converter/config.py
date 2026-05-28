@@ -9,10 +9,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from tools.common.paths import project_root
+
 # ---------------------------------------------------------------------------
-# Root del progetto — tre livelli su rispetto a tools/pdf_converter/
+# Root del progetto
 # ---------------------------------------------------------------------------
-PROJECT_ROOT: Path = Path(__file__).resolve().parent.parent.parent
+PROJECT_ROOT: Path = project_root()
 
 
 # ---------------------------------------------------------------------------
@@ -25,16 +27,16 @@ class PathConfig:
     inbox: Path = PROJECT_ROOT / "Team" / "Inbox"
 
     # Cartella di output: file Markdown generati
-    output: Path = PROJECT_ROOT / "Library" / "documents"
+    output: Path = PROJECT_ROOT / "lib" / "documents"
 
     # Cartella immagini estratte
-    assets: Path = PROJECT_ROOT / "Library" / "assets" / "images"
+    assets: Path = PROJECT_ROOT / "lib" / "assets" / "images"
 
     # Database SQLite per l'indicizzazione
-    database: Path = PROJECT_ROOT / "Library" / "data" / "pdf_index.db"
+    database: Path = PROJECT_ROOT / "lib" / "data" / "pdf_index.db"
 
     # File di log
-    log_file: Path = PROJECT_ROOT / "Library" / "data" / "pdf_converter.log"
+    log_file: Path = PROJECT_ROOT / "lib" / "data" / "pdf_converter.log"
 
 
 # ---------------------------------------------------------------------------

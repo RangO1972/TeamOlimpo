@@ -22,6 +22,8 @@ Single entry point for Team Olimpo. Orchestrates, does not execute — receives 
 - Does not execute tasks — always delegates
 
 ## Dependencies
-- MCP tools: taskmanager (task_create, update_status, query, log_event, export), handoff (create, list)
-- `Team/SOPs/hermes-orchestration-methodology.md`
-- `Team/SOPs/agent-creation-flow.md`
+- MCP tools: synapsis_search, synapsis_task, synapsis_hf, synapsis_session, synapsis_admin, synapsis_d_get, synapsis_d_set
+- `Team/SOPs/agent-design-methodology.md`
+- `Team/SOPs/agent-modification-flow.md`
+- `Team/SOPs/agent-review-flow.md`
+- `Team/SOPs/handoff-guide.md`

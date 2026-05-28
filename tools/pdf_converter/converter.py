@@ -21,7 +21,13 @@ from tools.pdf_converter.config import (
     paths as default_paths,
 )
 from tools.pdf_converter.models import ConversionResult, DocumentMetadata
-from tools.pdf_converter.utils import calculate_file_hash, count_images_in_dir, ensure_dir, extract_doc_id, slugify
+from tools.pdf_converter.utils import (
+    calculate_file_hash,
+    count_images_in_dir,
+    ensure_dir,
+    extract_doc_id,
+    slugify,
+)
 
 
 def extract_metadata(pdf_path: Path) -> DocumentMetadata:
@@ -47,9 +53,7 @@ def extract_metadata(pdf_path: Path) -> DocumentMetadata:
     try:
         import pymupdf  # noqa: PLC0415
     except ImportError as exc:
-        raise ImportError(
-            "pymupdf non e' installato. Eseguire: uv add pymupdf"
-        ) from exc
+        raise ImportError("pymupdf non e' installato. Eseguire: uv add pymupdf") from exc
 
     logger.debug(f"Estrazione metadati da: {pdf_path.name}")
 
@@ -102,9 +106,7 @@ def convert_pdf(
     try:
         import pymupdf4llm  # noqa: PLC0415
     except ImportError as exc:
-        raise ImportError(
-            "pymupdf4llm non e' installato. Eseguire: uv add pymupdf4llm"
-        ) from exc
+        raise ImportError("pymupdf4llm non e' installato. Eseguire: uv add pymupdf4llm") from exc
 
     pc = path_config or default_paths
     cc = conv_config or default_conversion
@@ -148,8 +150,7 @@ def convert_pdf(
     ensure_dir(images_dir)
 
     logger.info(
-        f"Conversione: {pdf_path.name} "
-        f"({metadata.num_pages} pag.) -> {md_output_path.name}"
+        f"Conversione: {pdf_path.name} ({metadata.num_pages} pag.) -> {md_output_path.name}"
     )
 
     # --- Conversione PDF -> Markdown ---
@@ -187,10 +188,13 @@ def convert_pdf(
     # centinaia di caratteri). Li rinominiamo in <slug>-0001.png, <slug>-0002.png...
     # per evitare il limite MAX_PATH di Windows (260 caratteri).
     image_extensions = {".png", ".jpg", ".jpeg", ".gif", ".webp"}
-    old_images = sorted(
-        f for f in images_dir.iterdir()
-        if f.is_file() and f.suffix.lower() in image_extensions
-    ) if images_dir.exists() else []
+    old_images = (
+        sorted(
+            f for f in images_dir.iterdir() if f.is_file() and f.suffix.lower() in image_extensions
+        )
+        if images_dir.exists()
+        else []
+    )
 
     for idx, old_path in enumerate(old_images, start=1):
         new_name = f"{metadata.slug}-{idx:04d}{old_path.suffix.lower()}"
@@ -216,8 +220,7 @@ def convert_pdf(
     num_images = count_images_in_dir(images_dir)
 
     logger.success(
-        f"Convertito: {pdf_path.name} in {elapsed:.2f}s "
-        f"({num_images} immagini estratte)"
+        f"Convertito: {pdf_path.name} in {elapsed:.2f}s ({num_images} immagini estratte)"
     )
 
     return ConversionResult(

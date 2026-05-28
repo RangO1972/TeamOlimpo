@@ -44,6 +44,7 @@ class Scratchpad:
     def rel_path(self) -> str:
         try:
             from tools.hermes_cli.config import PROJECT_ROOT
+
             return str(self.path.relative_to(PROJECT_ROOT))
         except (ValueError, ImportError):
             return str(self.path)
@@ -71,6 +72,7 @@ class HandoffValidation:
     def rel_path(self) -> str:
         try:
             from tools.hermes_cli.config import PROJECT_ROOT
+
             return str(self.path.relative_to(PROJECT_ROOT))
         except (ValueError, ImportError):
             return str(self.path)

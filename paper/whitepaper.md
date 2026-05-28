@@ -185,7 +185,7 @@ Inter-agent communication in Team Olimpo is mediated exclusively through a **fil
 
 Handoff files follow a strict naming convention and contain YAML frontmatter:
 
-**Path:** `Library/Fucina/Handoff/YYYY/MM/data_mittente-destinatario_titolo.md`
+**Path:** `lib/Fucina/Handoff/YYYY/MM/data_mittente-destinatario_titolo.md`
 
 **Frontmatter fields:**
 - `date`: ISO date of creation
@@ -209,11 +209,11 @@ sequenceDiagram
     U->>H: Task request
     H->>H: Task decomposition
     H->>A: Handoff file (delegation)
-    Note over H,A: Library/Fucina/Handoff/YYYY/MM/hermes-agent_title.md
+    Note over H,A: lib/Fucina/Handoff/YYYY/MM/hermes-agent_title.md
     
     A->>A: Execute task
     A->>H: Handoff file (result)
-    Note over A,H: Library/Fucina/Handoff/YYYY/MM/agent-hermes_title.md
+    Note over A,H: lib/Fucina/Handoff/YYYY/MM/agent-hermes_title.md
     
     H->>Q: Send for quality verification
     Q->>Q: Quality checklist
@@ -411,7 +411,7 @@ Eunomia, a new agent for email cataloging and contact management created on 2026
 
 1. **ADQ**: Design reviewed by Atena — role defined as email processing specialist, model assigned (sonnet based on Claude's text analysis strengths), risk class set to Medium (indirect user impact).
 
-2. **AEQ**: Environment verified — dependency on `email_processor` tool (developed by Efesto), fallback manual parsing defined, write permissions to `Library/Persone/` confirmed.
+2. **AEQ**: Environment verified — dependency on `email_processor` tool (developed by Efesto), fallback manual parsing defined, write permissions to `lib/Persone/` confirmed.
 
 3. **AOQ**: Tested on 6 cases — 3 standard email formats, 2 edge cases (multilingual, attachments), 1 failure mode (malformed email). Pass rate: 5/6 (83%).
 
@@ -650,7 +650,7 @@ The system's ability to execute independent subtasks in parallel — governed by
 
 **Case 2 — AQF Implementation (2026-05-16)**: A coordinated effort involving Metis (strategic analysis of qualification frameworks), Dike (audit of existing processes), and Atena (risk classification and ADQ checklist creation). The AQF was designed, documented, and partially deployed in a single day across 13 agents.
 
-**Case 3 — Email Integration Pipeline**: Eunomia (cataloging agent, sonnet) was created via the Agent Factory Pipeline, qualified through AQF gates, and deployed to process email inbox data into structured person records in `Library/Persone/`, with a fallback to manual parsing when the `email_processor` tool is unavailable.
+**Case 3 — Email Integration Pipeline**: Eunomia (cataloging agent, sonnet) was created via the Agent Factory Pipeline, qualified through AQF gates, and deployed to process email inbox data into structured person records in `lib/Persone/`, with a fallback to manual parsing when the `email_processor` tool is unavailable.
 
 ---
 

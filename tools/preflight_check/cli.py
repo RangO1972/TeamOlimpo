@@ -49,9 +49,7 @@ def _project_root() -> Path:
     """Risale fino alla root del progetto (dov'è opencode.json o Team/)."""
     cwd = Path.cwd()
     for candidate in [cwd, *cwd.parents]:
-        if (candidate / "opencode.json").exists() or (
-            candidate / "Team"
-        ).is_dir():
+        if (candidate / "opencode.json").exists() or (candidate / "Team").is_dir():
             return candidate
     return cwd
 
@@ -77,7 +75,7 @@ def _check_disk(root: Path) -> tuple[bool, str]:
 def _check_permissions(root: Path) -> list[tuple[bool, str, str]]:
     """Permessi scrittura su cartelle critiche."""
     results: list[tuple[bool, str, str]] = []
-    folders = ["Team/Handoff", "Library/deliverables"]
+    folders = ["Team/Handoff", "lib/deliverables"]
     for folder in folders:
         path = root / folder
         if not path.exists():
@@ -118,14 +116,14 @@ def _check_python_env(root: Path) -> list[tuple[bool, str, str]]:
 
 
 def _check_vault(root: Path) -> tuple[bool, str]:
-    """Verifica che Library/ esista e contenga .md."""
-    vault = root / "Library"
+    """Verifica che lib/ esista e contenga .md."""
+    vault = root / "lib"
     if not vault.is_dir():
-        return False, "Cartella Library/ non trovata"
+        return False, "Cartella lib/ non trovata"
     md_files = list(vault.rglob("*.md"))
     if md_files:
-        return True, f"Trovati {len(md_files)} file .md in Library/"
-    return False, "Nessun file .md in Library/"
+        return True, f"Trovati {len(md_files)} file .md in lib/"
+    return False, "Nessun file .md in lib/"
 
 
 # ---------------------------------------------------------------------------

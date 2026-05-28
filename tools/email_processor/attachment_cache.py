@@ -118,13 +118,9 @@ def update_cache(
         entry = cache[sha256_full]
         if message_id not in entry["email_ids"]:
             entry["email_ids"].append(message_id)
-            logger.debug(
-                f"Cache hit: {sha256_full[:16]} → aggiunto message_id {message_id}"
-            )
+            logger.debug(f"Cache hit: {sha256_full[:16]} → aggiunto message_id {message_id}")
         else:
-            logger.debug(
-                f"Cache hit: {sha256_full[:16]} — message_id già presente, skip"
-            )
+            logger.debug(f"Cache hit: {sha256_full[:16]} — message_id già presente, skip")
     else:
         now_str = datetime.now(timezone.utc).isoformat(timespec="seconds")
         cache[sha256_full] = {
@@ -134,6 +130,4 @@ def update_cache(
             "first_seen": now_str,
             "email_ids": [message_id],
         }
-        logger.debug(
-            f"Cache miss: {sha256_full[:16]} — nuova entry ({original_name}, {size} byte)"
-        )
+        logger.debug(f"Cache miss: {sha256_full[:16]} — nuova entry ({original_name}, {size} byte)")

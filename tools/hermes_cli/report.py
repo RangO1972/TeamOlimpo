@@ -48,11 +48,13 @@ def _extract_body_tasks(body_text: str) -> list[dict[str, Any]]:
         if not in_task_section:
             continue
         for match in TASK_ID_BODY_RE.finditer(line):
-            tasks.append({
-                "id": match.group(1),
-                "status": _infer_body_status(line),
-                "line": stripped[:80],
-            })
+            tasks.append(
+                {
+                    "id": match.group(1),
+                    "status": _infer_body_status(line),
+                    "line": stripped[:80],
+                }
+            )
 
     return tasks
 
@@ -65,12 +67,20 @@ def generate_report(
     result: dict[str, Any] = {
         "short": short,
         "tasks": {
-            "open": 0, "completed": 0, "blocked": 0,
-            "cancelled": 0, "total": 0, "by_agent": {},
+            "open": 0,
+            "completed": 0,
+            "blocked": 0,
+            "cancelled": 0,
+            "total": 0,
+            "by_agent": {},
         },
         "handoffs": {
-            "da-processare": 0, "in-corso": 0, "bloccato": 0,
-            "completato": 0, "senza_stato": 0, "total": len(handoff_paths),
+            "da-processare": 0,
+            "in-corso": 0,
+            "bloccato": 0,
+            "completato": 0,
+            "senza_stato": 0,
+            "total": len(handoff_paths),
         },
         "conformity": {
             "scratchpad": {
@@ -96,9 +106,12 @@ def generate_report(
     for t in scratchpad.tasks:
         agent = (t.delegated_to or t.responsible or "unknown").lower()
         result["tasks"]["by_agent"].setdefault(agent, [])
-        result["tasks"]["by_agent"][agent].append({
-            "id": t.id, "status": t.status or "unknown",
-        })
+        result["tasks"]["by_agent"][agent].append(
+            {
+                "id": t.id,
+                "status": t.status or "unknown",
+            }
+        )
 
     for hp in handoff_paths:
         hv = validate_handoff_file(hp)
@@ -115,6 +128,7 @@ def generate_report(
             result["conformity"]["handoffs"]["conformi"] += 1
 
     from tools.hermes_cli.id_manager import check_duplicate_ids
+
     conflicts = check_duplicate_ids(scratchpad, handoff_paths)
     result["conformity"]["ids"]["duplicates"] = len(conflicts)
     result["conformity"]["ids"]["duplicate_ids"] = [c["id"] for c in conflicts]
@@ -130,23 +144,17 @@ def generate_report(
 def generate_diff(scratchpad: Scratchpad, scratchpad_text: str) -> dict[str, Any]:
     if scratchpad_text.startswith("---"):
         end_marker = scratchpad_text.find("\n---", 3)
-        body_text = scratchpad_text[end_marker + 5:] if end_marker != -1 else scratchpad_text
+        body_text = scratchpad_text[end_marker + 5 :] if end_marker != -1 else scratchpad_text
     else:
         body_text = scratchpad_text
 
-    fm_tasks: dict[str, str] = {
-        t.id: t.status or "unknown" for t in scratchpad.tasks if t.id
-    }
+    fm_tasks: dict[str, str] = {t.id: t.status or "unknown" for t in scratchpad.tasks if t.id}
 
     body_task_list = _extract_body_tasks(body_text)
     body_tasks: dict[str, str] = {t["id"]: t["status"] for t in body_task_list}
 
-    only_in_fm: dict[str, str] = {
-        tid: s for tid, s in fm_tasks.items() if tid not in body_tasks
-    }
-    only_in_body: dict[str, str] = {
-        tid: s for tid, s in body_tasks.items() if tid not in fm_tasks
-    }
+    only_in_fm: dict[str, str] = {tid: s for tid, s in fm_tasks.items() if tid not in body_tasks}
+    only_in_body: dict[str, str] = {tid: s for tid, s in body_tasks.items() if tid not in fm_tasks}
     status_mismatch: dict[str, dict[str, str]] = {}
     for tid in fm_tasks:
         if tid in body_tasks and fm_tasks[tid] != body_tasks[tid]:
@@ -154,7 +162,9 @@ def generate_diff(scratchpad: Scratchpad, scratchpad_text: str) -> dict[str, Any
 
     total = len(only_in_fm) + len(only_in_body) + len(status_mismatch)
 
-    logger.debug(f"Diff: {len(only_in_fm)} solo FM, {len(only_in_body)} solo body, {len(status_mismatch)} stato diff")
+    logger.debug(
+        f"Diff: {len(only_in_fm)} solo FM, {len(only_in_body)} solo body, {len(status_mismatch)} stato diff"
+    )
     return {
         "diff": True,
         "only_in_frontmatter": only_in_fm,

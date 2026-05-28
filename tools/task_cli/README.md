@@ -6,7 +6,7 @@ Sostituto zero-MCP del server `taskmanager`. Stessa macchina a stati, stesso dat
 
 - **Niente MCP** — è un CLI invocato via `bash` tool
 - **Niente server** — ogni comando è un processo che muore subito
-- **SQLite** — `Library/data/tasks.db`, veloce e indicizzato
+- **SQLite** — `lib/data/tasks.db`, veloce e indicizzato
 - **Stesso data model** del taskmanager design (pending → in_progress → completed/blocked/cancelled)
 - **Stesse regole** — auto-promozione parent, ID counter per area, event logging
 
@@ -132,10 +132,10 @@ CREATE TABLE counter (
 
 ```bash
 # Dump dal vecchio server
-taskmanager_task_export() → state.yaml
+taskmanager_task_export() → taskmanager state
 
 # Import nel nuovo db
-uv run -m tools.task_cli migrate state.yaml
+uv run -m tools.task_cli migrate taskmanager state
 ```
 
 Sostituisce: `tools/taskmanager/` + entry MCP in `opencode.json`

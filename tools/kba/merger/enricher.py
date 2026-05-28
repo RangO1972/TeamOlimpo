@@ -2,7 +2,7 @@
 Enrichment delle righe merged con dati dal catalogo KBA locale.
 
 Per ogni KBA Number cerca il record corrispondente in:
-  Library/data/kba_catalog/records/<slug>.md
+  lib/data/kba_catalog/records/<slug>.md
 
 Legge il frontmatter YAML e popola le colonne di risk enrichment.
 Se il record non esiste, le colonne restano vuote senza errore.
@@ -25,11 +25,20 @@ import yaml
 from loguru import logger
 
 from tools.kba_merger.config import DOCUMENTS_DIR, INDEX_FILE, RECORDS_DIR
-from tools.kba_reporter.config import DELTAV_VERSIONS, VERSION_PATTERNS, RI_PATTERNS, UNIVERSAL_PATTERNS
-from tools.kba_reporter.patch_builder import _extract_files_from_doc, _is_compatible, _deduplicate_files
+from tools.kba_reporter.config import (
+    DELTAV_VERSIONS,
+    VERSION_PATTERNS,
+    RI_PATTERNS,
+    UNIVERSAL_PATTERNS,
+)
+from tools.kba_reporter.patch_builder import (
+    _extract_files_from_doc,
+    _is_compatible,
+    _deduplicate_files,
+)
 
 # Pattern per estrarre ID KBA da fix_reference
-_KBA_REF_RE = re.compile(r'\b([A-Z]{2}-\d{4}-\d{4})\b')
+_KBA_REF_RE = re.compile(r"\b([A-Z]{2}-\d{4}-\d{4})\b")
 
 # Pattern per estrarre blocco ```json ... ```
 _JSON_BLOCK_RE = re.compile(r"```json\s*([\s\S]*?)\s*```", re.IGNORECASE)
@@ -45,24 +54,50 @@ _HANDLED_TAGS = ("{DONE}", "{DEFER}", "{WIP}", "{NA}", "{FLAG}", "{ACK}")
 
 # Parole chiave in testo libero che implicano DEFER
 _DEFER_TEXT = [
-    "NEXT STOP", "NEXT SHUTDOWN", "PLANNED MAINTENANCE", "NEXT SERVICE INTERVAL",
-    "PATCH DA INSTALLARE", "WILL BE APPLIED", "TO NEXT STOP", "NEXT PLANT STOP",
-    "PRODUCTION SHUTDOWN", "PATCHING STAGE", "TO BE INSTALLED", "NEXT PLANNED",
-    "PROSSIMA FERMATA", "FERMATA", "PROSSIMO FERMO",
+    "NEXT STOP",
+    "NEXT SHUTDOWN",
+    "PLANNED MAINTENANCE",
+    "NEXT SERVICE INTERVAL",
+    "PATCH DA INSTALLARE",
+    "WILL BE APPLIED",
+    "TO NEXT STOP",
+    "NEXT PLANT STOP",
+    "PRODUCTION SHUTDOWN",
+    "PATCHING STAGE",
+    "TO BE INSTALLED",
+    "NEXT PLANNED",
+    "PROSSIMA FERMATA",
+    "FERMATA",
+    "PROSSIMO FERMO",
 ]
 
 # Parole chiave in testo libero che implicano WIP
 _WIP_TEXT = [
-    "TO CHECK", "TO EVALUATE", "VALUTARE", "TO BE ANALYZED", "ANALYSIS TO BE",
-    "UNDER INVESTIGATION", "TO BE CHECKED", "VERIFICARE", "TO BE SCHEDULED",
-    "TO BE DISCUSSED", "DA ANALIZZARE", "DA VERIFICARE",
+    "TO CHECK",
+    "TO EVALUATE",
+    "VALUTARE",
+    "TO BE ANALYZED",
+    "ANALYSIS TO BE",
+    "UNDER INVESTIGATION",
+    "TO BE CHECKED",
+    "VERIFICARE",
+    "TO BE SCHEDULED",
+    "TO BE DISCUSSED",
+    "DA ANALIZZARE",
+    "DA VERIFICARE",
 ]
 
 # Valori raccomandazione che il fast-path Python sa gestire
-_KNOWN_RECOS = frozenset({
-    "applicare_patch", "applicare_fix", "applicare_workaround",
-    "nessuna_azione", "monitorare", "installare_patch",
-})
+_KNOWN_RECOS = frozenset(
+    {
+        "applicare_patch",
+        "applicare_fix",
+        "applicare_workaround",
+        "nessuna_azione",
+        "monitorare",
+        "installare_patch",
+    }
+)
 
 
 def _load_catalog_ids() -> set[str]:
@@ -193,12 +228,10 @@ def _lookup_css_files(fix_reference: str, site: str) -> list[str]:
         return []
 
     # Esclude KB Microsoft (utili al reporter ma non alla colonna Suggested Notes)
-    _KB_RE = re.compile(r'^KB\d{6,}$', re.IGNORECASE)
+    _KB_RE = re.compile(r"^KB\d{6,}$", re.IGNORECASE)
     css_files = {f for f in raw_files if not _KB_RE.match(f)}
 
-    compatible = _deduplicate_files(
-        {f for f in css_files if _is_compatible(f, version)}
-    )
+    compatible = _deduplicate_files({f for f in css_files if _is_compatible(f, version)})
 
     result = sorted(f.replace(".zip", "") for f in compatible)
     logger.debug(f"CSS lookup {fix_reference} @ {site}: {result}")
@@ -403,7 +436,9 @@ def _build_suggested_note_ai(
         referenced_bodies_text = "(nessun documento correlato disponibile)"
 
     prompt = prompt_template.replace("{{kba_metadata}}", kba_metadata)
-    prompt = prompt.replace("{{kba_body}}", kba_body[:4000] if kba_body else "(documento non disponibile)")
+    prompt = prompt.replace(
+        "{{kba_body}}", kba_body[:4000] if kba_body else "(documento non disponibile)"
+    )
     prompt = prompt.replace("{{referenced_bodies}}", referenced_bodies_text)
     prompt = prompt.replace("{{rules_context}}", rules_context if rules_context else "")
 
@@ -509,7 +544,9 @@ def enrich_rows(
             api_key = get_api_key(provider_name)
             provider_cls = PROVIDERS.get(provider_name)
             if provider_cls is None:
-                logger.warning(f"Provider AI '{provider_name}' non trovato — disabilito AI enrichment")
+                logger.warning(
+                    f"Provider AI '{provider_name}' non trovato — disabilito AI enrichment"
+                )
                 use_ai = False
             else:
                 provider_instance = provider_cls(api_key)
@@ -569,8 +606,12 @@ def enrich_rows(
                     emerson_category = str(fm.get("emerson_category") or "").strip()
                     raccomandazione = _extract_raccomandazione(content)
                     fix_ref_str = str(fm.get("fix_reference") or "").strip()
-                    fix_versions_list: list[str] = [str(v) for v in (fm.get("fix_versions") or []) if v]
-                    logger.debug(f"Enriched {kba_number}: {risk_level} ({risk_score}), reco={raccomandazione!r}")
+                    fix_versions_list: list[str] = [
+                        str(v) for v in (fm.get("fix_versions") or []) if v
+                    ]
+                    logger.debug(
+                        f"Enriched {kba_number}: {risk_level} ({risk_score}), reco={raccomandazione!r}"
+                    )
                 else:
                     logger.warning(f"Record presente in indice ma non leggibile: {kba_number}")
         else:
@@ -584,7 +625,9 @@ def enrich_rows(
 
         # Fast path Python
         python_result = _build_suggested_note_python(
-            user_notes, in_catalog, raccomandazione,
+            user_notes,
+            in_catalog,
+            raccomandazione,
             fix_reference=fix_ref_str,
             site=site_str,
             fix_versions=fix_versions_list,
@@ -654,7 +697,9 @@ def enrich_rows(
                 logger.warning(f"Errore AI per {kba_number}: {_exc_box[0]}")
                 suggested_note = ""
                 if on_progress:
-                    on_progress(_row_idx, total_rows, kba_number, "ai_error", None, str(_exc_box[0]))
+                    on_progress(
+                        _row_idx, total_rows, kba_number, "ai_error", None, str(_exc_box[0])
+                    )
             else:
                 suggested_note = _suggestion_box[0] or ""
                 ai_response = _response_box[0]
@@ -668,17 +713,19 @@ def enrich_rows(
             if on_progress:
                 on_progress(_row_idx, total_rows, kba_number, "fallback", None, None)
 
-        enriched.append({
-            **row,
-            "Risk Score": risk_score,
-            "Risk Level": risk_level,
-            "Problem Type": problem_type,
-            "Workaround": workaround,
-            "Fix Available": fix_available,
-            "Emerson Category": emerson_category,
-            "FIS Notes": "",
-            "Suggested Notes": suggested_note,
-        })
+        enriched.append(
+            {
+                **row,
+                "Risk Score": risk_score,
+                "Risk Level": risk_level,
+                "Problem Type": problem_type,
+                "Workaround": workaround,
+                "Fix Available": fix_available,
+                "Emerson Category": emerson_category,
+                "FIS Notes": "",
+                "Suggested Notes": suggested_note,
+            }
+        )
 
     logger.info(
         f"Suggested Notes — python:{_cnt_python_filled}, AI:{_cnt_ai}, fallback:{_cnt_fallback}"

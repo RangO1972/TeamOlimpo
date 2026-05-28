@@ -65,7 +65,16 @@ def write_gap_excel(gap_rows: list[dict[str, Any]], today: str) -> Path:
     ws.title = "Gap Check"
 
     # Header
-    headers = ["KBA Number", "Published", "Category", "Disposition Status", "Title", "Occurrences", "Status", "Referenced By"]
+    headers = [
+        "KBA Number",
+        "Published",
+        "Category",
+        "Disposition Status",
+        "Title",
+        "Occurrences",
+        "Status",
+        "Referenced By",
+    ]
     for col_num, header in enumerate(headers, 1):
         ws.cell(row=1, column=col_num, value=header)
 
@@ -78,12 +87,20 @@ def write_gap_excel(gap_rows: list[dict[str, Any]], today: str) -> Path:
         ws.cell(row=row_num, column=5, value=row["title"])
         ws.cell(row=row_num, column=6, value=row["occurrences"])
         ws.cell(row=row_num, column=7, value=row["stato"])
-        ws.cell(row=row_num, column=8, value=", ".join(row["referenced_by"]) if row["referenced_by"] else "")
+        ws.cell(
+            row=row_num,
+            column=8,
+            value=", ".join(row["referenced_by"]) if row["referenced_by"] else "",
+        )
 
         # Colora la colonna Status
         status_cell = ws.cell(row=row_num, column=7)
         if row["stato"] in GAP_STATUS_COLORS:
-            status_cell.fill = PatternFill(start_color=GAP_STATUS_COLORS[row["stato"]], end_color=GAP_STATUS_COLORS[row["stato"]], fill_type="solid")
+            status_cell.fill = PatternFill(
+                start_color=GAP_STATUS_COLORS[row["stato"]],
+                end_color=GAP_STATUS_COLORS[row["stato"]],
+                fill_type="solid",
+            )
 
     # Larghezze colonne
     for col_num, width in enumerate([14, 12, 12, 14, 50, 10, 12, 30], 1):
@@ -108,6 +125,7 @@ def write_merge_excel(enriched_rows: list[dict[str, Any]], output_path: Path | N
     if output_path is None:
         from tools.kba.merger.config import OUTPUT_DIR
         from datetime import datetime
+
         today = datetime.now().strftime("%y%m%d")
         output_path = OUTPUT_DIR / f"merged_enriched_{today}.xlsx"
 

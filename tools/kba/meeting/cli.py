@@ -33,11 +33,11 @@ from tools.llm.batch import extract_prompt_section
 
 console = Console()
 
-DONE_NA        = {"{DONE}", "{NA}", "{ACK}"}
+DONE_NA = {"{DONE}", "{NA}", "{ACK}"}
 SYSTEM_PROMPT_PATH = PROJECT_ROOT / ".claude" / "agents" / "dike.md"
-MEETING_PROMPT_PATH = PROJECT_ROOT / "Library" / "Prompts" / "kba" / "report-meeting.md"
+MEETING_PROMPT_PATH = PROJECT_ROOT / "lib" / "Prompts" / "kba" / "report-meeting.md"
 DEFAULT_PROVIDER = "grok"
-DEFAULT_MODEL    = "grok-4.20-0309-reasoning"
+DEFAULT_MODEL = "grok-4.20-0309-reasoning"
 
 
 class Provider(str, Enum):
@@ -133,7 +133,9 @@ def _build_kba_input(wip_rows: list[dict]) -> str:
 @app.command()
 def main(
     input: Path = typer.Argument(..., help="File KBA_Merged Excel.", exists=True),
-    output: Path = typer.Option(None, "--output", "-o", help="Path output Markdown (auto se omesso)."),
+    output: Path = typer.Option(
+        None, "--output", "-o", help="Path output Markdown (auto se omesso)."
+    ),
     provider: Provider = typer.Option(Provider.grok, "--provider", help="Provider LLM."),
     model: str = typer.Option(DEFAULT_MODEL, "--model", help="Override modello LLM."),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Output debug su stderr."),
@@ -154,7 +156,9 @@ def main(
         for r in empty_rows:
             console.print(f"  [yellow]{r['kba_number']}[/yellow]  {r['title'][:60]}")
         console.print()
-        console.print("Compila la colonna 'Stefano's Notes' per tutte le righe aperte, poi rilancia.")
+        console.print(
+            "Compila la colonna 'Stefano's Notes' per tutte le righe aperte, poi rilancia."
+        )
         raise typer.Exit(code=1)
     # ─────────────────────────────────────────────────────────────────────────
 
@@ -191,6 +195,7 @@ def main(
     sys.stdout.flush()
 
     import time
+
     t0 = time.monotonic()
     try:
         response = provider_instance.chat(prompt=prompt, model=model, system=system_text)

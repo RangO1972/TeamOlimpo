@@ -2,32 +2,72 @@ from __future__ import annotations
 
 from pathlib import Path
 
-PROJECT_ROOT: Path = Path(__file__).resolve().parent.parent.parent
+from tools.common.paths import project_root
 
-HANDOFF_DIR: Path = PROJECT_ROOT / "Library" / "Fucina" / "Handoff"
-SCRATCHPAD_PATH: Path = PROJECT_ROOT / "Library" / "Fucina" / "Hermes" / "Scratchpad.md"
+PROJECT_ROOT: Path = project_root()
 
-MEMBRI: frozenset[str] = frozenset({
-    "hermes", "proteo", "atena", "efesto", "clio", "dike", "metis",
-    "calliope", "pythagoras", "hermione", "euterpe", "demetra", "eunomia",
-})
+HANDOFF_DIR: Path = PROJECT_ROOT / "lib" / "Fucina" / "Handoff"
+SCRATCHPAD_PATH: Path = PROJECT_ROOT / "lib" / "Fucina" / "Hermes" / "Scratchpad.md"
 
-SKIP_DIRS: frozenset[str] = frozenset({
-    "templates", "kba_batch", "kba_batch2", "tucson", "Legacy", "scripts",
-})
+MEMBRI: frozenset[str] = frozenset(
+    {
+        "hermes",
+        "proteo",
+        "atena",
+        "efesto",
+        "clio",
+        "dike",
+        "metis",
+        "calliope",
+        "pythagoras",
+        "hermione",
+        "euterpe",
+        "demetra",
+        "eunomia",
+    }
+)
 
-STATI_HANDOFF: frozenset[str] = frozenset({
-    "da-processare", "in-corso", "bloccato", "completato",
-})
+SKIP_DIRS: frozenset[str] = frozenset(
+    {
+        "templates",
+        "kba_batch",
+        "kba_batch2",
+        "tucson",
+        "Legacy",
+        "scripts",
+    }
+)
+
+STATI_HANDOFF: frozenset[str] = frozenset(
+    {
+        "da-processare",
+        "in-corso",
+        "bloccato",
+        "completato",
+    }
+)
 
 PRIORITA_VALIDE: frozenset[str] = frozenset({"alta", "media", "bassa"})
 
-TIPI_HANDOFF: frozenset[str] = frozenset({
-    "profilo", "specifica", "feedback", "bug", "report", "test", "nota",
-})
+TIPI_HANDOFF: frozenset[str] = frozenset(
+    {
+        "profilo",
+        "specifica",
+        "feedback",
+        "bug",
+        "report",
+        "test",
+        "nota",
+    }
+)
 
-STATI_TASK: frozenset[str] = frozenset({
-    "in_progress", "blocked", "awaiting_review", "completed",
-})
+STATI_TASK: frozenset[str] = frozenset(
+    {
+        "in_progress",
+        "blocked",
+        "awaiting_review",
+        "completed",
+    }
+)
 
 REGISTRO_PATH: Path = HANDOFF_DIR / "Registro.md"

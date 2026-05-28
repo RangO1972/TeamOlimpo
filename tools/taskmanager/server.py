@@ -16,12 +16,12 @@ Tools
 - task_summary — Aggregate task statistics.
 - task_log_event — Append an event to a task's log.
 - task_export — Dump all state as YAML.
+- taskmanager_compress — Compress task event logs (hot/warm/cold).
 """
 
 from __future__ import annotations
 
 import json
-import re
 from typing import Any
 
 from loguru import logger
@@ -29,12 +29,9 @@ from loguru import logger
 from tools.taskmanager.models import (
     INITIAL_STATUSES,
     TASK_ID_REGEX,
-    VALID_EVENT_TYPES,
     VALID_PRIORITIES,
     VALID_STATUSES,
     StateMachine,
-    Task,
-    TaskEvent,
     extract_area_from_description,
     extract_area_from_task_id,
     now_iso,
@@ -43,7 +40,7 @@ from tools.taskmanager.models import (
     validate_priority,
     validate_status,
 )
-from tools.taskmanager.state import StateStore
+from tools.taskmanager.state import StateStore, compress_events
 
 # ---------------------------------------------------------------------------
 # MCP SDK — graceful fallback if missing
@@ -110,6 +107,7 @@ def _task_dict_to_json(task_dict: dict[str, Any], include_events: bool = False) 
         "tags": task_dict.get("tags", []),
         "parent": task_dict.get("parent"),
         "handoff_refs": task_dict.get("handoff_refs", []),
+        "compression_level": task_dict.get("compression_level", 0),
         "event_count": len(events),
     }
     if include_events:
@@ -182,12 +180,14 @@ def task_create(
         return json.dumps({"error": str(e)})
 
     if status not in INITIAL_STATUSES:
-        return json.dumps({
-            "error": (
-                f"Status '{status}' non valido per creazione. "
-                f"Usa uno di: {', '.join(INITIAL_STATUSES)}."
-            )
-        })
+        return json.dumps(
+            {
+                "error": (
+                    f"Status '{status}' non valido per creazione. "
+                    f"Usa uno di: {', '.join(INITIAL_STATUSES)}."
+                )
+            }
+        )
 
     # --- Validate tags ---
     if tags is not None:
@@ -195,9 +195,9 @@ def task_create(
         for tag in tags:
             t = tag.strip()
             if " " in t:
-                return json.dumps({
-                    "error": f"Tag '{t}' contiene spazi. I tag devono essere una singola parola."
-                })
+                return json.dumps(
+                    {"error": f"Tag '{t}' contiene spazi. I tag devono essere una singola parola."}
+                )
             if t:
                 cleaned_tags.append(t)
         tags = cleaned_tags
@@ -209,17 +209,21 @@ def task_create(
     if final_id is not None:
         # Validate format
         if not TASK_ID_REGEX.match(final_id):
-            return json.dumps({
-                "error": (
-                    f"ID '{final_id}' non valido. Il formato deve essere "
-                    f"T-<AREA>-<NNN> (es. T-MCP-001)."
-                )
-            })
+            return json.dumps(
+                {
+                    "error": (
+                        f"ID '{final_id}' non valido. Il formato deve essere "
+                        f"T-<AREA>-<NNN> (es. T-MCP-001)."
+                    )
+                }
+            )
         # Check uniqueness
         if store.get_task(final_id) is not None:
-            return json.dumps({
-                "error": f"ID '{final_id}' già in uso. Usa un ID diverso o ometti per generazione automatica."
-            })
+            return json.dumps(
+                {
+                    "error": f"ID '{final_id}' già in uso. Usa un ID diverso o ometti per generazione automatica."
+                }
+            )
     else:
         # Auto-generate ID
         if parent:
@@ -268,12 +272,14 @@ def task_create(
 
     logger.info(f"Task created: {final_id} (status={status}, owner={owner})")
 
-    return json.dumps({
-        "id": final_id,
-        "status": status,
-        "created_at": ts,
-        "description": description,
-    })
+    return json.dumps(
+        {
+            "id": final_id,
+            "status": status,
+            "created_at": ts,
+            "description": description,
+        }
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -323,14 +329,16 @@ def task_update_status(
     # --- Validate transition ---
     if old_status == new_status:
         logger.warning(f"Task {task_id} already has status '{new_status}' — no-op")
-        return json.dumps({
-            "id": task_id,
-            "old_status": old_status,
-            "new_status": new_status,
-            "updated_at": task_dict.get("updated_at"),
-            "auto_parent_completed": None,
-            "warning": f"Task già in stato '{new_status}'.",
-        })
+        return json.dumps(
+            {
+                "id": task_id,
+                "old_status": old_status,
+                "new_status": new_status,
+                "updated_at": task_dict.get("updated_at"),
+                "auto_parent_completed": None,
+                "warning": f"Task già in stato '{new_status}'.",
+            }
+        )
 
     try:
         StateMachine.validate_transition(old_status, new_status)
@@ -346,11 +354,13 @@ def task_update_status(
     event_details = f"{new_status} ← {old_status}"
     if note:
         event_details += f" — {note}"
-    task_dict.setdefault("events", []).append({
-        "timestamp": ts,
-        "type": "status_change",
-        "details": event_details,
-    })
+    task_dict.setdefault("events", []).append(
+        {
+            "timestamp": ts,
+            "type": "status_change",
+            "details": event_details,
+        }
+    )
 
     auto_parent_completed: str | None = None
 
@@ -363,24 +373,21 @@ def task_update_status(
             if parent_status in ("in_progress", "pending"):
                 # Check all siblings
                 all_tasks = store.get_tasks()
-                siblings = [
-                    t for t in all_tasks.values()
-                    if t.get("parent") == parent_id
-                ]
-                if siblings and all(
-                    s.get("status") == "completed" for s in siblings
-                ):
+                siblings = [t for t in all_tasks.values() if t.get("parent") == parent_id]
+                if siblings and all(s.get("status") == "completed" for s in siblings):
                     # Auto-promote parent
                     parent_task["status"] = "completed"
                     parent_task["updated_at"] = ts
-                    parent_task.setdefault("events", []).append({
-                        "timestamp": ts,
-                        "type": "status_change",
-                        "details": (
-                            f"completed ← {parent_status} — "
-                            f"auto-promozione: tutti i subtask completati"
-                        ),
-                    })
+                    parent_task.setdefault("events", []).append(
+                        {
+                            "timestamp": ts,
+                            "type": "status_change",
+                            "details": (
+                                f"completed ← {parent_status} — "
+                                f"auto-promozione: tutti i subtask completati"
+                            ),
+                        }
+                    )
                     auto_parent_completed = parent_id
                     logger.info(
                         f"Parent {parent_id} auto-promoted to completed "
@@ -467,9 +474,11 @@ def task_query(
 
             dt_cls.fromisoformat(since)
         except ValueError:
-            return json.dumps({
-                "error": f"Formato data 'since' non valido: '{since}'. Usa ISO 8601 (es. 2026-05-20T10:00:00)."
-            })
+            return json.dumps(
+                {
+                    "error": f"Formato data 'since' non valido: '{since}'. Usa ISO 8601 (es. 2026-05-20T10:00:00)."
+                }
+            )
 
     store = _get_store()
     all_tasks = store.get_tasks()
@@ -515,10 +524,7 @@ def task_query(
         filtered = filtered[:limit]
 
     # --- Convert to output format ---
-    results = [
-        _task_dict_to_json(t, include_events=include_events)
-        for t in filtered
-    ]
+    results = [_task_dict_to_json(t, include_events=include_events) for t in filtered]
 
     return json.dumps(results)
 
@@ -545,10 +551,7 @@ def task_summary(
     all_tasks = store.get_tasks()
 
     if owner:
-        filtered = [
-            t for t in all_tasks.values()
-            if t.get("owner", "").lower() == owner.lower()
-        ]
+        filtered = [t for t in all_tasks.values() if t.get("owner", "").lower() == owner.lower()]
     else:
         filtered = list(all_tasks.values())
 
@@ -716,6 +719,60 @@ def task_export(
 
 
 # ---------------------------------------------------------------------------
+# Tool 7: taskmanager_compress
+# ---------------------------------------------------------------------------
+
+
+@mcp.tool()
+def taskmanager_compress(
+    age_days: int | None = None,
+    max_level: int = 2,
+    dry_run: bool = True,
+) -> str:
+    """Compress task event logs based on age (hot/warm/cold).
+
+    Applies progressive compression to tasks older than thresholds:
+    - **Warm** (level 1, 8-30 days): compresses event details to max 200 chars
+      using Token Juice prose compressor, preserving handoff_path, timestamp, type.
+    - **Cold** (level 2, >30 days): replaces multiple events with a single period
+      summary preserving only type counts and key handoff paths.
+
+    Parameters
+    ----------
+    age_days : int | None
+        If set, only compress tasks older than this many days.
+        If None, uses default thresholds (7 for warm, 30 for cold).
+    max_level : int
+        Maximum compression level: 1 (warm) or 2 (cold). Default 2.
+    dry_run : bool
+        If True (default), only report what would be done without saving.
+    """
+    logger.info(
+        f"taskmanager_compress: age_days={age_days}, max_level={max_level}, dry_run={dry_run}"
+    )
+
+    if max_level not in (1, 2):
+        return json.dumps({"error": "max_level deve essere 1 (warm) o 2 (cold)."})
+
+    try:
+        results = compress_events(
+            age_days=age_days,
+            max_level=max_level,
+            dry_run=dry_run,
+        )
+        logger.info(
+            f"Compression {'dry-run' if dry_run else 'applied'}: "
+            f"{results['tasks_processed']} tasks, "
+            f"{results['events_compressed']} events compressed, "
+            f"{results['events_summarized']} events summarized"
+        )
+        return json.dumps(results)
+    except Exception as e:
+        logger.error(f"Compression failed: {e}")
+        return json.dumps({"error": f"Compressione fallita: {e}"})
+
+
+# ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
 
@@ -723,9 +780,7 @@ def task_export(
 def main_server() -> None:
     """Start the taskmanager MCP server on stdio transport."""
     if not MCP_AVAILABLE:
-        logger.error(
-            "MCP SDK not installed. Run: uv add mcp"
-        )
+        logger.error("MCP SDK not installed. Run: uv add mcp")
         import sys
 
         sys.exit(1)

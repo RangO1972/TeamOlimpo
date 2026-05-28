@@ -16,10 +16,12 @@ import os
 import sys
 from pathlib import Path
 
+from tools.common.paths import project_root
+
 # ---------------------------------------------------------------------------
-# Root del progetto — due livelli su rispetto a tools/llm/
+# Root del progetto
 # ---------------------------------------------------------------------------
-PROJECT_ROOT: Path = Path(__file__).resolve().parent.parent.parent
+PROJECT_ROOT: Path = project_root()
 
 # ---------------------------------------------------------------------------
 # Caricamento .env
@@ -29,6 +31,7 @@ PROJECT_ROOT: Path = Path(__file__).resolve().parent.parent.parent
 # d'ambiente dirette senza file .env.
 try:
     from dotenv import load_dotenv
+
     load_dotenv(dotenv_path=PROJECT_ROOT / ".env", override=False)
 except ImportError:
     # Se python-dotenv non e' installato, l'errore verra' segnalato
@@ -40,7 +43,7 @@ except ImportError:
 # ---------------------------------------------------------------------------
 
 # Provider usato se --provider non viene specificato
-DEFAULT_PROVIDER: str = "grok"
+DEFAULT_PROVIDER: str = "openrouter"
 
 # Versione del tool (usata nell'output --verbose)
 TOOL_VERSION: str = "0.2.0"
@@ -48,11 +51,13 @@ TOOL_VERSION: str = "0.2.0"
 # Nomi delle variabili d'ambiente per le API key
 ENV_KEY_GROK: str = "XAI_API_KEY"
 ENV_KEY_GEMINI: str = "GEMINI_API_KEY"
+ENV_KEY_OPENROUTER: str = "OPENROUTER_API_KEY"
 
 # Mappa provider -> variabile d'ambiente attesa
 PROVIDER_ENV_KEYS: dict[str, str] = {
     "grok": ENV_KEY_GROK,
     "gemini": ENV_KEY_GEMINI,
+    "openrouter": ENV_KEY_OPENROUTER,
 }
 
 
@@ -67,26 +72,38 @@ PROVIDER_ENV_KEYS: dict[str, str] = {
 
 KNOWN_PRICES: dict[str, tuple[float, float]] = {
     # xAI / Grok — prezzi aprile 2026
-    "grok-4-1-fast-non-reasoning":   (0.20, 0.50),
-    "grok-4-1-fast-reasoning":       (0.20, 0.50),
-    "grok-4-0709":                   (3.00, 15.00),
-    "grok-code-fast-1":              (0.20, 1.50),
-    "grok-3":                        (3.00, 15.00),
-    "grok-3-mini":                   (0.30, 0.50),
-    "grok-4.20-0309-non-reasoning":  (2.00, 6.00),
-    "grok-4.20-0309-reasoning":      (2.00, 6.00),
-    "grok-4.20-multi-agent-0309":    (2.00, 6.00),
+    "grok-4-1-fast-non-reasoning": (0.20, 0.50),
+    "grok-4-1-fast-reasoning": (0.20, 0.50),
+    "grok-4-0709": (3.00, 15.00),
+    "grok-code-fast-1": (0.20, 1.50),
+    "grok-3": (3.00, 15.00),
+    "grok-3-mini": (0.30, 0.50),
+    "grok-4.20-0309-non-reasoning": (2.00, 6.00),
+    "grok-4.20-0309-reasoning": (2.00, 6.00),
+    "grok-4.20-multi-agent-0309": (2.00, 6.00),
     # Google / Gemini — prezzi aprile 2026
-    "gemini-2.5-flash":              (0.15, 0.60),
-    "gemini-2.5-flash-lite":         (0.10, 0.40),
-    "gemini-2.5-pro":                (1.25, 10.00),
+    "gemini-2.5-flash": (0.15, 0.60),
+    "gemini-2.5-flash-lite": (0.10, 0.40),
+    "gemini-2.5-pro": (1.25, 10.00),
+    # OpenRouter — modelli piu' usati (prezzi variabili per provider)
+    "openai/gpt-4o-mini": (0.15, 0.60),
+    "openai/gpt-4o": (2.50, 10.00),
+    "openai/o3-mini": (1.10, 4.40),
+    "openai/o4-mini": (1.10, 4.40),
+    "anthropic/claude-sonnet-4-20250514": (3.00, 15.00),
+    "anthropic/claude-haiku-3-5": (0.80, 4.00),
+    "google/gemini-2.5-flash": (0.15, 0.60),
+    "google/gemini-2.5-pro": (1.25, 10.00),
+    "deepseek/deepseek-chat-v3-0324": (0.27, 1.10),
+    "meta-llama/llama-4-maverick": (0.20, 0.20),
+    "qwen/qwen-2.5-72b-instruct": (0.35, 0.40),
 }
 
 # ---------------------------------------------------------------------------
 # Directory prompt predefinita
 # ---------------------------------------------------------------------------
 
-PROMPTS_DIR: Path = PROJECT_ROOT / "Library" / "Prompts"
+PROMPTS_DIR: Path = PROJECT_ROOT / "lib" / "Prompts"
 
 
 def get_api_key(provider: str) -> str:
@@ -151,6 +168,10 @@ def _print_missing_key_error(provider: str, env_var: str) -> None:
     elif provider == "gemini":
         lines += [
             "  3. Ottieni la chiave da: https://aistudio.google.com/apikey",
+        ]
+    elif provider == "openrouter":
+        lines += [
+            "  3. Ottieni la chiave da: https://openrouter.ai/keys",
         ]
 
     lines += [

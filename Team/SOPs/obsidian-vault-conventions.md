@@ -6,7 +6,7 @@ tags: [sops, obsidian, conventions]
 
 # Library — Obsidian Vault
 
-`Library/` is an **Obsidian vault**. Every `.md` file written here must follow the conventions in this document to ensure that links, images, and metadata work correctly when the vault is opened in Obsidian.
+`lib/` is an **Obsidian vault**. Every `.md` file written here must follow the conventions in this document to ensure that links, images, and metadata work correctly when the vault is opened in Obsidian.
 
 This document is the operational reference for all team members that produce output in the Library.
 
@@ -15,7 +15,7 @@ This document is the operational reference for all team members that produce out
 ## Vault structure
 
 ```
-Library/
+lib/
 ├── .obsidian/          # Obsidian configuration (do not edit manually)
 ├── assets/
 │   └── images/         # Images extracted from PDFs, organized by slug
@@ -82,7 +82,7 @@ Obsidian searches the entire vault for the image file. Works if the filename is 
 ![alt text](../assets/images/<slug>/image.png)
 ```
 
-The path must be **relative to the `.md` file location**. Documents in `Library/documents/` use `../assets/images/<slug>/` to reference extracted images.
+The path must be **relative to the `.md` file location**. Documents in `lib/documents/` use `../assets/images/<slug>/` to reference extracted images.
 
 > **Operational rule**: the `pdf_converter` tool automatically produces the correct relative path. If writing a `.md` file manually with images, use the relative path `../assets/images/<slug>/name.png` — never absolute paths, never paths relative to the project root.
 
@@ -90,7 +90,7 @@ The path must be **relative to the `.md` file location**. Documents in `Library/
 
 Each document has its own dedicated image folder:
 ```
-Library/assets/images/<document-slug>/
+lib/assets/images/<document-slug>/
 ```
 
 Example: for `documents/nk-2400-0150.md` images are in `assets/images/nk-2400-0150/`.
@@ -183,7 +183,7 @@ Files with other extensions (e.g. `.xlsx`, `.db`, `.log`, `.yaml`) are treated a
 ## What NOT to do in the vault
 
 - **No absolute paths** in images (e.g. `C:\Users\dev\...`) — breaks on any other machine
-- **No CWD-relative paths** (e.g. `Library/assets/...`) — breaks in Obsidian because the viewer resolves them relative to the file location, not the project root
+- **No CWD-relative paths** (e.g. `lib/assets/...`) — breaks in Obsidian because the viewer resolves them relative to the file location, not the project root
 - **No non-Markdown files in `documents/`** — that folder is reserved for converted `.md` files
 - **Do not edit `.obsidian/` manually** — use Obsidian to change settings
 
@@ -198,7 +198,7 @@ Files with other extensions (e.g. `.xlsx`, `.db`, `.log`, `.yaml`) are treated a
 5. **Markdown links only for external URLs** — `[text](https://...)`.
 6. **Minimum paths** in links — filename only if unique in vault.
 7. **Unique filenames** — avoid duplicates across folders; use hyphens instead of spaces.
-8. **Images in centralized folder** — `Library/assets/images/<slug>/`.
+8. **Images in centralized folder** — `lib/assets/images/<slug>/`.
 9. **Dates in ISO 8601** without quotes — `data: 2026-03-25`.
 10. **Never touch `.obsidian/`** — it's Obsidian's internal configuration.
 
@@ -208,6 +208,6 @@ Files with other extensions (e.g. `.xlsx`, `.db`, `.log`, `.yaml`) are treated a
 
 **Cataloger (library management)** — verify that every converted file has valid frontmatter and images with correct relative path before considering the conversion complete.
 
-**KBA analyst** — KBA records go in `Library/data/kba_catalog/records/`. Frontmatter must include at least `title` and `tags`. Links to source documents use wikilink syntax `[[document-slug]]`.
+**KBA analyst** — KBA records go in `lib/data/kba_catalog/records/`. Frontmatter must include at least `title` and `tags`. Links to source documents use wikilink syntax `[[document-slug]]`.
 
 **Developer (scripts writing `.md` to vault)** — every script must produce: (1) valid frontmatter, (2) images with path relative to the `.md` file, (3) wikilinks for internal vault links. No absolute paths in output.

@@ -1,8 +1,7 @@
-"""Entry point for ``python tools/knowledge_base/main.py``.
+"""Entry point — DISMESSO.
 
-Registers the module so it can also be run as::
-
-    python -m tools.knowledge_base.main
+Il tool ``kb_search`` è stato incorporato in Synapsis.
+Vedi ``tools/synapsis/server.py`` → ``knowledge_search``.
 """
 
 from tools.knowledge_base.server import main_server

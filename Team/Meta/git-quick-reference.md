@@ -29,7 +29,7 @@ git ls-files
 
 # Controllare se un file specifico è tracciato
 git ls-files uv.lock
-git ls-files Library/
+git ls-files lib/
 
 # File "ignorati ma tracciati" (dovrebbe essere vuoto)
 git ls-files --cached --ignored --exclude-standard

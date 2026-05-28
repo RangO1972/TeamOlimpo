@@ -9,33 +9,35 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from tools.common.paths import project_root
+
 # ---------------------------------------------------------------------------
-# Root del progetto — quattro livelli su rispetto a tools/kba/merger/
+# Root del progetto
 # ---------------------------------------------------------------------------
-PROJECT_ROOT: Path = Path(__file__).resolve().parent.parent.parent.parent
+PROJECT_ROOT: Path = project_root()
 
 # ---------------------------------------------------------------------------
 # Path catalogo KBA
 # ---------------------------------------------------------------------------
-CATALOG_DIR: Path = PROJECT_ROOT / "Library" / "data" / "kba_catalog"
+CATALOG_DIR: Path = PROJECT_ROOT / "lib" / "data" / "kba_catalog"
 RECORDS_DIR: Path = CATALOG_DIR / "records"
 INDEX_FILE: Path = CATALOG_DIR / "index.yaml"
 
 # ---------------------------------------------------------------------------
 # Path documenti convertiti
 # ---------------------------------------------------------------------------
-DOCUMENTS_DIR: Path = PROJECT_ROOT / "Library" / "documents"
+DOCUMENTS_DIR: Path = PROJECT_ROOT / "lib" / "documents"
 
 # ---------------------------------------------------------------------------
 # Inbox / Output
 # ---------------------------------------------------------------------------
 INBOX_DIR: Path = PROJECT_ROOT / "Team" / "Inbox"
-OUTPUT_DIR: Path = PROJECT_ROOT / "Library" / "deliverables"
+OUTPUT_DIR: Path = PROJECT_ROOT / "lib" / "deliverables"
 
 # ---------------------------------------------------------------------------
 # Log
 # ---------------------------------------------------------------------------
-LOG_FILE: Path = PROJECT_ROOT / "Library" / "data" / "kba_merger.log"
+LOG_FILE: Path = PROJECT_ROOT / "lib" / "data" / "kba_merger.log"
 
 # ---------------------------------------------------------------------------
 # Siti noti — ordine di priorita' nel match case-insensitive
@@ -81,11 +83,11 @@ HEADER_FG_COLOR: str = "FFFFFF"
 # Colori Risk Level (colonna J) — (bg_hex, fg_hex)
 # ---------------------------------------------------------------------------
 RISK_LEVEL_COLORS: dict[str, tuple[str, str]] = {
-    "critical":      ("C00000", "FFFFFF"),
-    "warning":       ("FF0000", "FFFFFF"),
-    "advisory":      ("FF9900", "000000"),
+    "critical": ("C00000", "FFFFFF"),
+    "warning": ("FF0000", "FFFFFF"),
+    "advisory": ("FF9900", "000000"),
     "informational": ("FFFF00", "000000"),
-    "negligible":    ("92D050", "000000"),
+    "negligible": ("92D050", "000000"),
 }
 
 # ---------------------------------------------------------------------------
@@ -94,5 +96,5 @@ RISK_LEVEL_COLORS: dict[str, tuple[str, str]] = {
 GAP_STATUS_COLORS: dict[str, str] = {
     "da_convertire": "FF9900",
     "da_analizzare": "FFFF00",
-    "ok":            "92D050",
+    "ok": "92D050",
 }

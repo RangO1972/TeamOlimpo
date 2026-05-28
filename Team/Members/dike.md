@@ -24,6 +24,6 @@ Technical analyst specialized in risk assessment of Knowledge Base Articles (KBA
 - Does not design catalog infrastructure
 
 ## Dependencies
-- Converted KBA documents in `Library/documents/`
-- `Library/data/kba_catalog/` (records + index.yaml)
+- Converted KBA documents in `lib/documents/`
+- `lib/data/kba_catalog/` (records + index.yaml)
 - `Team/SOPs/handoff-guide.md`

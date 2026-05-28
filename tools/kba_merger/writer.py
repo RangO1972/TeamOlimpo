@@ -34,6 +34,7 @@ from tools.kba_merger.config import (
 # Utilita' stile
 # ---------------------------------------------------------------------------
 
+
 def _make_header_fill() -> PatternFill:
     return PatternFill("solid", fgColor=HEADER_BG_COLOR)
 
@@ -61,6 +62,7 @@ def _top_alignment() -> Alignment:
 # ---------------------------------------------------------------------------
 # Scrittura merge Excel
 # ---------------------------------------------------------------------------
+
 
 def write_merge_excel(
     rows: list[dict[str, Any]],
@@ -180,7 +182,7 @@ def write_merge_excel(
     # --- Protezione foglio ---
     ws.protection.sheet = True
     ws.protection.enable()
-    ws.protection.sort = False        # allowSort=True -> sort NON bloccato
+    ws.protection.sort = False  # allowSort=True -> sort NON bloccato
     ws.protection.autoFilter = False  # allowFiltering=True -> filter NON bloccato
 
     wb.save(output_path)
@@ -191,6 +193,7 @@ def write_merge_excel(
 # ---------------------------------------------------------------------------
 # Scrittura gap report testuale
 # ---------------------------------------------------------------------------
+
 
 def write_gap_txt(
     gap_rows: list[dict[str, Any]],
@@ -216,6 +219,7 @@ def write_gap_txt(
 
     total = len(gap_rows)
     ok_count = sum(1 for r in gap_rows if r["stato"] == "ok")
+    da_rianalizzare = [r for r in gap_rows if r["stato"] == "da_rianalizzare"]
     da_analizzare = [r for r in gap_rows if r["stato"] == "da_analizzare"]
     da_convertire = [r for r in gap_rows if r["stato"] == "da_convertire"]
 
@@ -224,6 +228,7 @@ def write_gap_txt(
         "=" * 30,
         f"Totale KBA nel file DeltaV:    {total}",
         f"In catalogo (ok):              {ok_count}",
+        f"Documento riconvertito, da rianalizzare: {len(da_rianalizzare)}",
         f"PDF convertito, manca analisi: {len(da_analizzare)}",
         f"Da convertire (PDF non trovato): {len(da_convertire)}",
         "",
@@ -232,6 +237,12 @@ def write_gap_txt(
     if da_convertire:
         lines.append("--- DA CONVERTIRE ---")
         for r in da_convertire:
+            lines.append(r["kba_number"])
+        lines.append("")
+
+    if da_rianalizzare:
+        lines.append("--- DA RIANALIZZARE ---")
+        for r in da_rianalizzare:
             lines.append(r["kba_number"])
         lines.append("")
 
@@ -249,6 +260,7 @@ def write_gap_txt(
 # ---------------------------------------------------------------------------
 # Scrittura gap report Excel
 # ---------------------------------------------------------------------------
+
 
 def write_gap_excel(
     gap_rows: list[dict[str, Any]],
@@ -283,8 +295,13 @@ def write_gap_excel(
     has_refs = any(r.get("referenced_by") for r in gap_rows)
 
     gap_headers = [
-        "KBA Number", "Published", "Category", "Disposition Status",
-        "Title", "Occorrenze", "Stato",
+        "KBA Number",
+        "Published",
+        "Category",
+        "Disposition Status",
+        "Title",
+        "Occorrenze",
+        "Stato",
     ]
     gap_widths = [16, 12, 14, 18, 50, 12, 16]
     if has_refs:

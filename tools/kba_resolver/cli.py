@@ -36,6 +36,7 @@ app = typer.Typer(
 # Configurazione logging
 # ---------------------------------------------------------------------------
 
+
 def _setup_logging(verbose: bool = False) -> None:
     """
     Configura loguru: handler su file + stderr.
@@ -68,6 +69,7 @@ def _setup_logging(verbose: bool = False) -> None:
 # Callback globale (verbose)
 # ---------------------------------------------------------------------------
 
+
 @app.callback()
 def common(
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Output debug su stderr."),
@@ -79,6 +81,7 @@ def common(
 # ---------------------------------------------------------------------------
 # Utilita' lettura Excel input
 # ---------------------------------------------------------------------------
+
 
 def _read_deltav_excel(path: Path) -> tuple[list[str], list[dict[str, Any]]]:
     """
@@ -128,6 +131,7 @@ def _read_deltav_excel(path: Path) -> tuple[list[str], list[dict[str, Any]]]:
 # Risoluzione path input
 # ---------------------------------------------------------------------------
 
+
 def _resolve_input(raw: Path) -> Path:
     """
     Risolve il path di input: se relativo, lo considera rispetto a PROJECT_ROOT.
@@ -149,6 +153,7 @@ def _resolve_input(raw: Path) -> Path:
 # ---------------------------------------------------------------------------
 # Stampa ad albero dipendenze
 # ---------------------------------------------------------------------------
+
 
 def _print_tree(kba_ids: list[str], tree: dict[str, list[str]]) -> None:
     """
@@ -202,6 +207,7 @@ def _print_tree(kba_ids: list[str], tree: dict[str, list[str]]) -> None:
 # Comando principale: resolve
 # ---------------------------------------------------------------------------
 
+
 @app.command()
 def resolve(
     input: Path = typer.Argument(
@@ -222,7 +228,7 @@ def resolve(
     Legge le KBA dal file Excel DeltaV e mappa le dipendenze documentali.
 
     Naviga ricorsivamente i fix_reference fino a MAX_DEPTH livelli e verifica
-    quali documenti dipendenti sono gia' presenti in Library/documents/.
+    quali documenti dipendenti sono gia' presenti in lib/documents/.
 
     Exit code 0 se nessun documento mancante, 1 se ci sono mancanti.
     """
@@ -236,7 +242,10 @@ def resolve(
     # Valida estensione
     if resolved.suffix.lower() != ".xlsx":
         logger.error(f"File non valido (atteso .xlsx): {resolved.name}")
-        console.print(f"[bold red]Errore:[/bold red] il file deve essere .xlsx, ricevuto: {resolved.suffix}", stderr=True)
+        console.print(
+            f"[bold red]Errore:[/bold red] il file deve essere .xlsx, ricevuto: {resolved.suffix}",
+            stderr=True,
+        )
         raise typer.Exit(1)
 
     logger.debug(f"Input risolto: {resolved}")
@@ -275,7 +284,9 @@ def resolve(
     # --- Output ---
 
     if not all_deps:
-        console.print("[green]Nessuna dipendenza trovata -- tutti i documenti necessari sono presenti.[/green]")
+        console.print(
+            "[green]Nessuna dipendenza trovata -- tutti i documenti necessari sono presenti.[/green]"
+        )
         raise typer.Exit(0)
 
     # Albero dipendenze
@@ -288,7 +299,7 @@ def resolve(
 
     # Ordine: prima presenti, poi mancanti — alfabetico dentro ogni gruppo
     for slug in sorted(present):
-        console.print(f"  [green]OK[/green]  [dim]{slug:<30}[/dim]  presente in Library/documents/")
+        console.print(f"  [green]OK[/green]  [dim]{slug:<30}[/dim]  presente in lib/documents/")
     for slug in sorted(missing):
         console.print(f"  [red]NO[/red]  [cyan]{slug:<30}[/cyan]  [bold red]MANCANTE[/bold red]")
 

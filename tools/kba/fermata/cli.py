@@ -100,7 +100,9 @@ def main(
         for r in empty_rows:
             console.print(f"  [yellow]{r['kba_number']}[/yellow]  {r['title'][:60]}")
         console.print()
-        console.print("Compila la colonna 'Stefano's Notes' per tutte le righe aperte, poi rilancia.")
+        console.print(
+            "Compila la colonna 'Stefano's Notes' per tutte le righe aperte, poi rilancia."
+        )
         raise typer.Exit(code=1)
     # ─────────────────────────────────────────────────────────────────────────
 
@@ -119,7 +121,7 @@ def main(
 
     # Riepilogo per sito
     for site, data in patch_data.items():
-        n_ws  = len(data.get("workstation_ms", {}))
+        n_ws = len(data.get("workstation_ms", {}))
         n_srv = len(data.get("server_ms", {}))
-        n_fw  = len(data.get("firmware", {}))
+        n_fw = len(data.get("firmware", {}))
         console.print(f"  {site}: {n_ws} file WS, {n_srv} file SRV, {n_fw} firmware")

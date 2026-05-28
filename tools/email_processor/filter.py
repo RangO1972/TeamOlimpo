@@ -66,8 +66,11 @@ class RuleEngine:
 
     # Operatori supportati per campo
     _SUPPORTED_OPS = {
-        "contains", "starts_with", "ends_with",
-        "contains_regex", "not_contains",
+        "contains",
+        "starts_with",
+        "ends_with",
+        "contains_regex",
+        "not_contains",
     }
 
     def __init__(self, rules_path: Path | None = None) -> None:
@@ -119,9 +122,7 @@ class RuleEngine:
             action = rule.get("action")
 
             if action not in ("discard", "aggregate", "keep"):
-                logger.warning(
-                    f"Regola {rule_id}: action '{action}' non valida, saltata"
-                )
+                logger.warning(f"Regola {rule_id}: action '{action}' non valida, saltata")
                 continue
 
             if "match" not in rule or not isinstance(rule["match"], dict):
@@ -129,9 +130,7 @@ class RuleEngine:
                 continue
 
             if action == "aggregate" and not rule.get("aggregate_to"):
-                logger.warning(
-                    f"Regola {rule_id}: action='aggregate' ma aggregate_to mancante"
-                )
+                logger.warning(f"Regola {rule_id}: action='aggregate' ma aggregate_to mancante")
                 continue
 
             # Default priority
@@ -140,15 +139,12 @@ class RuleEngine:
             # Validazione operatori
             for field, conditions in rule["match"].items():
                 if not isinstance(conditions, dict):
-                    logger.warning(
-                        f"Regola {rule_id}: match.{field} non è un dict, saltata"
-                    )
+                    logger.warning(f"Regola {rule_id}: match.{field} non è un dict, saltata")
                     continue
                 for op in conditions:
                     if op not in self._SUPPORTED_OPS:
                         logger.warning(
-                            f"Regola {rule_id}: operatore '{op}' non supportato "
-                            f"in match.{field}"
+                            f"Regola {rule_id}: operatore '{op}' non supportato in match.{field}"
                         )
 
             validated.append(rule)
@@ -160,8 +156,7 @@ class RuleEngine:
         self._sorted_rules = validated
 
         logger.info(
-            f"Regole caricate: {len(validated)}/{len(raw_rules)} valide "
-            f"(versione {version})"
+            f"Regole caricate: {len(validated)}/{len(raw_rules)} valide (versione {version})"
         )
 
     # ------------------------------------------------------------------
@@ -196,10 +191,7 @@ class RuleEngine:
                 )
 
         # Fallback: nessuna regola matchata
-        logger.debug(
-            f"Nessuna regola matchata per subject: "
-            f"{email_data.get('subject', '')[:60]}"
-        )
+        logger.debug(f"Nessuna regola matchata per subject: {email_data.get('subject', '')[:60]}")
         return ClassificationResult(
             action="keep",
             rule_id="__fallback__",

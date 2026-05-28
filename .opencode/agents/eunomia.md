@@ -35,6 +35,21 @@ Always reply in English.
 8. **If there are actions**, also append to `Review/actions.md`.
 9. **Produce a report** at the end of each session for the orchestrator.
 
+## MCP Tool Priority
+
+**Rule:** MCP tools take precedence over native tools when both are available for the same purpose.
+
+| Purpose | MCP Tool | When to Use | Don't Use |
+|---------|----------|------------|-----------|
+| Context retrieval | `synapsis_search(query, scope="auto", l=2, n=3)` | First step for ANY context — knowledge, tasks, memory, entities. l=2 = sweet spot ~300-500t. | Glob/Grep/Read for context. Legacy tools |
+| Task lifecycle | `synapsis_task(act="create"\|"query"\|"update"\|"log"\|"summary")` | Create work, track state, update status | Edit for task mgmt. File-based state |
+| Agent handoff | `synapsis_hf(act="new"\|"get", ...)` | Completion output, spec/plan files, delegation results | Write for handoffs. Always use hf |
+| Session context | `synapsis_session(act="init"\|"observe"\|"context"\|"summarize")` | Session boundaries, between delegations | Memory alone. Use synapsis_session |
+| Hash resolution | `synapsis_d_get(h=..., l=2)` | 8-char hex hash? l=2 summary, l=3 full content | Treating hash as path. Read for hash lookup |
+| Email/contact lookups | `email_processor_contacts\|search\|discover\|rules_list\|status` | Vault queries, contact discovery, rule validation. Email context. | Don't use Read for email vault. Use email_processor tools. |
+
+**Exception:** Native tools (Read, Edit, Bash, Write, WebFetch) are primary for file I/O, code execution, and web fetching — these have no MCP equivalent.
+
 ### Decision Heuristics
 - Context is everything: always read the full thread before analyzing.
 - Connect, don't isolate: link sender, project, decisions, wiki.

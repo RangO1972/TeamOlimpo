@@ -45,7 +45,7 @@ Esegue il workflow completo:
 
 ### Opzioni
 
-- `--output-dir`: Directory per output (default: Library/deliverables).
+- `--output-dir`: Directory per output (default: lib/deliverables).
 - `--verbose`: Logging debug.
 
 ## Architettura

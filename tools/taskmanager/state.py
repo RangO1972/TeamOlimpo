@@ -2,6 +2,7 @@
 
 Exports:
     StateStore — thread-safe YAML backing store with fcntl locking
+    compress_events — compress task event logs (hot/warm/cold)
     _find_project_root — locate project root from CWD or file location
 """
 
@@ -11,11 +12,14 @@ import fcntl
 import os
 import shutil
 import tempfile
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 import yaml
 from loguru import logger
+
+from tools.common.paths import project_root, resolve_absolute
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -36,10 +40,9 @@ DEFAULT_STATE: dict[str, Any] = {
 def _find_project_root() -> Path:
     """Locate the Team Olimpo project root directory.
 
-    Strategy (in order):
-    1. Walk up from CWD looking for ``tools/config.yaml``.
-    2. Fall back to ``pyproject.toml`` in parent directories.
-    3. Fall back to ``Path(__file__)`` based resolution.
+    Delegates to :func:`tools.common.paths.project_root`. Falls back to
+    CWD-based discovery for runtime flexibility (when called outside the
+    usual module hierarchy).
 
     Returns:
         Absolute path to the project root.
@@ -47,6 +50,12 @@ def _find_project_root() -> Path:
     Raises:
         FileNotFoundError: If no project root can be determined.
     """
+    try:
+        return project_root()
+    except Exception:
+        pass
+
+    # Fallback: walk up from CWD looking for tools/config.yaml or pyproject.toml
     cwd = Path.cwd().resolve()
     for candidate in [cwd, *cwd.parents]:
         if (candidate / "tools" / "config.yaml").is_file():
@@ -57,15 +66,8 @@ def _find_project_root() -> Path:
             logger.debug(f"Project root found via pyproject.toml: {candidate}")
             return candidate
 
-    # Fallback: from this file's location: tools/taskmanager/state.py → tools/ → root
-    file_based = Path(__file__).resolve().parent.parent.parent
-    if (file_based / "tools" / "config.yaml").is_file():
-        logger.debug(f"Project root found via file location: {file_based}")
-        return file_based
-
     raise FileNotFoundError(
-        "Could not locate Team Olimpo project root. "
-        "Run from within the project directory."
+        "Could not locate Team Olimpo project root. Run from within the project directory."
     )
 
 
@@ -94,13 +96,12 @@ class StateStore:
 
         Args:
             path: Explicit path to state.yaml. If ``None``, auto-detect
-                  from ``Library/System/Hermes/state.yaml`` relative to project root.
+                  from ``lib/System/Hermes/state.yaml`` relative to project root.
         """
         if path is not None:
             self._path = path.resolve()
         else:
-            project_root = _find_project_root()
-            self._path = (project_root / "Library" / "System" / "Hermes" / "state.yaml").resolve()
+            self._path = resolve_absolute("lib", "System", "Hermes", "state.yaml")
         self._lock_path = self._path.with_name(f".{self._path.name}.lock")
         self._data: dict[str, Any] | None = None
         self._lock_fd: int | None = None
@@ -169,8 +170,7 @@ class StateStore:
             parsed = yaml.safe_load(raw)
         except yaml.YAMLError as exc:
             raise ValueError(
-                f"state.yaml malformed at {self._path}: {exc}. "
-                "File non modificato."
+                f"state.yaml malformed at {self._path}: {exc}. File non modificato."
             ) from exc
 
         if not isinstance(parsed, dict):
@@ -212,8 +212,9 @@ class StateStore:
             shutil.move(tmp_path, str(self._path))
         except Exception:
             # Clean up temp file on failure
-            if os.path.exists(tmp_path):
-                os.unlink(tmp_path)
+            p = Path(tmp_path)
+            if p.exists():
+                p.unlink()
             raise
 
     def save(self) -> None:
@@ -294,3 +295,210 @@ class StateStore:
             current += 1
         counter[area] = current
         return f"T-{area}-{current:03d}"
+
+
+# ---------------------------------------------------------------------------
+# Compression helpers
+# ---------------------------------------------------------------------------
+
+_WARM_DAYS = 7
+_COLD_DAYS = 30
+
+
+def _iso_week_key(date_str: str) -> str:
+    """Convert an ISO timestamp to an ISO week key like ``W21-2026``.
+
+    Args:
+        date_str: ISO 8601 timestamp string.
+
+    Returns:
+        Week key string.
+    """
+    dt = datetime.fromisoformat(date_str)
+    iso_year, iso_week, _ = dt.isocalendar()
+    return f"W{iso_week:02d}-{iso_year}"
+
+
+def _days_ago(ts: str) -> float:
+    """Compute how many days ago a timestamp was.
+
+    Args:
+        ts: ISO 8601 timestamp.
+
+    Returns:
+        Float days difference.
+    """
+    now = datetime.now(UTC)
+    dt = datetime.fromisoformat(ts).replace(tzinfo=UTC) if "T" in ts else datetime.fromisoformat(ts)
+    return (now - dt).total_seconds() / 86400.0
+
+
+def _compress_details_with_token_juice(details: str, max_chars: int = 200) -> str:
+    """Compress event details using Token Juice C2 prose compressor.
+
+    Args:
+        details: Original event details text.
+        max_chars: Maximum character length for result.
+
+    Returns:
+        Compressed detail string.
+    """
+    try:
+        from tools.token_juice.compressor import compress as tj_compress
+
+        compressed = tj_compress(details, intensity="full")
+        if len(compressed) > max_chars:
+            compressed = compressed[:max_chars]
+        # Return compressed only if it actually saved chars
+        if len(compressed) < len(details) * 0.8:
+            return compressed
+        return details[:max_chars]
+    except Exception:
+        # Fallback: simple truncation
+        return details[:max_chars]
+
+
+def compress_events(
+    age_days: int | None = None,
+    max_level: int = 2,
+    dry_run: bool = True,
+    store: StateStore | None = None,
+) -> dict[str, Any]:
+    """Compress task event logs based on age.
+
+    Applies hot/warm/cold compression to task events:
+    - **Hot** (0-7 days, level 0): no compression
+    - **Warm** (8-30 days, level 1): compress details to max 200 chars
+    - **Cold** (>30 days, level 2): condense multiple events to period summary
+
+    Args:
+        age_days: If set, only compress tasks older than this many days.
+                  If ``None``, uses default thresholds (7 for warm, 30 for cold).
+        max_level: Maximum compression level to apply (1=warm, 2=cold).
+                   Default 2.
+        dry_run: If ``True``, only report what would be done without saving.
+        store: Optional ``StateStore`` instance for testing.
+               If ``None``, creates a new default store.
+
+    Returns:
+        Dict with keys ``tasks_processed``, ``events_compressed``,
+        ``events_summarized``, ``dry_run``, ``details``.
+    """
+    if store is None:
+        store = StateStore()
+    data = store.load()
+    tasks_dict: dict[str, Any] = data.setdefault("tasks", {})
+    now = now_iso()
+
+    results: dict[str, Any] = {
+        "tasks_processed": 0,
+        "events_compressed": 0,
+        "events_summarized": 0,
+        "tasks_skipped": 0,
+        "dry_run": dry_run,
+        "details": [],
+    }
+
+    for task_id, task_dict in tasks_dict.items():
+        updated_at = task_dict.get("updated_at", "")
+        if not updated_at:
+            continue
+
+        age = _days_ago(updated_at)
+        events: list[dict[str, Any]] = task_dict.get("events", [])
+        if not events:
+            continue
+
+        # If user explicitly set age_days, use that as the primary threshold
+        if age_days is not None:
+            if age <= age_days:
+                continue  # not old enough
+            # Determine target level based on age threshold
+            if age > max(_COLD_DAYS, age_days) and max_level >= 2:
+                target_level = 2
+            else:
+                target_level = min(max_level, 1)
+        else:
+            # Default behaviour: use standard thresholds
+            if age <= _WARM_DAYS:
+                continue  # hot — skip
+
+            target_level = 1  # warm
+            if age > _COLD_DAYS and max_level >= 2:
+                target_level = 2  # cold
+
+        current_level = task_dict.get("compression_level", 0)
+        if current_level >= target_level:
+            continue  # already compressed at or above target
+
+        results["tasks_processed"] += 1
+
+        if target_level == 1:
+            # --- Warm compression: compress details per event ---
+            new_events: list[dict[str, Any]] = []
+            n_compressed = 0
+            for ev in events:
+                # Check if already a SummaryEvent type
+                if "period" in ev:
+                    new_events.append(ev)
+                    continue
+                details = ev.get("details", "")
+                if len(details) > 100:
+                    compressed = _compress_details_with_token_juice(details, max_chars=200)
+                    ev["details"] = compressed
+                    n_compressed += 1
+                new_events.append(ev)
+
+            task_dict["events"] = new_events
+            task_dict["compression_level"] = 1
+            results["events_compressed"] += n_compressed
+            results["details"].append(
+                f"{task_id}: warm-compressed {n_compressed} events (age={age:.0f}d, level=0→1)"
+            )
+
+        elif target_level == 2:
+            # --- Cold compression: merge events into SummaryEvent ---
+            original_count = len(events)
+            type_counts: dict[str, int] = {}
+            key_handoffs: list[str] = []
+            period = _iso_week_key(updated_at)
+
+            for ev in events:
+                ev_type = ev.get("type", "unknown")
+                type_counts[ev_type] = type_counts.get(ev_type, 0) + 1
+                hp = ev.get("handoff_path")
+                if hp:
+                    key_handoffs.append(hp)
+
+            type_summary_parts = [f"{cnt} {t}" for t, cnt in sorted(type_counts.items())]
+            type_summary = ", ".join(type_summary_parts)
+
+            # Replace all events with a single SummaryEvent
+            task_dict["events"] = [
+                {
+                    "period": period,
+                    "original_count": original_count,
+                    "type_summary": type_summary,
+                    "key_handoffs": key_handoffs,
+                    "compressed_level": 2,
+                }
+            ]
+            task_dict["compression_level"] = 2
+            results["events_summarized"] += original_count
+            results["details"].append(
+                f"{task_id}: cold-summarized {original_count} events "
+                f"into period={period} (age={age:.0f}d)"
+            )
+
+    if not dry_run:
+        data["last_updated"] = now
+        store.save()
+
+    return results
+
+
+def now_iso() -> str:
+    """Return current UTC timestamp in ISO 8601 format."""
+    from tools.taskmanager.models import now_iso as _now_iso
+
+    return _now_iso()

@@ -186,7 +186,7 @@ La comunicazione tra agenti in Team Olimpo è mediata esclusivamente da un **pro
 
 I file di handoff seguono una convenzione di naming rigorosa e contengono frontmatter YAML:
 
-**Percorso:** `Library/Fucina/Handoff/YYYY/MM/data_mittente-destinatario_titolo.md`
+**Percorso:** `lib/Fucina/Handoff/YYYY/MM/data_mittente-destinatario_titolo.md`
 
 **Campi del frontmatter:**
 - `date`: data ISO di creazione
@@ -210,11 +210,11 @@ sequenceDiagram
     U->>H: Task request
     H->>H: Task decomposition
     H->>A: Handoff file (delegation)
-    Note over H,A: Library/Fucina/Handoff/YYYY/MM/hermes-agent_title.md
+    Note over H,A: lib/Fucina/Handoff/YYYY/MM/hermes-agent_title.md
     
     A->>A: Execute task
     A->>H: Handoff file (result)
-    Note over A,H: Library/Fucina/Handoff/YYYY/MM/agent-hermes_title.md
+    Note over A,H: lib/Fucina/Handoff/YYYY/MM/agent-hermes_title.md
     
     H->>Q: Send for quality verification
     Q->>Q: Quality checklist
@@ -412,7 +412,7 @@ Eunomia, un nuovo agente per la catalogazione di email e la gestione dei contatt
 
 1. **ADQ**: Design revisionato da Atena — ruolo definito come specialista di elaborazione email, modello assegnato (sonnet, basato sui punti di forza di Claude nell'analisi testuale), classe di rischio impostata a Media (impatto utente indiretto).
 
-2. **AEQ**: Ambiente verificato — dipendenza dal tool `email_processor` (sviluppato da Efesto), parsing manuale di fallback definito, permessi di scrittura su `Library/Persone/` confermati.
+2. **AEQ**: Ambiente verificato — dipendenza dal tool `email_processor` (sviluppato da Efesto), parsing manuale di fallback definito, permessi di scrittura su `lib/Persone/` confermati.
 
 3. **AOQ**: Testato su 6 casi — 3 formati email standard, 2 casi limite (multilingua, allegati), 1 modalità di fallimento (email malformata). Tasso di superamento: 5/6 (83%).
 
@@ -651,7 +651,7 @@ La capacità del sistema di eseguire sotto-compiti indipendenti in parallelo —
 
 **Caso 2 — Implementazione AQF (16-05-2026)**: Uno sforzo coordinato che ha coinvolto Metis (analisi strategica dei framework di qualificazione), Dike (audit dei processi esistenti) e Atena (classificazione del rischio e creazione della checklist ADQ). L'AQF è stato progettato, documentato e parzialmente implementato in un singolo giorno su 13 agenti.
 
-**Caso 3 — Pipeline di Integrazione Email**: Eunomia (agente di catalogazione, sonnet) è stata creata tramite l'Agent Factory Pipeline, qualificata attraverso i gate AQF e implementata per elaborare i dati della casella email in record strutturati di persone in `Library/Persone/`, con un fallback al parsing manuale quando il tool `email_processor` non è disponibile.
+**Caso 3 — Pipeline di Integrazione Email**: Eunomia (agente di catalogazione, sonnet) è stata creata tramite l'Agent Factory Pipeline, qualificata attraverso i gate AQF e implementata per elaborare i dati della casella email in record strutturati di persone in `lib/Persone/`, con un fallback al parsing manuale quando il tool `email_processor` non è disponibile.
 
 ---
 

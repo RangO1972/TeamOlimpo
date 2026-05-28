@@ -60,8 +60,7 @@ class GrokProvider:
             from openai import OpenAI
         except ImportError as exc:
             raise ImportError(
-                "La libreria 'openai' non e' installata. "
-                "Esegui: uv add openai"
+                "La libreria 'openai' non e' installata. Esegui: uv add openai"
             ) from exc
 
         self._api_key = api_key
@@ -105,13 +104,10 @@ class GrokProvider:
             from xai_sdk.chat import user as xai_user
         except ImportError as exc:
             raise ImportError(
-                "La libreria 'xai_sdk' non e' installata. "
-                "Esegui: uv add xai-sdk"
+                "La libreria 'xai_sdk' non e' installata. Esegui: uv add xai-sdk"
             ) from exc
 
-        logger.debug(
-            f"GrokProvider (multi-agent): modello={model}, agent_count={agent_count}"
-        )
+        logger.debug(f"GrokProvider (multi-agent): modello={model}, agent_count={agent_count}")
 
         try:
             xai_client = XaiClient(api_key=self._api_key)
@@ -144,13 +140,11 @@ class GrokProvider:
             usage = getattr(final_response, "usage", None)
             if usage is not None:
                 # xai_sdk usa nomi diversi da openai — proviamo entrambi
-                input_tokens = (
-                    getattr(usage, "input_tokens", None)
-                    or getattr(usage, "prompt_tokens", None)
+                input_tokens = getattr(usage, "input_tokens", None) or getattr(
+                    usage, "prompt_tokens", None
                 )
-                output_tokens = (
-                    getattr(usage, "output_tokens", None)
-                    or getattr(usage, "completion_tokens", None)
+                output_tokens = getattr(usage, "output_tokens", None) or getattr(
+                    usage, "completion_tokens", None
                 )
 
         logger.debug(
@@ -206,7 +200,9 @@ class GrokProvider:
             messages.append({"role": "system", "content": system})
         messages.append({"role": "user", "content": prompt})
 
-        logger.debug(f"GrokProvider: chiamata a modello={effective_model}, messaggi={len(messages)}")
+        logger.debug(
+            f"GrokProvider: chiamata a modello={effective_model}, messaggi={len(messages)}"
+        )
 
         start = time.monotonic()
         try:
@@ -404,10 +400,7 @@ class GrokProvider:
         # Aggiunge modelli multi-agent (non esposti da /v1/models)
         ids.update(_KNOWN_MULTI_AGENT_MODELS)
 
-        models = [
-            ModelInfo(id=mid, is_default=(mid == self.default_model))
-            for mid in sorted(ids)
-        ]
+        models = [ModelInfo(id=mid, is_default=(mid == self.default_model)) for mid in sorted(ids)]
         logger.debug(f"GrokProvider: {len(models)} modelli trovati")
         return models
 
@@ -415,6 +408,7 @@ class GrokProvider:
 # ---------------------------------------------------------------------------
 # Sessione stateful via Responses API
 # ---------------------------------------------------------------------------
+
 
 class GrokChatSession:
     """

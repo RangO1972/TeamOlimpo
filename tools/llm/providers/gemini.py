@@ -128,8 +128,7 @@ class GeminiProvider:
             from google import genai
         except ImportError as exc:
             raise ImportError(
-                "La libreria 'google-genai' non e' installata. "
-                "Esegui: uv add google-genai"
+                "La libreria 'google-genai' non e' installata. Esegui: uv add google-genai"
             ) from exc
 
         self._client = genai.Client(api_key=api_key)
@@ -167,7 +166,9 @@ class GeminiProvider:
                 system_instruction=system,
             )
 
-        logger.debug(f"GeminiProvider: chiamata a modello={effective_model}, system={'si' if system else 'no'}")
+        logger.debug(
+            f"GeminiProvider: chiamata a modello={effective_model}, system={'si' if system else 'no'}"
+        )
 
         start = time.monotonic()
         try:

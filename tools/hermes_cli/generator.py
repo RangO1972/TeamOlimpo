@@ -31,6 +31,7 @@ ROOT_DIR = PROJECT_ROOT
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _slugify(text: str, max_words: int = 5) -> str:
     """
     Converte un testo in slug kebab-case.
@@ -49,21 +50,21 @@ def _slugify(text: str, max_words: int = 5) -> str:
         Slug kebab-case.
     """
     # Normalizza unicode (scompone caratteri accentati)
-    text = unicodedata.normalize('NFKD', text)
-    text = text.encode('ascii', 'ignore').decode('ascii')
+    text = unicodedata.normalize("NFKD", text)
+    text = text.encode("ascii", "ignore").decode("ascii")
     text = text.lower()
 
     # Sostituisce underscore con trattini
-    text = text.replace('_', '-')
+    text = text.replace("_", "-")
 
     # Rimuove caratteri non ammessi (solo lettere, numeri, trattini)
-    text = re.sub(r'[^a-z0-9-]', ' ', text)
+    text = re.sub(r"[^a-z0-9-]", " ", text)
 
     # Split in parole e tronca
     words = [w for w in text.split() if w]
     words = words[:max_words]
 
-    return '-'.join(words)
+    return "-".join(words)
 
 
 def _template_path(name: str) -> Path:
@@ -95,6 +96,7 @@ def _backup_file(file_path: Path) -> Path | None:
 # Template rendering
 # ---------------------------------------------------------------------------
 
+
 def _render_template(template_name: str, variables: dict[str, str]) -> str:
     """
     Legge un template e sostituisce i placeholder {{CHIAVE}}.
@@ -122,6 +124,7 @@ def _render_template(template_name: str, variables: dict[str, str]) -> str:
 # ---------------------------------------------------------------------------
 # scratchpad init
 # ---------------------------------------------------------------------------
+
 
 def init_scratchpad(
     agent_name: str,
@@ -161,9 +164,7 @@ def init_scratchpad(
     dest_file = dest_dir / "Scratchpad.md"
 
     if dest_file.exists() and not force:
-        result["errors"].append(
-            f"Il file esiste già: {dest_file}. Usa --force per sovrascrivere."
-        )
+        result["errors"].append(f"Il file esiste già: {dest_file}. Usa --force per sovrascrivere.")
         return result
 
     if dry_run:
@@ -182,12 +183,15 @@ def init_scratchpad(
     # Rendi il template
     today = date.today().isoformat()
     try:
-        content = _render_template("scratchpad-template.md", {
-            "NOME": agent_name,
-            "SLUG": slug,
-            "RUOLO": role,
-            "DATA": today,
-        })
+        content = _render_template(
+            "scratchpad-template.md",
+            {
+                "NOME": agent_name,
+                "SLUG": slug,
+                "RUOLO": role,
+                "DATA": today,
+            },
+        )
     except FileNotFoundError as exc:
         result["errors"].append(str(exc))
         return result
@@ -215,6 +219,7 @@ def init_scratchpad(
 # ---------------------------------------------------------------------------
 # handoff create
 # ---------------------------------------------------------------------------
+
 
 def create_handoff(
     tipo: str,
@@ -251,9 +256,7 @@ def create_handoff(
 
     # Valida tipo
     if tipo not in TIPI_HANDOFF:
-        result["errors"].append(
-            f"Tipo non valido: '{tipo}'. Validi: {', '.join(TIPI_HANDOFF)}"
-        )
+        result["errors"].append(f"Tipo non valido: '{tipo}'. Validi: {', '.join(TIPI_HANDOFF)}")
         return result
 
     # Valida destinatario
@@ -267,8 +270,7 @@ def create_handoff(
     # Valida mittente
     if mittente not in MEMBRI:
         result["errors"].append(
-            f"Mittente non valido: '{mittente}'. "
-            f"Validi: {', '.join(sorted(MEMBRI))}"
+            f"Mittente non valido: '{mittente}'. Validi: {', '.join(sorted(MEMBRI))}"
         )
         return result
 
@@ -281,7 +283,9 @@ def create_handoff(
 
     # Valida titolo
     if len(titolo) > 60:
-        result["warnings"].append(f"Titolo troppo lungo ({len(titolo)} caratteri, max 60). Verrà troncato.")
+        result["warnings"].append(
+            f"Titolo troppo lungo ({len(titolo)} caratteri, max 60). Verrà troncato."
+        )
         titolo = titolo[:57] + "..."
 
     if not titolo.strip():
@@ -320,23 +324,24 @@ def create_handoff(
 
     # Verifica collisioni
     if dest_file.exists() and not force:
-        result["errors"].append(
-            f"Il file esiste già: {dest_file}. Usa --force per sovrascrivere."
-        )
+        result["errors"].append(f"Il file esiste già: {dest_file}. Usa --force per sovrascrivere.")
         return result
 
     if dry_run:
         result["success"] = True
         result["path"] = str(dest_file)
         result["warnings"].append("Dry-run: nessun file creato.")
-        result["_content"] = _render_template("handoff-template.md", {
-            "DATA": data_str,
-            "MITTENTE": mittente,
-            "DESTINATARIO": destinatario,
-            "TIPO": tipo,
-            "TITOLO": titolo,
-            "PRIORITA": priorita,
-        })
+        result["_content"] = _render_template(
+            "handoff-template.md",
+            {
+                "DATA": data_str,
+                "MITTENTE": mittente,
+                "DESTINATARIO": destinatario,
+                "TIPO": tipo,
+                "TITOLO": titolo,
+                "PRIORITA": priorita,
+            },
+        )
         return result
 
     # Crea directory
@@ -344,14 +349,17 @@ def create_handoff(
 
     # Rendering template
     try:
-        content = _render_template("handoff-template.md", {
-            "DATA": data_str,
-            "MITTENTE": mittente,
-            "DESTINATARIO": destinatario,
-            "TIPO": tipo,
-            "TITOLO": titolo,
-            "PRIORITA": priorita,
-        })
+        content = _render_template(
+            "handoff-template.md",
+            {
+                "DATA": data_str,
+                "MITTENTE": mittente,
+                "DESTINATARIO": destinatario,
+                "TIPO": tipo,
+                "TITOLO": titolo,
+                "PRIORITA": priorita,
+            },
+        )
     except FileNotFoundError as exc:
         result["errors"].append(str(exc))
         return result
@@ -376,6 +384,7 @@ def create_handoff(
 # ---------------------------------------------------------------------------
 # Fix logic (validate --fix)
 # ---------------------------------------------------------------------------
+
 
 def _ensure_handoff_frontmatter(file_path: Path) -> dict[str, Any]:
     """
@@ -429,7 +438,12 @@ def _ensure_handoff_frontmatter(file_path: Path) -> dict[str, Any]:
             if len(mittente_dest) >= 2:
                 fm_destinatario = mittente_dest[1]
             if len(parts) >= 3:
-                fm_tipo = parts[2] if parts[2] in ("profilo", "specifica", "feedback", "bug", "report", "test", "nota") else "nota"
+                fm_tipo = (
+                    parts[2]
+                    if parts[2]
+                    in ("profilo", "specifica", "feedback", "bug", "report", "test", "nota")
+                    else "nota"
+                )
         except ValueError:
             pass
 
@@ -459,7 +473,9 @@ def _ensure_handoff_frontmatter(file_path: Path) -> dict[str, Any]:
     return result
 
 
-def fix_handoff_file(file_path: Path, fix_name: bool = True, fix_frontmatter: bool = True) -> dict[str, Any]:
+def fix_handoff_file(
+    file_path: Path, fix_name: bool = True, fix_frontmatter: bool = True
+) -> dict[str, Any]:
     """
     Applica --fix a un file handoff.
 

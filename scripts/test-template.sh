@@ -48,18 +48,18 @@ EXPECTED_DIRS=(
   ".opencode/agents"
   "Team"
   "Team/Members"
-  "Library/Fucina/Handoff"
-  "Library/Fucina/Hermes"
-  "Library/Fucina"
+  "lib/Fucina/Handoff"
+  "lib/Fucina/Hermes"
+  "lib/Fucina"
   "Inbox"
   "Owner's Inbox"
-  "Library"
+  "lib"
   "Team/Meta"
   "Team/Prompts"
-  "Library/assets/images"
-  "Library/documents"
-  "Library/data"
-  "Library/Wiki"
+  "lib/assets/images"
+  "lib/documents"
+  "lib/data"
+  "lib/Wiki"
   "tools"
   "tools/hermes_cli"
   "tools/llm"
@@ -78,7 +78,7 @@ EXPECTED_FILES=(
   "Team/Config.md"
   "Team/README.md"
   "Team/Members/Registro.md"
-  "Library/Fucina/Hermes/Scratchpad.md"
+  "lib/Fucina/Hermes/Scratchpad.md"
   "Team/Meta/strumenti-indice.md"
   "Team/Meta/llm-guida.md"
   "Team/Meta/hermes-cli-guida.md"
@@ -216,7 +216,7 @@ header "7. HANDOFF CREATION & VALIDATION"
 
 # Helper: extract handoff path from output (handles absolute paths)
 extract_handoff_path() {
-  echo "$1" | tr -d '\n' | grep -oE '/Library/Fucina/Handoff/[0-9]{4}/[0-9]{2}/[^/]+\.md' | head -1
+  echo "$1" | tr -d '\n' | grep -oE '/lib/Fucina/Handoff/[0-9]{4}/[0-9]{2}/[^/]+\.md' | head -1
 }
 
 # Create a test handoff (dry-run first)
@@ -381,7 +381,7 @@ check "python3 -c \"import json; c=json.load(open('$ROOT/opencode.json')); asser
 # =============================================================================
 header "13. HERMES SCRATCHPAD — PERSISTENT STATE"
 
-scratchpad="$ROOT/Library/Fucina/Hermes/Scratchpad.md"
+scratchpad="$ROOT/lib/Fucina/Hermes/Scratchpad.md"
 check "test -f '$scratchpad'" "Hermes scratchpad exists"
 
 # Validate scratchpad structure

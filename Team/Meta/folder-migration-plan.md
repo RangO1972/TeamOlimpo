@@ -1,12 +1,12 @@
 ---
-title: "Folder Migration Plan — Library/Fucina/ → Team/"
+title: "Folder Migration Plan — lib/Fucina/ → Team/"
 tags: [meta, migration, folder-structure]
 aliases: [folder-migration-plan, migration-plan]
 ---
 
-# Folder Migration Plan — `Library/Fucina/` → `Team/`
+# Folder Migration Plan — `lib/Fucina/` → `Team/`
 
-> Piano di migrazione per spostare il contenuto di `Library/Fucina/`
+> Piano di migrazione per spostare il contenuto di `lib/Fucina/`
 > nelle nuove destinazioni in `Team/`.
 >
 > **Stato**: 📋 Pianificato (non eseguito)
@@ -19,7 +19,7 @@ aliases: [folder-migration-plan, migration-plan]
 
 ### 0.1 Verifica stato iniziale
 
-- [ ] `Library/Fucina/` esiste ed è raggiungibile via symlink
+- [ ] `lib/Fucina/` esiste ed è raggiungibile via symlink
 - [ ] `Team/Handoff/` NON esiste ancora
 - [ ] `Team/Fucina/` NON esiste ancora
 - [ ] `Team/Hermes/` esiste già
@@ -30,8 +30,8 @@ aliases: [folder-migration-plan, migration-plan]
 
 - [ ] `git status` pulito (nessuna modifica non committata)
 - [ ] `git log --oneline -5` per riferimento
-- [ ] `Library/Fucina/` è dentro il symlink → backup automatico del repo Library
-- [ ] Opzionale: snapshot manuale di `Library/Fucina/Handoff/` (tar o cp -a)
+- [ ] `lib/Fucina/` è dentro il symlink → backup automatico del repo Library
+- [ ] Opzionale: snapshot manuale di `lib/Fucina/Handoff/` (tar o cp -a)
 
 ---
 
@@ -51,8 +51,8 @@ Team/Fucina/
 
 | Chiave | Valore vecchio | Valore nuovo |
 |--------|---------------|--------------|
-| `handoff.handoff_root` | `Library/Fucina/Handoff` | `Team/Handoff` |
-| `knowledge_base.search_paths[2]` | `Library/Fucina/Handoff/` | `Team/Handoff/` |
+| `handoff.handoff_root` | `lib/Fucina/Handoff` | `Team/Handoff` |
+| `knowledge_base.search_paths[2]` | `lib/Fucina/Handoff/` | `Team/Handoff/` |
 
 ---
 
@@ -71,22 +71,22 @@ Team/Fucina/
 
 ```bash
 # Struttura principale YYYY/MM/
-mv Library/Fucina/Handoff/2024   Team/Handoff/2024
-mv Library/Fucina/Handoff/2026   Team/Handoff/2026
+mv lib/Fucina/Handoff/2024   Team/Handoff/2024
+mv lib/Fucina/Handoff/2026   Team/Handoff/2026
 
 # Batch KBA
-mv Library/Fucina/Handoff/kba_batch   Team/Handoff/kba_batch
-mv Library/Fucina/Handoff/kba_batch2  Team/Handoff/kba_batch2
+mv lib/Fucina/Handoff/kba_batch   Team/Handoff/kba_batch
+mv lib/Fucina/Handoff/kba_batch2  Team/Handoff/kba_batch2
 
 # Altri
-mv Library/Fucina/Handoff/Legacy     Team/Handoff/Legacy
-mv Library/Fucina/Handoff/tucson     Team/Handoff/tucson
-mv Library/Fucina/Handoff/scripts    Team/Handoff/scripts
-mv Library/Fucina/Handoff/templates  Team/Handoff/templates
-mv Library/Fucina/Handoff/Registro.md Team/Handoff/Registro.md
+mv lib/Fucina/Handoff/Legacy     Team/Handoff/Legacy
+mv lib/Fucina/Handoff/tucson     Team/Handoff/tucson
+mv lib/Fucina/Handoff/scripts    Team/Handoff/scripts
+mv lib/Fucina/Handoff/templates  Team/Handoff/templates
+mv lib/Fucina/Handoff/Registro.md Team/Handoff/Registro.md
 
 # File sparsi nella root (se esistono)
-mv Library/Fucina/Handoff/2026-05-16_dike-hermes_mappatura-processi.md Team/Handoff/
+mv lib/Fucina/Handoff/2026-05-16_dike-hermes_mappatura-processi.md Team/Handoff/
 ```
 
 - [ ] Verificare count: `find Team/Handoff -name '*.md' | wc -l` → deve dare 370
@@ -94,16 +94,16 @@ mv Library/Fucina/Handoff/2026-05-16_dike-hermes_mappatura-processi.md Team/Hand
 ### 3.2 Hermes → `Team/Hermes/`
 
 ```bash
-mv Library/Fucina/Hermes/state.yaml Team/Hermes/state.yaml
-mv Library/Fucina/Hermes/.state.yaml.lock Team/Hermes/.state.yaml.lock
+mv lib/Fucina/Hermes/taskmanager state Team/Hermes/taskmanager state
+mv lib/Fucina/Hermes/.taskmanager state.lock Team/Hermes/.taskmanager state.lock
 ```
 
-- [ ] `Team/Hermes/` ora contiene `Scratchpad.md` + `state.yaml` + lock file
+- [ ] `Team/Hermes/` ora contiene `Scratchpad.md` + `taskmanager state` + lock file
 
 ### 3.3 KBA → `Team/Fucina/KBA/`
 
 ```bash
-mv Library/Fucina/KBA/* Team/Fucina/KBA/
+mv lib/Fucina/KBA/* Team/Fucina/KBA/
 ```
 
 - [ ] Verificare presenza di: `kba-flusso-umano.md`, `kba-workflow.md`, `kba-vecchi/`, `prompts-kba/`, `tools-kba/`
@@ -111,7 +111,7 @@ mv Library/Fucina/KBA/* Team/Fucina/KBA/
 ### 3.4 Repo → `Team/Fucina/repos/`
 
 ```bash
-mv Library/Fucina/repos/* Team/Fucina/repos/
+mv lib/Fucina/repos/* Team/Fucina/repos/
 ```
 
 - [ ] Verificare presenza di: `oh-my-openagent/`, `ruflo/`, `superpowers/`
@@ -119,20 +119,20 @@ mv Library/Fucina/repos/* Team/Fucina/repos/
 ### 3.5 Analyses → `Team/Fucina/analyses/`
 
 ```bash
-mv Library/Fucina/*.md Team/Fucina/analyses/
+mv lib/Fucina/*.md Team/Fucina/analyses/
 ```
 
 - [ ] Verificare: `chunk-retrieval-synthesis.md`, `claude-context-chunker-analysis.md`, `memvid-smartframes-analysis.md`, `openhuman-chunker-analysis.md`
 
 ### 3.6 Pulizia
 
-- [ ] `Library/Fucina/` dovrebbe essere vuota
-- [ ] `rmdir Library/Fucina/Handoff` (se vuota)
-- [ ] `rmdir Library/Fucina/Hermes` (se vuota)
-- [ ] `rmdir Library/Fucina/repos` (se vuota)
-- [ ] `rmdir Library/Fucina/KBA` (se vuota)
-- [ ] `rmdir Library/Fucina` (se vuota)
-- [ ] **NOTA**: `Library/Fucina/` è dentro il symlink → la directory viene eliminata sul target `/home/stra/Library/Fucina/`
+- [ ] `lib/Fucina/` dovrebbe essere vuota
+- [ ] `rmdir lib/Fucina/Handoff` (se vuota)
+- [ ] `rmdir lib/Fucina/Hermes` (se vuota)
+- [ ] `rmdir lib/Fucina/repos` (se vuota)
+- [ ] `rmdir lib/Fucina/KBA` (se vuota)
+- [ ] `rmdir lib/Fucina` (se vuota)
+- [ ] **NOTA**: `lib/Fucina/` è dentro il symlink → la directory viene eliminata sul target `/home/stra/lib/Fucina/`
 
 ---
 
@@ -140,15 +140,15 @@ mv Library/Fucina/*.md Team/Fucina/analyses/
 
 ### 4.1 Link tra handoff
 
-Gli handoff possono referenziarsi tra loro. I path relativi dentro `Library/Fucina/Handoff/` cambiano in `Team/Handoff/`.
+Gli handoff possono referenziarsi tra loro. I path relativi dentro `lib/Fucina/Handoff/` cambiano in `Team/Handoff/`.
 
-- [ ] `rg -l 'Library/Fucina/Handoff' Team/Handoff/` — mostra file che referenziano il vecchio path
+- [ ] `rg -l 'lib/Fucina/Handoff' Team/Handoff/` — mostra file che referenziano il vecchio path
 - [ ] Per ogni match, valutare se aggiornare (i link interni tra handoff possono essere relativi)
 
 ### 4.2 Link da documenti
 
-- [ ] `rg -l 'Library/Fucina/' Library/documents/` — eventuali link da documenti
-- [ ] `rg -l 'Library/Fucina/' Library/deliverables/` — eventuali link da deliverables
+- [ ] `rg -l 'lib/Fucina/' lib/documents/` — eventuali link da documenti
+- [ ] `rg -l 'lib/Fucina/' Library/deliverables/` — eventuali link da deliverables
 
 > **Nota**: I documenti e deliverables potrebbero referenziare handoff specifici. Valutare se aggiornare o lasciare (i path in Library non sono più raggiungibili dopo la migrazione).
 
@@ -160,10 +160,10 @@ Gli handoff possono referenziarsi tra loro. I path relativi dentro `Library/Fuci
 
 | File | Ref count | Azione |
 |------|-----------|--------|
-| `Team/Meta/handoff-register-guida.md` | 23 | Sostituzione massiva `Library/Fucina/Handoff` → `Team/Handoff` |
+| `Team/Meta/handoff-register-guida.md` | 23 | Sostituzione massiva `lib/Fucina/Handoff` → `Team/Handoff` |
 | `Team/Quarantine/Convenzioni-Scratchpad.md` | 13 | Sostituzione massiva |
 
-Azione: `rg 'Library/Fucina/Handoff' --files-with-matches Team/Meta/handoff-register-guida.md Team/Quarantine/Convenzioni-Scratchpad.md`
+Azione: `rg 'lib/Fucina/Handoff' --files-with-matches Team/Meta/handoff-register-guida.md Team/Quarantine/Convenzioni-Scratchpad.md`
 
 ### 5.2 Altri documenti
 
@@ -185,7 +185,7 @@ Azione: `rg 'Library/Fucina/Handoff' --files-with-matches Team/Meta/handoff-regi
 - [ ] `Team/Quarantine/preflight-checklist-hermes.md` — 1 ref
 - [ ] `Team/Quarantine/2026-05-04_task-ricorrente-manutenzione-scratchpad.md` — 8 refs
 
-> **Strategia**: Sostituzione massiva con `sed` o `rg --replace` per `Library/Fucina/Handoff` → `Team/Handoff`. Pochi casi hanno `Library/Fucina/` senza `Handoff` (es. riferimenti a `Library/Fucina/Hermes/` o `Library/Fucina/KBA/`) — questi vanno uno per uno.
+> **Strategia**: Sostituzione massiva con `sed` o `rg --replace` per `lib/Fucina/Handoff` → `Team/Handoff`. Pochi casi hanno `lib/Fucina/` senza `Handoff` (es. riferimenti a `lib/Fucina/Hermes/` o `lib/Fucina/KBA/`) — questi vanno uno per uno.
 
 ---
 
@@ -205,8 +205,8 @@ Azione: `rg 'Library/Fucina/Handoff' --files-with-matches Team/Meta/handoff-regi
 - [ ] `tools/kba/reporter/cli.py` — path batch KBA
 - [ ] `tools/extract_kba_excel.py` — path batch KBA
 - [ ] `tools/preflight_check/cli.py` — path handoff
-- [ ] `tools/taskmanager/state.py` — se referenzia Library/Fucina
-- [ ] `tools/taskmanager/migration.py` — se referenzia Library/Fucina
+- [ ] `tools/taskmanager/state.py` — se referenzia lib/Fucina
+- [ ] `tools/taskmanager/migration.py` — se referenzia lib/Fucina
 
 > **Nota**: Solo docstring e commenti. La logica dei tool Python usa `config.yaml` per i path, quindi non dovrebbe essere necessario modificarne la logica.
 
@@ -220,9 +220,9 @@ Azione: `rg 'Library/Fucina/Handoff' --files-with-matches Team/Meta/handoff-regi
 - [ ] Creare handoff di test → finisce in `Team/Handoff/YYYY/MM/`
 - [ ] `handoff_list` mostra path corretti
 
-### 7.2 Test kb_search
+### 7.2 Test knowledge_search
 
-- [ ] `kb_search(query="test", scope="all")` include `Team/Handoff/` nei risultati
+- [ ] `knowledge_search(query="test", scope="all")` include `Team/Handoff/` nei risultati
 - [ ] Path restituiti sono relativi
 
 ### 7.3 Git status
@@ -231,14 +231,14 @@ Azione: `rg 'Library/Fucina/Handoff' --files-with-matches Team/Meta/handoff-regi
   - `Team/Handoff/` → nuovi file tracciati
   - `Team/Fucina/` → ignorato
   - `Team/Hermes/` → tracciato (se ci sono modifiche)
-  - `Library/Fucina/` → non più presente (nel symlink, non in git)
+  - `lib/Fucina/` → non più presente (nel symlink, non in git)
 - [ ] `git add Team/Handoff/` e commit
 
 ### 7.4 Smoke test
 
 - [ ] Chiedere a Hermes: "mostrami la struttura delle cartelle" → path corretti
 - [ ] Generare un handoff fittizio → percorso corretto
-- [ ] Cercare un handoff con kb_search → risultato con path relativo
+- [ ] Cercare un handoff con knowledge_search → risultato con path relativo
 
 ---
 

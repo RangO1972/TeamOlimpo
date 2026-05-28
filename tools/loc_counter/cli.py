@@ -10,6 +10,8 @@ from loguru import logger
 from rich.console import Console
 from rich.table import Table
 
+from tools.common.paths import project_root
+
 # ---------------------------------------------------------------------------
 # App Typer
 # ---------------------------------------------------------------------------
@@ -24,7 +26,7 @@ app = typer.Typer(
 # Costanti
 # ---------------------------------------------------------------------------
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = project_root()
 AGENTS_DIR = PROJECT_ROOT / ".opencode" / "agents"
 
 # ---------------------------------------------------------------------------

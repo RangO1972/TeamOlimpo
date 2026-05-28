@@ -75,6 +75,7 @@ def fix_references_in_file(file_path: Path, dry_run: bool) -> int:
 # Comandi
 # ---------------------------------------------------------------------------
 
+
 @app.command()
 def main(
     dry_run: bool = typer.Option(
@@ -112,4 +113,6 @@ def main(
             total_files_modified += 1
             total_references_updated += changes
 
-    typer.echo(f"Report: {total_files_modified} file modificati, {total_references_updated} riferimenti aggiornati.")
+    typer.echo(
+        f"Report: {total_files_modified} file modificati, {total_references_updated} riferimenti aggiornati."
+    )

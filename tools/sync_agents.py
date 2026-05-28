@@ -38,20 +38,9 @@ def parse_frontmatter(content: str) -> tuple[dict[str, Any], str]:
 def convert_model(opencode_model: str) -> str:
     """Convert OpenCode model ID to Claude Code alias.
 
-    opencode/big-pickle → sonnet
-    anthropic/claude-sonnet-4-5 → sonnet
-    anthropic/claude-opus-4-7 → opus
-    anthropic/claude-haiku-4-5 → haiku
+    Always returns 'haiku'.
     """
-    if "big-pickle" in opencode_model:
-        return "sonnet"
-    elif "opus" in opencode_model:
-        return "opus"
-    elif "haiku" in opencode_model:
-        return "haiku"
-    elif "sonnet" in opencode_model:
-        return "sonnet"
-    return "sonnet"  # default
+    return "haiku"
 
 
 def extract_tools(permission: dict) -> list[str]:
@@ -61,6 +50,12 @@ def extract_tools(permission: dict) -> list[str]:
     - read: allow → ['Read']
     - bash: allow → ['Bash']
     - edit: {path: allow} → ['Edit']
+
+    All agents automatically get access to all MCP tools:
+    - synapsis: synapsis_hf, synapsis_search, synapsis_session, synapsis_task, synapsis_admin, synapsis_consolidate
+    - email_processor: status, search, discover, rules_list, contacts
+    - taskmanager: task_create, task_update_status, task_query, task_summary, task_log_event, task_export
+    - executor: executor_run
     """
     tools = []
 
@@ -90,12 +85,45 @@ def extract_tools(permission: dict) -> list[str]:
     if permission.get("websearch") == "allow":
         tools.append("WebSearch")
 
+    # Add all MCP tools to every agent
+    # Tool names are as exposed by their MCP servers in .mcp.json
+    mcp_tools = [
+        # synapsis (includes hf: handoff create/get)
+        "synapsis_hf",
+        "synapsis_search",
+        "synapsis_session",
+        "synapsis_task",
+        "synapsis_admin",
+        "synapsis_consolidate",
+        # email_processor
+        "status",
+        "search",
+        "discover",
+        "rules_list",
+        "contacts",
+        # taskmanager
+        "task_create",
+        "task_update_status",
+        "task_query",
+        "task_summary",
+        "task_log_event",
+        "task_export",
+        # synapsis (KB search)
+        "knowledge_search",
+        "knowledge_read",
+        # session_memory
+        "session_init",
+        "session_observe",
+        "session_context",
+        "session_recall",
+        "session_summarize",
+    ]
+    tools.extend(mcp_tools)
+
     return tools
 
 
-def convert_frontmatter(
-    opencode_fm: dict[str, Any], filename: str
-) -> dict[str, Any]:
+def convert_frontmatter(opencode_fm: dict[str, Any], filename: str) -> dict[str, Any]:
     """Transform OpenCode frontmatter to Claude Code format."""
     claude_fm = {}
 
@@ -167,9 +195,7 @@ def sync_agents() -> int:
             claude_fm = convert_frontmatter(opencode_fm, filename)
 
             # Reconstruct with Claude Code frontmatter
-            claude_fm_yaml = yaml.dump(
-                claude_fm, default_flow_style=False, sort_keys=False
-            )
+            claude_fm_yaml = yaml.dump(claude_fm, default_flow_style=False, sort_keys=False)
             claude_content = f"---\n{claude_fm_yaml}---\n\n{body}"
 
             # Write to .claude/agents/

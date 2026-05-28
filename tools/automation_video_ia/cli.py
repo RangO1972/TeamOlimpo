@@ -23,11 +23,13 @@ from pydantic import BaseModel, ValidationError
 # Models Pydantic
 # ---------------------------------------------------------------------------
 
+
 class TrendData(BaseModel):
     topic: str
     score: float
     audience: str
     tone: str
+
 
 class ScriptData(BaseModel):
     hook: str
@@ -36,20 +38,24 @@ class ScriptData(BaseModel):
     duration_seconds: int
     keywords: list[str]
 
+
 class VideoData(BaseModel):
     video_url: str
     thumbnail_url: str
     platform: str  # youtube or tiktok
 
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def _setup_logging(verbose: bool) -> None:
     """Configura loguru: WARNING di default, DEBUG con --verbose."""
     logger.remove()
     level = "DEBUG" if verbose else "WARNING"
     logger.add(sys.stderr, level=level, format="<level>{level}</level>: {message}")
+
 
 def _get_trends() -> TrendData:
     """Placeholder: Detect trend using API (e.g., Google Trends via pytrends)."""
@@ -60,8 +66,9 @@ def _get_trends() -> TrendData:
         topic="IA per produttività freelance",
         score=0.85,
         audience="Freelance 25-45 anni",
-        tone="Provocatorio-utilitaristico"
+        tone="Provocatorio-utilitaristico",
     )
+
 
 def _generate_script(trend: TrendData) -> ScriptData:
     """Generate script using Keraunos prompt with LLM."""
@@ -74,8 +81,9 @@ def _generate_script(trend: TrendData) -> ScriptData:
         body="Tre cose: scrivere email, gestire clienti, fare ricerca. Le fai ancora a mano. I freelance che lavorano 4 ore al giorno non sono più disciplinati di te. Usano tre agenti IA...",
         cta="Salva questo video. La prossima settimana lavori 4 ore.",
         duration_seconds=45,
-        keywords=["produttività IA", "freelance AI", "lavorare meno"]
+        keywords=["produttività IA", "freelance AI", "lavorare meno"],
     )
+
 
 def _create_video(script: ScriptData) -> VideoData:
     """Create video with avatar using HeyGen/Creatify API."""
@@ -85,8 +93,9 @@ def _create_video(script: ScriptData) -> VideoData:
     return VideoData(
         video_url="https://example.com/video.mp4",
         thumbnail_url="https://example.com/thumb.jpg",
-        platform="youtube"
+        platform="youtube",
     )
+
 
 def _publish_video(video: VideoData) -> None:
     """Publish to YouTube/TikTok API."""
@@ -95,6 +104,7 @@ def _publish_video(video: VideoData) -> None:
     #     youtube = build("youtube", "v3", credentials=...)
     #     ...
     logger.info(f"Published to {video.platform}: {video.video_url}")
+
 
 def _quality_gate(script: ScriptData) -> bool:
     """Quality gate L1+L2 automatico."""
@@ -107,6 +117,7 @@ def _quality_gate(script: ScriptData) -> bool:
         return False
     # Semantico placeholder
     return True
+
 
 # ---------------------------------------------------------------------------
 # App Typer
@@ -121,10 +132,11 @@ app = typer.Typer(
 # Comandi
 # ---------------------------------------------------------------------------
 
+
 @app.callback()
 def main(
     output_dir: Path = typer.Option(
-        Path("Library/deliverables"),
+        Path("lib/deliverables"),
         "--output-dir",
         "-o",
         help="Directory di output per video e log.",

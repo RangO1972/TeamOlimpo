@@ -3,8 +3,8 @@ Logica del gap check per il tool kba.merger.
 
 Per ogni KBA Number unico nel file DeltaV:
   - stato 'ok'             -> presente in kba_catalog/records/
-  - stato 'da_analizzare'  -> MD convertito in Library/documents/ ma non in catalog
-  - stato 'da_convertire'  -> PDF non ancora convertito (nessun MD in Library/documents/)
+  - stato 'da_analizzare'  -> MD convertito in lib/documents/ ma non in catalog
+  - stato 'da_convertire'  -> PDF non ancora convertito (nessun MD in lib/documents/)
 
 Il flag recursive=True estende la verifica alle KBA referenziate da fix_reference
 nei record del catalogo, in modo transitivo (BFS). Le KBA mancanti vengono
@@ -22,7 +22,7 @@ from loguru import logger
 from tools.kba.merger.config import DOCUMENTS_DIR, RECORDS_DIR
 
 # Pattern per estrarre ID KBA da stringhe libere (es. fix_reference)
-_KBA_ID_RE = re.compile(r'\b([A-Z]{2}-\d{4}-\d{4})\b')
+_KBA_ID_RE = re.compile(r"\b([A-Z]{2}-\d{4}-\d{4})\b")
 
 
 def _get_status(slug: str) -> str:
@@ -153,16 +153,18 @@ def compute_gap(
         slug = kba.lower()
         stato = _get_status(slug)
         logger.debug(f"Gap check {kba}: {stato}")
-        result.append({
-            "kba_number": kba,
-            "published": meta["published"],
-            "category": meta["category"],
-            "disposition_status": meta["disposition_status"],
-            "title": meta["title"],
-            "occurrences": kba_count[kba],
-            "stato": stato,
-            "referenced_by": [],
-        })
+        result.append(
+            {
+                "kba_number": kba,
+                "published": meta["published"],
+                "category": meta["category"],
+                "disposition_status": meta["disposition_status"],
+                "title": meta["title"],
+                "occurrences": kba_count[kba],
+                "stato": stato,
+                "referenced_by": [],
+            }
+        )
 
     # ── Espansione ricorsiva ──────────────────────────────────────────────────
     if recursive:
@@ -177,16 +179,18 @@ def compute_gap(
             if stato == "ok":
                 continue  # referenziata e presente — nessun problema
             logger.debug(f"Gap ricorsivo {ref_kba}: {stato} (da {parents})")
-            result.append({
-                "kba_number": ref_kba,
-                "published": None,
-                "category": "",
-                "disposition_status": "",
-                "title": f"[referenziata da: {', '.join(parents)}]",
-                "occurrences": 0,
-                "stato": stato,
-                "referenced_by": parents,
-            })
+            result.append(
+                {
+                    "kba_number": ref_kba,
+                    "published": None,
+                    "category": "",
+                    "disposition_status": "",
+                    "title": f"[referenziata da: {', '.join(parents)}]",
+                    "occurrences": 0,
+                    "stato": stato,
+                    "referenced_by": parents,
+                }
+            )
     # ─────────────────────────────────────────────────────────────────────────
 
     # Ordinamento: prima per occorrenze desc, poi le referenziate (occ=0)

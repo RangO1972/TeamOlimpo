@@ -29,7 +29,9 @@ class DocumentMetadata(BaseModel):
     subject: str = Field(default="", description="Soggetto dai metadati PDF (puo' essere vuoto)")
     num_pages: int = Field(ge=1, description="Numero di pagine del documento")
     file_size_bytes: int = Field(ge=0, description="Dimensione del file PDF in byte")
-    file_hash: str = Field(default="", description="SHA256 hash del file PDF per rilevare modifiche")
+    file_hash: str = Field(
+        default="", description="SHA256 hash del file PDF per rilevare modifiche"
+    )
 
 
 class ConversionResult(BaseModel):
@@ -44,10 +46,14 @@ class ConversionResult(BaseModel):
     metadata: DocumentMetadata
 
     # Path del file Markdown generato (None se la conversione e' fallita)
-    md_path: Path | None = Field(default=None, description="Path assoluto al file Markdown generato")
+    md_path: Path | None = Field(
+        default=None, description="Path assoluto al file Markdown generato"
+    )
 
     # Cartella immagini estratte (None se nessuna immagine o errore)
-    images_dir: Path | None = Field(default=None, description="Path alla cartella immagini del documento")
+    images_dir: Path | None = Field(
+        default=None, description="Path alla cartella immagini del documento"
+    )
 
     # Numero di immagini estratte
     num_images: int = Field(default=0, ge=0, description="Numero di immagini estratte dal PDF")

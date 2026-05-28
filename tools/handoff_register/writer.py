@@ -26,6 +26,7 @@ from tools.handoff_register.scanner import HandoffRecord
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _cell(value: str | None, fallback: str = "—") -> str:
     """Restituisce il valore o un placeholder se assente/vuoto."""
     v = str(value).strip() if value else ""
@@ -103,6 +104,7 @@ def _render_archived_table(records: Sequence[HandoffRecord]) -> str:
 # ---------------------------------------------------------------------------
 # Funzione principale
 # ---------------------------------------------------------------------------
+
 
 def write_registro(
     active_records: Sequence[HandoffRecord],

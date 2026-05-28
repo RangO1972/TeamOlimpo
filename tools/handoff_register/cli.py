@@ -40,6 +40,7 @@ _verbose_state: dict[str, bool] = {"verbose": False}
 # Configurazione logging
 # ---------------------------------------------------------------------------
 
+
 def _setup_logging(verbose: bool = False) -> None:
     """
     Configura loguru: handler su file (tutti i livelli) + stderr (WARNING+).
@@ -72,6 +73,7 @@ def _setup_logging(verbose: bool = False) -> None:
 # Callback globale (verbose)
 # ---------------------------------------------------------------------------
 
+
 @app.callback()
 def common(
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Output debug su stderr."),
@@ -84,6 +86,7 @@ def common(
 # ---------------------------------------------------------------------------
 # Comandi
 # ---------------------------------------------------------------------------
+
 
 @app.command()
 def sync() -> None:
@@ -100,9 +103,7 @@ def sync() -> None:
         raise typer.Exit(code=1)
 
     console.print(f"[green]Registro aggiornato:[/green] {REGISTRO_PATH}")
-    logger.info(
-        f"[sync] Completato. {len(active)} attivi, {len(archived)} archiviati"
-    )
+    logger.info(f"[sync] Completato. {len(active)} attivi, {len(archived)} archiviati")
 
 
 @app.command()
@@ -123,6 +124,3 @@ def registro() -> None:
         f"Registro aggiornato: [bold]{REGISTRO_PATH}[/bold] "
         f"({len(active)} attivi, {len(archived)} archiviati)"
     )
-
-
-

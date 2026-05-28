@@ -32,6 +32,7 @@ from tools.kba_pipeline.config import (
 # Utilita' interne
 # ---------------------------------------------------------------------------
 
+
 def _read_deltav_excel(path: Path) -> tuple[list[str], list[dict[str, Any]]]:
     """
     Legge il file Excel DeltaV e restituisce headers + righe come dizionari.
@@ -89,6 +90,7 @@ def _extract_frontmatter_date(text: str, field: str) -> str:
         Stringa data in formato ISO, o '' se non trovata.
     """
     import re
+
     pattern = re.compile(
         rf"^{re.escape(field)}:\s*(['\"]?)(\d{{4}}-\d{{2}}-\d{{2}})\1\s*$",
         re.MULTILINE,
@@ -102,6 +104,7 @@ def _extract_frontmatter_date(text: str, field: str) -> str:
 # ---------------------------------------------------------------------------
 # Step 1 — Conversione PDF
 # ---------------------------------------------------------------------------
+
 
 def step1_convert(inbox: Path, force: bool, dry_run: bool) -> dict[str, int]:
     """
@@ -201,6 +204,7 @@ def step1_convert(inbox: Path, force: bool, dry_run: bool) -> dict[str, int]:
 # Step 2 — Analisi AI
 # ---------------------------------------------------------------------------
 
+
 def step2_analyze(
     provider_name: str,
     model: str,
@@ -252,8 +256,7 @@ def step2_analyze(
 
     # --- Trova candidati nuovi (nessun record) ---
     nuovi: list[Path] = [
-        p for p in DOCUMENTS_DIR.glob("*.md")
-        if not (RECORDS_DIR / p.name).exists()
+        p for p in DOCUMENTS_DIR.glob("*.md") if not (RECORDS_DIR / p.name).exists()
     ]
 
     if force_analyze:
@@ -267,9 +270,11 @@ def step2_analyze(
             try:
                 rec_text = record_path.read_text(encoding="utf-8")
                 import re as _re
+
                 fm_match = _re.search(r"\A---\s*\n([\s\S]*?)\n---", rec_text)
                 if fm_match:
                     import yaml as _yaml
+
                     fm = _yaml.safe_load(fm_match.group(1)) or {}
                     rec_model = str(fm.get("analyzed_by_model", "unknown"))
                 else:
@@ -470,6 +475,7 @@ def step2_analyze(
 # Step 3 — Verifica dipendenze
 # ---------------------------------------------------------------------------
 
+
 def step3_resolve(excel_path: Path) -> dict[str, Any]:
     """
     Legge le KBA dal file Excel DeltaV e verifica le dipendenze documentali.
@@ -528,6 +534,7 @@ def step3_resolve(excel_path: Path) -> dict[str, Any]:
 # Step 4 — Merge + Enrichment
 # ---------------------------------------------------------------------------
 
+
 def step4_merge(
     excel_path: Path,
     use_ai: bool,
@@ -581,8 +588,7 @@ def step4_merge(
         on_progress=on_progress,
     )
     logger.info(
-        f"Step 4: enrichment completato — "
-        f"{in_catalog}/{total_unique} KBA uniche in catalogo"
+        f"Step 4: enrichment completato — {in_catalog}/{total_unique} KBA uniche in catalogo"
     )
 
     output_path = write_merge_excel(enriched)

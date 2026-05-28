@@ -22,8 +22,7 @@ def write_patch_list(patch_data: dict, output_path: Path) -> None:
                 label = fname
                 if "ALL" in fname and "64bit" in fname:
                     label = (
-                        fname
-                        + "  *(applicare il file per l'OS del nodo: Win10 / S2016 / S2022)*"
+                        fname + "  *(applicare il file per l'OS del nodo: Win10 / S2016 / S2022)*"
                     )
                 lines.append(f"**{label}**")
                 for n in sorted(nodes):
@@ -83,7 +82,9 @@ def _build_azioni(record: dict) -> list[str]:
     note = (record.get("note") or "").strip()
 
     if reco in ("nessuna_azione", "monitorare"):
-        azioni.append("Nessuna azione urgente — segnalare se il comportamento viene osservato nei siti.")
+        azioni.append(
+            "Nessuna azione urgente — segnalare se il comportamento viene osservato nei siti."
+        )
         return azioni
 
     if wk and reco == "applicare_workaround":
@@ -142,7 +143,9 @@ def write_kba_discussion(brief_data: list[dict], output_path: Path) -> None:
         if situazione:
             lines.append(f"**Situazione**: {situazione}")
         else:
-            lines.append("**Situazione**: *(analisi non disponibile — rilancia kba_reporter dopo analisi Grok)*")
+            lines.append(
+                "**Situazione**: *(analisi non disponibile — rilancia kba_reporter dopo analisi Grok)*"
+            )
         lines.append("")
 
         azioni = _build_azioni(r)

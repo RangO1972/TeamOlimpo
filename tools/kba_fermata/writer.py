@@ -27,12 +27,12 @@ from openpyxl.worksheet.table import Table, TableStyleInfo
 
 SITE_ORDER = ["Montecchio", "Lonigo", "Termoli"]
 
-HEADER_BG  = "1F4E79"
-HEADER_FG  = "FFFFFF"
-FILE_BG    = "D6E4F7"   # azzurro chiaro — sheet Files
-WS_BG      = "E2EFDA"   # verde chiaro  — workstation
-SRV_BG     = "FFF2CC"   # giallo chiaro — server
-FW_BG      = "FCE4D6"   # arancio chiaro — firmware/controller
+HEADER_BG = "1F4E79"
+HEADER_FG = "FFFFFF"
+FILE_BG = "D6E4F7"  # azzurro chiaro — sheet Files
+WS_BG = "E2EFDA"  # verde chiaro  — workstation
+SRV_BG = "FFF2CC"  # giallo chiaro — server
+FW_BG = "FCE4D6"  # arancio chiaro — firmware/controller
 
 
 def _hfill(hex_: str) -> PatternFill:
@@ -60,8 +60,10 @@ def _add_table(ws, name: str, ref: str) -> None:
     t = Table(displayName=name, ref=ref)
     t.tableStyleInfo = TableStyleInfo(
         name="TableStyleMedium9",
-        showRowStripes=True, showColumnStripes=False,
-        showFirstColumn=False, showLastColumn=False,
+        showRowStripes=True,
+        showColumnStripes=False,
+        showFirstColumn=False,
+        showLastColumn=False,
     )
     ws.add_table(t)
 
@@ -69,6 +71,7 @@ def _add_table(ws, name: str, ref: str) -> None:
 # ---------------------------------------------------------------------------
 # Sheet "Files" — lista deduplicata di tutti i file da procurare
 # ---------------------------------------------------------------------------
+
 
 def _collect_all_files(patch_data: dict) -> list[dict]:
     """
@@ -98,7 +101,7 @@ def _collect_all_files(patch_data: dict) -> list[dict]:
 
 def _write_files_sheet(ws, patch_data: dict) -> None:
     headers = ["File", "Tipo", "Siti"]
-    widths  = [60, 22, 30]
+    widths = [60, 22, 30]
 
     hfill = _hfill(HEADER_BG)
     hfont = _hfont()
@@ -110,28 +113,27 @@ def _write_files_sheet(ws, patch_data: dict) -> None:
 
     rows = _collect_all_files(patch_data)
     for ri, r in enumerate(rows, 2):
-        siti_str = ", ".join(
-            s for s in SITE_ORDER if s in r["siti"]
-        )
+        siti_str = ", ".join(s for s in SITE_ORDER if s in r["siti"])
         ws.cell(row=ri, column=1, value=r["file"]).alignment = _top()
         ws.cell(row=ri, column=2, value=r["tipo"]).alignment = _top()
-        ws.cell(row=ri, column=3, value=siti_str).alignment  = _top()
+        ws.cell(row=ri, column=3, value=siti_str).alignment = _top()
         for ci in range(1, 4):
             ws.cell(row=ri, column=ci).fill = _hfill(FILE_BG)
 
     _set_col_widths(ws, widths)
     ws.freeze_panes = "A2"
     if rows:
-        _add_table(ws, "Files_Table", f"A1:C{len(rows)+1}")
+        _add_table(ws, "Files_Table", f"A1:C{len(rows) + 1}")
 
 
 # ---------------------------------------------------------------------------
 # Sheet per sito — file con nodi/controller
 # ---------------------------------------------------------------------------
 
+
 def _write_site_sheet(ws, site: str, site_data: dict) -> None:
     headers = ["File", "Tipo", "Nodi / Note"]
-    widths  = [60, 22, 50]
+    widths = [60, 22, 50]
 
     hfill = _hfill(HEADER_BG)
     hfont = _hfont()
@@ -146,34 +148,43 @@ def _write_site_sheet(ws, site: str, site_data: dict) -> None:
 
     # Workstation
     for f, nodes in sorted(site_data.get("workstation_ms", {}).items()):
-        site_rows.append({
-            "file": f, "tipo": "Workstation",
-            "nodi": ", ".join(nodes) if nodes else "tutti",
-            "bg": WS_BG,
-        })
+        site_rows.append(
+            {
+                "file": f,
+                "tipo": "Workstation",
+                "nodi": ", ".join(nodes) if nodes else "tutti",
+                "bg": WS_BG,
+            }
+        )
 
     # Server
     for f, nodes in sorted(site_data.get("server_ms", {}).items()):
-        site_rows.append({
-            "file": f, "tipo": "Server",
-            "nodi": ", ".join(nodes) if nodes else "tutti",
-            "bg": SRV_BG,
-        })
+        site_rows.append(
+            {
+                "file": f,
+                "tipo": "Server",
+                "nodi": ", ".join(nodes) if nodes else "tutti",
+                "bg": SRV_BG,
+            }
+        )
 
     # Firmware
     for f, info in sorted(site_data.get("firmware", {}).items()):
         tipo = "Firmware Controller" if info.get("type") == "controller" else "Firmware I/O"
         nodi = info.get("nodes", [])
-        site_rows.append({
-            "file": f, "tipo": tipo,
-            "nodi": ", ".join(nodi) if nodi else "tutti i controller/IO",
-            "bg": FW_BG,
-        })
+        site_rows.append(
+            {
+                "file": f,
+                "tipo": tipo,
+                "nodi": ", ".join(nodi) if nodi else "tutti i controller/IO",
+                "bg": FW_BG,
+            }
+        )
 
     for r in site_rows:
-        ws.cell(row=row_idx, column=1, value=r["file"]).fill  = _hfill(r["bg"])
-        ws.cell(row=row_idx, column=2, value=r["tipo"]).fill  = _hfill(r["bg"])
-        ws.cell(row=row_idx, column=3, value=r["nodi"]).fill  = _hfill(r["bg"])
+        ws.cell(row=row_idx, column=1, value=r["file"]).fill = _hfill(r["bg"])
+        ws.cell(row=row_idx, column=2, value=r["tipo"]).fill = _hfill(r["bg"])
+        ws.cell(row=row_idx, column=3, value=r["nodi"]).fill = _hfill(r["bg"])
         for ci in range(1, 4):
             ws.cell(row=row_idx, column=ci).alignment = _wrap() if ci == 3 else _top()
         ws.row_dimensions[row_idx].height = 30
@@ -188,6 +199,7 @@ def _write_site_sheet(ws, site: str, site_data: dict) -> None:
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
+
 
 def write_fermata_excel(
     patch_data: dict,

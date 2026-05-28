@@ -32,7 +32,19 @@ from typing import Optional
 import yaml as yaml_lib
 from loguru import logger
 
+from tools.common.paths import project_root, resolve_relative
 from tools.email_processor.discovery import PatternDiscovery
+
+# ---------------------------------------------------------------------------
+# Token Juice — graceful fallback if missing
+# ---------------------------------------------------------------------------
+
+try:
+    from tools.token_juice import maybe_compress
+except ImportError:
+
+    def maybe_compress(text: str, **kwargs: object) -> str:  # type: ignore[misc]
+        return text
 
 # ---------------------------------------------------------------------------
 # MCP SDK
@@ -51,7 +63,7 @@ except ImportError:
 # Config helpers (mirror cli.py)
 # ---------------------------------------------------------------------------
 
-_PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+_PROJECT_ROOT = project_root()
 
 
 def _load_config() -> dict:
@@ -70,7 +82,7 @@ def _get_vault_root() -> Path | None:
     config = _load_config()
     vault_root_str = config.get("email_processor", {}).get("vault_root")
     if vault_root_str:
-        return (_PROJECT_ROOT / vault_root_str).resolve()
+        return resolve_relative(vault_root_str)
 
     return None
 
@@ -128,10 +140,7 @@ def _get_email_files(vault_root: Path) -> list[Path]:
 
 @mcp.tool()
 def status() -> str:
-    """Statistiche vault email: note totali, per stato, thread, contatti, intervallo date.
-
-    Returns JSON con metriche chiave dello stato corrente del vault email.
-    """
+    """Statistiche vault email."""
     vault_root = _get_vault_root()
     if not vault_root or not vault_root.exists():
         return json.dumps({"error": "Vault email non trovato"}, indent=2)
@@ -183,11 +192,9 @@ def status() -> str:
             label_counts[label] = label_counts.get(label, 0) + 1
 
     result = {
-        "vault": str(vault_root.resolve()),
+        "vault": str(vault_root),
         "total_notes": total_notes,
-        "by_status": {
-            k: v for k, v in sorted(status_counts.items())
-        },
+        "by_status": {k: v for k, v in sorted(status_counts.items())},
         "other_status": total_notes - sum(status_counts.values()),
         "threads": thread_count,
         "contacts": contact_count,
@@ -204,21 +211,7 @@ def search(
     limit: int = 10,
     status_filter: Optional[str] = None,
 ) -> str:
-    """Cerca nel vault email per contenuto o campo specifico.
-
-    Parameters
-    ----------
-    query : str
-        Testo da cercare (case-insensitive).
-    field : str | None
-        Campo su cui cercare: ``subject``, ``from``, ``body``, ``label``, o ``all`` (default).
-    limit : int
-        Numero massimo risultati (default 10).
-    status_filter : str | None
-        Filtra per stato: ``new``, ``processed``, ``flagged``.
-
-    Returns JSON array con path, subject, from, date, status, labels, snippet.
-    """
+    """Cerca nel vault email per contenuto o campo."""
     vault_root = _get_vault_root()
     if not vault_root or not vault_root.exists():
         return json.dumps({"error": "Vault email non trovato"}, indent=2)
@@ -244,6 +237,12 @@ def search(
         body_match = content.split("---", 2)
         if len(body_match) > 2:
             body = body_match[2].strip()
+
+        # Compress large bodies to reduce token usage
+        if len(body) > 1024:
+            body = maybe_compress(
+                body, intensity="ultra", argv=["email_processor", "search", query]
+            )
 
         # Search logic
         matched = False
@@ -280,15 +279,17 @@ def search(
                     snippet = snippet + "..."
 
         rel_path = str(md_file.relative_to(vault_root))
-        results.append({
-            "path": rel_path,
-            "subject": fm.get("subject", ""),
-            "from": fm.get("from", ""),
-            "date": fm.get("date", ""),
-            "status": fm.get("status", ""),
-            "labels": fm.get("labels", []),
-            "snippet": snippet,
-        })
+        results.append(
+            {
+                "path": rel_path,
+                "subject": fm.get("subject", ""),
+                "from": fm.get("from", ""),
+                "date": fm.get("date", ""),
+                "status": fm.get("status", ""),
+                "labels": fm.get("labels", []),
+                "snippet": snippet,
+            }
+        )
 
         if len(results) >= limit:
             break
@@ -302,18 +303,7 @@ def search(
 
 @mcp.tool()
 def discover(days: int = 30) -> str:
-    """Scopre pattern di classificazione nelle email recenti.
-
-    Scansiona le note email nel vault, raggruppa soggetti simili,
-    e produce pattern con conteggi, mittenti e suggerimenti regole.
-
-    Parameters
-    ----------
-    days : int
-        Finestra temporale in giorni (default 30).
-
-    Returns JSON array di pattern con id, normalized, count, senders, samples.
-    """
+    """Scopre pattern nelle email recenti."""
     vault_root = _get_vault_root()
     if not vault_root or not vault_root.exists():
         return json.dumps({"error": "Vault email non trovato"}, indent=2)
@@ -323,15 +313,17 @@ def discover(days: int = 30) -> str:
 
     results = []
     for p in patterns:
-        results.append({
-            "id": p.id,
-            "normalized": p.normalized,
-            "count": p.count,
-            "senders": p.senders[:5],  # top 5
-            "sender_domain": p.sender_domain,
-            "date_range": p.date_range,
-            "samples": p.samples,
-        })
+        results.append(
+            {
+                "id": p.id,
+                "normalized": p.normalized,
+                "count": p.count,
+                "senders": p.senders[:5],  # top 5
+                "sender_domain": p.sender_domain,
+                "date_range": p.date_range,
+                "samples": p.samples,
+            }
+        )
 
     return json.dumps(
         {"patterns": results, "total": len(results), "window_days": days},
@@ -342,10 +334,7 @@ def discover(days: int = 30) -> str:
 
 @mcp.tool()
 def rules_list() -> str:
-    """Elenca tutte le regole di filtro email attive.
-
-    Returns JSON array con id, name, action, priority, label, reason, match summary.
-    """
+    """Elenca regole filtro email attive."""
     rules_path = _get_rules_path()
     if not rules_path:
         return json.dumps({"error": "filter_rules.yaml non trovato"}, indent=2)
@@ -364,19 +353,20 @@ def rules_list() -> str:
         for field, conditions in match.items():
             if isinstance(conditions, dict):
                 match_summary[field] = {
-                    k: (v[:3] if isinstance(v, list) else v)
-                    for k, v in conditions.items()
+                    k: (v[:3] if isinstance(v, list) else v) for k, v in conditions.items()
                 }
 
-        results.append({
-            "id": r.get("id"),
-            "name": r.get("name", ""),
-            "action": r.get("action"),
-            "priority": r.get("priority"),
-            "label": r.get("label"),
-            "reason": r.get("reason", ""),
-            "match": match_summary,
-        })
+        results.append(
+            {
+                "id": r.get("id"),
+                "name": r.get("name", ""),
+                "action": r.get("action"),
+                "priority": r.get("priority"),
+                "label": r.get("label"),
+                "reason": r.get("reason", ""),
+                "match": match_summary,
+            }
+        )
 
     results.sort(key=lambda x: -(x.get("priority", 0) or 0))
 
@@ -389,15 +379,7 @@ def rules_list() -> str:
 
 @mcp.tool()
 def contacts(search_query: Optional[str] = None) -> str:
-    """Elenca o cerca contatti nell'Addressbook del vault email.
-
-    Parameters
-    ----------
-    search_query : str | None
-        Testo opzionale per filtrare per nome o email (case-insensitive).
-
-    Returns JSON array con nome, email, azienda (se presenti nel frontmatter).
-    """
+    """Elenca o cerca contatti nell'Addressbook."""
     vault_root = _get_vault_root()
     if not vault_root or not vault_root.exists():
         return json.dumps({"error": "Vault email non trovato"}, indent=2)

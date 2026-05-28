@@ -1,7 +1,7 @@
 """
 Writer per il catalogo KBA del Team Olimpo.
 
-Scrive record MD nel formato usato da Dike in Library/data/kba_catalog/records/
+Scrive record MD nel formato usato da Dike in lib/data/kba_catalog/records/
 e riscrive index.yaml da zero leggendo tutti i record presenti.
 """
 
@@ -20,6 +20,7 @@ from tools.kba_indexer.config import INDEX_FILE, RECORDS_DIR
 # ---------------------------------------------------------------------------
 # Costruzione del body Markdown
 # ---------------------------------------------------------------------------
+
 
 def _build_body(body_data: dict[str, Any]) -> str:
     """
@@ -128,6 +129,7 @@ def _build_body(body_data: dict[str, Any]) -> str:
 # Costruzione del frontmatter YAML
 # ---------------------------------------------------------------------------
 
+
 def _build_frontmatter(record: dict[str, Any]) -> str:
     """
     Costruisce il frontmatter YAML del record nel formato di Dike.
@@ -202,7 +204,9 @@ def _build_frontmatter(record: dict[str, Any]) -> str:
     sections.append(_dump_field("author", record["author"]))
     sections.append(_dump_field("tags", record["tags"]))
     sections.append(_dump_field("source", record["source"]))
-    sections.append(_dump_field("analyzed_by_provider", record.get("analyzed_by_provider", "unknown")))
+    sections.append(
+        _dump_field("analyzed_by_provider", record.get("analyzed_by_provider", "unknown"))
+    )
     sections.append(_dump_field("analyzed_by_model", record.get("analyzed_by_model", "unknown")))
 
     # Confidence
@@ -218,6 +222,7 @@ def _build_frontmatter(record: dict[str, Any]) -> str:
 # ---------------------------------------------------------------------------
 # Scrittura del record
 # ---------------------------------------------------------------------------
+
 
 def write_record(record: dict[str, Any]) -> Path:
     """
@@ -256,6 +261,7 @@ def write_record(record: dict[str, Any]) -> Path:
 # Aggiornamento index.yaml
 # ---------------------------------------------------------------------------
 
+
 def _parse_record_for_index(record_path: Path) -> dict[str, Any] | None:
     """
     Legge un record MD e ne estrae i campi necessari per l'indice.
@@ -274,6 +280,7 @@ def _parse_record_for_index(record_path: Path) -> dict[str, Any] | None:
 
     # Estrae il frontmatter
     import re
+
     fm_match = re.match(r"\A---\s*\n([\s\S]*?)\n---\s*\n", content, re.MULTILINE)
     if not fm_match:
         logger.warning(f"Frontmatter mancante in {record_path.name}")

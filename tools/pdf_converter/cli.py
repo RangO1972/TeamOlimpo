@@ -8,6 +8,7 @@ Comandi disponibili:
   search        Cerca nei documenti indicizzati (FTS5)
   list          Elenca i documenti indicizzati
   stats         Mostra statistiche aggregate
+  summarize     Genera pagine wiki per documenti convertiti (Auto-Summarizer V1+V2)
 
 Utilizzo:
   python -m tools.pdf_converter <comando> [opzioni]
@@ -62,6 +63,7 @@ class StatusFilter(str, Enum):
 # Configurazione logging
 # ---------------------------------------------------------------------------
 
+
 def _setup_logging(verbose: bool = False) -> None:
     """
     Configura loguru: rimuove l'handler default e ne aggiunge uno su file
@@ -99,6 +101,7 @@ def _setup_logging(verbose: bool = False) -> None:
 # Callback globale (verbose)
 # ---------------------------------------------------------------------------
 
+
 @app.callback()
 def common(
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Output debug su stderr."),
@@ -111,9 +114,15 @@ def common(
 # Logica di conversione condivisa
 # ---------------------------------------------------------------------------
 
-def _run_conversion(pdf_path: Path, force: bool, indexer: DocumentIndexer) -> ConversionResult:
+
+def _run_conversion(
+    pdf_path: Path,
+    force: bool,
+    indexer: DocumentIndexer,
+    no_wiki: bool = False,
+) -> ConversionResult:
     """
-    Esegue la conversione completa di un PDF: convert -> post_process -> index.
+    Esegue la conversione completa di un PDF: convert -> post_process -> wiki -> index.
 
     Controlla idempotenza (salta se gia' convertito e non modificato, a meno di --force).
 
@@ -121,6 +130,7 @@ def _run_conversion(pdf_path: Path, force: bool, indexer: DocumentIndexer) -> Co
         pdf_path: Path assoluto al file PDF
         force: Se True, riconverte anche se gia' presente nel DB
         indexer: Istanza del DocumentIndexer da usare
+        no_wiki: Se True, salta la generazione automatica della wiki page
 
     Returns:
         ConversionResult con lo stato finale dell'operazione
@@ -138,6 +148,7 @@ def _run_conversion(pdf_path: Path, force: bool, indexer: DocumentIndexer) -> Co
     if not force and indexer.is_already_converted(slug, file_hash):
         logger.info(f"Saltato (non modificato): {pdf_path.name}. Usa --force per riconvertire.")
         from tools.pdf_converter.models import DocumentMetadata  # noqa: PLC0415
+
         metadata = DocumentMetadata(
             filename=pdf_path.name,
             slug=slug,
@@ -155,6 +166,17 @@ def _run_conversion(pdf_path: Path, force: bool, indexer: DocumentIndexer) -> Co
     if result.success:
         result = post_process(result)
 
+    # Generazione wiki page (dopo post_process, prima dell'indicizzazione)
+    if not no_wiki and result.success and result.md_path is not None:
+        from tools.pdf_converter.auto_summarizer import generate_wiki_page  # noqa: PLC0415
+
+        try:
+            wiki_result = generate_wiki_page(result.md_path)
+            if wiki_result.get("status") == "created":
+                logger.info(f"Wiki page creata: {wiki_result['slug']}")
+        except Exception as exc:
+            logger.warning(f"Auto-summarizer skipped for {slug}: {exc}")
+
     # Indicizzazione nel DB (anche gli errori vengono registrati)
     indexer.index_document(result)
 
@@ -165,13 +187,19 @@ def _run_conversion(pdf_path: Path, force: bool, indexer: DocumentIndexer) -> Co
 # Comando: init
 # ---------------------------------------------------------------------------
 
+
 @app.command(name="init")
 def cmd_init() -> None:
     """Inizializza database e cartelle."""
     console.print("[bold cyan]Inizializzazione pdf_converter...[/bold cyan]")
 
     # Crea le cartelle
-    for folder in [default_paths.inbox, default_paths.output, default_paths.assets, default_paths.database.parent]:
+    for folder in [
+        default_paths.inbox,
+        default_paths.output,
+        default_paths.assets,
+        default_paths.database.parent,
+    ]:
         folder.mkdir(parents=True, exist_ok=True)
         console.print(f"  Cartella: [green]{folder}[/green]")
 
@@ -187,10 +215,14 @@ def cmd_init() -> None:
 # Comando: convert
 # ---------------------------------------------------------------------------
 
+
 @app.command(name="convert")
 def cmd_convert(
     pdf_path: Path = typer.Argument(..., help="Path al file PDF.", exists=True),
     force: bool = typer.Option(False, "--force", "-f", help="Riconverte se già presente."),
+    no_wiki: bool = typer.Option(
+        False, "--no-wiki", help="Salta la generazione automatica della wiki page."
+    ),
 ) -> None:
     """Converte un singolo PDF in Markdown."""
     resolved = pdf_path.resolve()
@@ -204,7 +236,7 @@ def cmd_convert(
 
     console.print(f"Conversione: [bold]{resolved.name}[/bold]")
 
-    result = _run_conversion(resolved, force=force, indexer=indexer)
+    result = _run_conversion(resolved, force=force, indexer=indexer, no_wiki=no_wiki)
 
     if result.status == "skipped":
         console.print(
@@ -227,18 +259,25 @@ def cmd_convert(
 # Comando: convert-all
 # ---------------------------------------------------------------------------
 
+
 @app.command(name="convert-all")
 def cmd_convert_all(
     inbox_path: Path = typer.Option(
         None,
-        "--inbox", "-i",
+        "--inbox",
+        "-i",
         help="Cartella sorgente PDF (default: Inbox/).",
     ),
     force: bool = typer.Option(False, "--force", "-f", help="Riconverte tutti i PDF."),
+    no_wiki: bool = typer.Option(
+        False, "--no-wiki", help="Salta la generazione automatica della wiki page."
+    ),
 ) -> None:
     """Converte tutti i PDF nuovi nella inbox (o in una cartella specificata con --inbox)."""
     if inbox_path is not None:
-        inbox = inbox_path if inbox_path.is_absolute() else (default_paths.project_root / inbox_path)
+        inbox = (
+            inbox_path if inbox_path.is_absolute() else (default_paths.project_root / inbox_path)
+        )
     else:
         inbox = default_paths.inbox
 
@@ -281,8 +320,7 @@ def cmd_convert_all(
         return
 
     console.print(
-        f"PDF da convertire: [bold]{len(to_convert)}[/bold] "
-        f"(saltati gia' presenti: {skipped})"
+        f"PDF da convertire: [bold]{len(to_convert)}[/bold] (saltati gia' presenti: {skipped})"
     )
 
     # Contatori risultati
@@ -303,7 +341,7 @@ def cmd_convert_all(
         for pdf_path in to_convert:
             progress.update(task, description=f"[cyan]{pdf_path.name[:50]}[/cyan]")
 
-            result = _run_conversion(pdf_path, force=force, indexer=indexer)
+            result = _run_conversion(pdf_path, force=force, indexer=indexer, no_wiki=no_wiki)
 
             if result.success:
                 completed += 1
@@ -331,6 +369,7 @@ def cmd_convert_all(
 # ---------------------------------------------------------------------------
 # Comando: search
 # ---------------------------------------------------------------------------
+
 
 @app.command(name="search")
 def cmd_search(
@@ -368,6 +407,7 @@ def cmd_search(
 # Comando: list
 # ---------------------------------------------------------------------------
 
+
 @app.command(name="list")
 def cmd_list(
     limit: int = typer.Option(50, "--limit", "-n", help="Numero max documenti."),
@@ -400,8 +440,10 @@ def cmd_list(
     for i, doc in enumerate(docs, 1):
         status_val = doc.get("status", "")
         status_display = (
-            "[green]OK[/green]" if status_val == "completed"
-            else "[red]ERR[/red]" if status_val == "error"
+            "[green]OK[/green]"
+            if status_val == "completed"
+            else "[red]ERR[/red]"
+            if status_val == "error"
             else "[yellow]SKP[/yellow]"
         )
         table.add_row(
@@ -420,6 +462,7 @@ def cmd_list(
 # ---------------------------------------------------------------------------
 # Comando: stats
 # ---------------------------------------------------------------------------
+
 
 @app.command()
 def stats() -> None:
@@ -450,3 +493,82 @@ def stats() -> None:
     )
 
     console.print(table)
+
+
+# ---------------------------------------------------------------------------
+# Comando: summarize
+# ---------------------------------------------------------------------------
+
+
+@app.command(name="summarize")
+def cmd_summarize(
+    slug: str = typer.Argument(None, help="Slug del documento da processare (default: nessuno)."),
+    all_docs: bool = typer.Option(False, "--all", help="Processa tutti i documenti convertiti."),
+    force: bool = typer.Option(False, "--force", "-f", help="Sovrascrivi pagine wiki esistenti."),
+    dry_run: bool = typer.Option(False, "--dry-run", "-n", help="Mostra output senza scrivere."),
+) -> None:
+    """Genera pagine wiki per documenti convertiti (Auto-Summarizer V1+V2)."""
+    from tools.pdf_converter.auto_summarizer import (  # noqa: PLC0415
+        generate_all_wiki_pages,
+        generate_wiki_page,
+    )
+    from tools.pdf_converter.config import paths as converter_paths  # noqa: PLC0415,I001
+
+    if not slug and not all_docs:
+        console.print(
+            "[bold red]Errore:[/bold red] Specifica uno slug o "
+            "usa --all per processare tutti i documenti."
+        )
+        raise typer.Exit(code=2)
+
+    if all_docs:
+        console.print("[bold cyan]Generazione wiki pages per tutti i documenti...[/bold cyan]")
+        if dry_run:
+            console.print("[yellow]Modalità dry-run: nessun file verrà scritto[/yellow]")
+
+        results = generate_all_wiki_pages(force=force, dry_run=dry_run)
+
+        created = sum(1 for r in results if r.get("status") == "created")
+        skipped = sum(1 for r in results if r.get("status") == "skipped")
+        dry_run_count = sum(1 for r in results if r.get("status") == "dry_run")
+        errors = sum(1 for r in results if r.get("status") == "error")
+
+        console.print("\n[bold]Riepilogo:[/bold]")
+        if dry_run:
+            console.print(f"  Dry-run:     [cyan]{dry_run_count}[/cyan]")
+        else:
+            console.print(f"  Create:      [green]{created}[/green]")
+            console.print(f"  Saltate:     [yellow]{skipped}[/yellow]")
+        console.print(f"  Errori:      [red]{errors}[/red]")
+
+        if errors > 0:
+            error_list = [r for r in results if r.get("status") == "error"]
+            console.print("\n[bold red]Errori:[/bold red]")
+            for err in error_list:
+                msg = err.get("error", "errore sconosciuto")
+                console.print(f"  \u2022 {err.get('slug')}: {msg}")
+            raise typer.Exit(code=1)
+
+        return
+
+    # Slug singolo
+    doc_path = converter_paths.output / f"{slug}.md"
+    if not doc_path.exists():
+        console.print(f"[bold red]Errore:[/bold red] Documento non trovato: {doc_path}")
+        raise typer.Exit(code=1)
+
+    console.print(f"Processamento: [bold]{slug}[/bold]")
+    result = generate_wiki_page(doc_path, force=force, dry_run=dry_run)
+
+    status_display = {
+        "created": "[green]Creata[/green]",
+        "skipped": "[yellow]Saltata (gi\u00e0 esistente)[/yellow]",
+        "dry_run": "[cyan]Dry-run[/cyan]",
+        "error": "[red]Errore[/red]",
+    }
+    st = result.get("status", "unknown")
+    console.print(f"  Status:  {status_display.get(st, st)}")
+    console.print(f"  Wiki:    {result.get('wiki_path', '\u2014')}")
+    if result.get("error"):
+        console.print(f"  Errore:  {result['error']}")
+        raise typer.Exit(code=1)

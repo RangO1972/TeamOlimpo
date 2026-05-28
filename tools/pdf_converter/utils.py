@@ -117,8 +117,7 @@ def count_images_in_dir(images_dir: Path) -> int:
 
     image_extensions = {".png", ".jpg", ".jpeg", ".gif", ".webp"}
     return sum(
-        1 for f in images_dir.iterdir()
-        if f.is_file() and f.suffix.lower() in image_extensions
+        1 for f in images_dir.iterdir() if f.is_file() and f.suffix.lower() in image_extensions
     )
 
 
@@ -128,7 +127,7 @@ def relative_path(path: Path, base: Path) -> str:
 
     Usa `os.path.relpath()` che gestisce correttamente la navigazione verso
     l'alto con `..`, anche quando le due directory non sono in relazione
-    parent-child (es. Library/documents/ → Library/assets/images/slug/).
+    parent-child (es. lib/documents/ → lib/assets/images/slug/).
 
     Args:
         path: Path da relativizzare

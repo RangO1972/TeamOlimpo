@@ -11,8 +11,8 @@ Exports:
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass, field, asdict
-from datetime import datetime, timezone
+from dataclasses import asdict, dataclass, field
+from datetime import UTC, datetime
 from typing import Any
 
 # ---------------------------------------------------------------------------
@@ -70,12 +70,38 @@ FRONTMATTER_STATUS_MAP: dict[str, str] = {
 
 @dataclass
 class TaskEvent:
-    """A single event in a task's audit log."""
+    """A single event in a task's audit log (hot level)."""
 
     timestamp: str
     type: str
     details: str
     handoff_path: str | None = None
+
+
+@dataclass
+class CompressedEvent:
+    """A warm-compressed event (max ~200 char details, preserved fields)."""
+
+    timestamp: str
+    type: str
+    details: str  # compressed to max ~200 chars
+    handoff_path: str | None = None
+    compressed_level: int = 1  # 1 = warm
+
+
+@dataclass
+class SummaryEvent:
+    """A cold-compressed period summary replacing multiple events."""
+
+    period: str  # e.g. "W21-2026" (ISO week)
+    original_count: int  # how many events were merged
+    type_summary: str  # e.g. "3 completed, 1 handoff_ref"
+    key_handoffs: list[str]  # only handoff paths, nothing else
+    compressed_level: int = 2  # 2 = cold
+
+
+# Union type for all event kinds
+Event = TaskEvent | CompressedEvent | SummaryEvent
 
 
 @dataclass
@@ -92,7 +118,8 @@ class Task:
     tags: list[str] = field(default_factory=list)
     parent: str | None = None
     handoff_refs: list[str] = field(default_factory=list)
-    events: list[TaskEvent] = field(default_factory=list)
+    events: list[Event] = field(default_factory=list)
+    compression_level: int = 0  # 0=hot, 1=warm, 2=cold
 
     def to_dict(self, include_events: bool = False) -> dict[str, Any]:
         """Serialize to dict for JSON/YAML output.
@@ -112,6 +139,7 @@ class Task:
             "tags": self.tags,
             "parent": self.parent,
             "handoff_refs": self.handoff_refs,
+            "compression_level": self.compression_level,
         }
         if include_events:
             result["events"] = [asdict(e) for e in self.events]
@@ -122,7 +150,7 @@ class Task:
 
     def to_storage_dict(self) -> dict[str, Any]:
         """Serialize to full dict for YAML storage (always includes events)."""
-        return {
+        result: dict[str, Any] = {
             "id": self.id,
             "description": self.description,
             "status": self.status,
@@ -135,20 +163,37 @@ class Task:
             "handoff_refs": self.handoff_refs,
             "events": [asdict(e) for e in self.events],
         }
+        if self.compression_level > 0:
+            result["compression_level"] = self.compression_level
+        return result
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Task:
         """Deserialize from a storage dict."""
         events_raw = data.get("events", [])
-        events = [
-            TaskEvent(
-                timestamp=e["timestamp"],
-                type=e["type"],
-                details=e["details"],
-                handoff_path=e.get("handoff_path"),
-            )
-            for e in events_raw
-        ]
+        events: list[Event] = []
+        for e in events_raw:
+            if "period" in e:
+                # SummaryEvent (cold)
+                events.append(
+                    SummaryEvent(
+                        period=e["period"],
+                        original_count=e.get("original_count", 0),
+                        type_summary=e.get("type_summary", ""),
+                        key_handoffs=e.get("key_handoffs", []),
+                        compressed_level=e.get("compressed_level", 2),
+                    )
+                )
+            else:
+                # TaskEvent (hot) or CompressedEvent (warm)
+                events.append(
+                    TaskEvent(
+                        timestamp=e["timestamp"],
+                        type=e["type"],
+                        details=e["details"],
+                        handoff_path=e.get("handoff_path"),
+                    )
+                )
         return cls(
             id=data["id"],
             description=data["description"],
@@ -161,6 +206,7 @@ class Task:
             parent=data.get("parent"),
             handoff_refs=data.get("handoff_refs", []),
             events=events,
+            compression_level=data.get("compression_level", 0),
         )
 
 
@@ -286,7 +332,7 @@ def validate_task_id(task_id: str) -> bool:
 
 def now_iso() -> str:
     """Return current UTC timestamp in ISO 8601 format."""
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
+    return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%S")
 
 
 def truncate_description(description: str, max_len: int = 150) -> tuple[str, bool]:
@@ -309,8 +355,7 @@ def validate_priority(priority: str) -> None:
     """Raise ``ValueError`` if priority is not valid."""
     if priority not in VALID_PRIORITIES:
         raise ValueError(
-            f"priority deve essere uno di: {', '.join(VALID_PRIORITIES)}. "
-            f"Ricevuto: '{priority}'."
+            f"priority deve essere uno di: {', '.join(VALID_PRIORITIES)}. Ricevuto: '{priority}'."
         )
 
 
@@ -318,8 +363,7 @@ def validate_status(status: str) -> None:
     """Raise ``ValueError`` if status is not valid."""
     if status not in VALID_STATUSES:
         raise ValueError(
-            f"status deve essere uno di: {', '.join(VALID_STATUSES)}. "
-            f"Ricevuto: '{status}'."
+            f"status deve essere uno di: {', '.join(VALID_STATUSES)}. Ricevuto: '{status}'."
         )
 
 

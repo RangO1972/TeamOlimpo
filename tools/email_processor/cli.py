@@ -36,6 +36,7 @@ from rich.console import Console
 from rich.table import Table
 from rich.text import Text
 
+from tools.common.paths import project_root, resolve_relative
 from tools.email_processor.attachment_cache import (
     load_cache,
     save_cache,
@@ -77,8 +78,7 @@ def _load_filter_engine() -> "RuleEngine | None":
             return None
         engine: RuleEngine = RuleEngine(rules_path)
         logger.info(
-            f"Filtro email caricato: "
-            f"{len(engine._sorted_rules)} regole attive"  # noqa: SLF001
+            f"Filtro email caricato: {len(engine._sorted_rules)} regole attive"  # noqa: SLF001
         )
         return engine
     except Exception as e:
@@ -160,8 +160,7 @@ def _get_vault_root() -> Path:
     config = _load_config()
     vault_root_str = config.get("email_processor", {}).get("vault_root")
     if vault_root_str:
-        project_root = Path(__file__).resolve().parent.parent.parent
-        return (project_root / vault_root_str).resolve()
+        return resolve_relative(vault_root_str)
 
     return Path("")
 
@@ -439,12 +438,8 @@ def _parse_eml(eml_path: Path) -> dict:
     _from_raw: tuple[str, str] = (
         (from_addrs[0][0] or "", from_addrs[0][1] or "") if from_addrs else ("", "")
     )
-    _to_raw: list[tuple[str, str]] = [
-        (name or "", email or "") for name, email in to_addrs
-    ]
-    _cc_raw: list[tuple[str, str]] = [
-        (name or "", email or "") for name, email in cc_addrs
-    ]
+    _to_raw: list[tuple[str, str]] = [(name or "", email or "") for name, email in to_addrs]
+    _cc_raw: list[tuple[str, str]] = [(name or "", email or "") for name, email in cc_addrs]
 
     return {
         "message_id": message_id,
@@ -552,9 +547,7 @@ def _save_attachment(
 
         # --- Safety net: path troppo lungo (dovrebbe essere impossibile con 16 char) ---
         if len(str(target_path.resolve())) > 255:
-            logger.warning(
-                f"Path allegato troppo lungo con hash 16 char: {target_path}"
-            )
+            logger.warning(f"Path allegato troppo lungo con hash 16 char: {target_path}")
             return None
 
         try:
@@ -714,14 +707,16 @@ def _scan_all_notes(vault_root: Path) -> list[dict]:
         if not isinstance(refs_raw, list):
             refs_raw = []
 
-        notes.append({
-            "path": md_file,
-            "message_id": str(message_id),
-            "references": [str(r) for r in refs_raw],
-            "subject": str(fm_data.get("subject", "")),
-            "from": str(fm_data.get("from", "")),
-            "date": str(fm_data.get("date", "")),
-        })
+        notes.append(
+            {
+                "path": md_file,
+                "message_id": str(message_id),
+                "references": [str(r) for r in refs_raw],
+                "subject": str(fm_data.get("subject", "")),
+                "from": str(fm_data.get("from", "")),
+                "date": str(fm_data.get("date", "")),
+            }
+        )
 
     logger.debug(f"Scansione note: {len(notes)} note trovate")
     return notes
@@ -773,8 +768,7 @@ def _build_thread_graph(
             children_of[parent_id].append(msg_id)
 
     logger.debug(
-        f"Thread graph: {len(parent_of)} nodi, "
-        f"{sum(1 for p in parent_of.values() if p)} con parent"
+        f"Thread graph: {len(parent_of)} nodi, {sum(1 for p in parent_of.values() if p)} con parent"
     )
     return parent_of, children_of, root_of
 
@@ -812,7 +806,7 @@ def _update_note_frontmatter(
         return False
 
     fm_text = fm_match.group(1)
-    body = content[fm_match.end():]
+    body = content[fm_match.end() :]
 
     try:
         fm_data = yaml.safe_load(fm_text)
@@ -1087,6 +1081,7 @@ def _run_import(
         filter_engine = filter_engine_result
         try:
             from tools.email_processor.aggregator import Aggregator
+
             aggregator = Aggregator(vault_root)
         except Exception as e:
             logger.warning(f"Impossibile inizializzare aggregator: {e}")
@@ -1161,22 +1156,14 @@ def _run_import(
                 filter_stats[result.action] = filter_stats.get(result.action, 0) + 1
 
                 if result.action == "discard":
-                    logger.info(
-                        f"[{idx}/{total}] DISCARD {eml_path.name} "
-                        f"({result.rule_id})"
-                    )
+                    logger.info(f"[{idx}/{total}] DISCARD {eml_path.name} ({result.rule_id})")
                     skipped_count += 1
                     continue
 
                 if result.action == "aggregate":
-                    logger.info(
-                        f"[{idx}/{total}] AGGREGATE {eml_path.name} "
-                        f"({result.rule_id})"
-                    )
+                    logger.info(f"[{idx}/{total}] AGGREGATE {eml_path.name} ({result.rule_id})")
                     if aggregator is not None and result.aggregate_to:
-                        aggregator.add_entry(
-                            result.aggregate_to, data, eml_path
-                        )
+                        aggregator.add_entry(result.aggregate_to, data, eml_path)
                     skipped_count += 1
                     continue
 
@@ -1187,9 +1174,7 @@ def _run_import(
                     data.setdefault("labels", []).append(result.label)
 
             except Exception as e:
-                logger.warning(
-                    f"Errore nel filtro per {eml_path.name}: {e}"
-                )
+                logger.warning(f"Errore nel filtro per {eml_path.name}: {e}")
                 # Fallback safe: importa normalmente
 
         # --- Estrazione contatti (anche per email duplicate) ---
@@ -1252,9 +1237,7 @@ def _run_import(
         data["attachments"] = attachments
 
         # --- Risolvi path nota (con gestione collisioni) ---
-        note_path = _resolve_note_path(
-            emails_dir, slug, data["subject"]
-        )
+        note_path = _resolve_note_path(emails_dir, slug, data["subject"])
 
         # --- Genera frontmatter YAML ---
         # Costruzione manuale per preservare ordine e struttura esatta del design
@@ -1338,9 +1321,7 @@ def _run_import(
             existing_ids.add(data["message_id"])
 
         imported_count += 1
-        logger.info(
-            f"[{idx}/{total}] ✅ {note_path.relative_to(vault_root)}"
-        )
+        logger.info(f"[{idx}/{total}] ✅ {note_path.relative_to(vault_root)}")
 
     # --- NUOVO: flush aggregati ---
     if aggregator is not None:
@@ -1378,7 +1359,9 @@ def _run_import(
             pct = (count / filtered_total * 100) if filtered_total > 0 else 0
             logger.info(f"    {action:<12} {count:>5} ({pct:>5.1f}%)")
         if filtered_total > 0:
-            logger.info(f"    Riduzione:        {filter_stats.get('discard', 0) + filter_stats.get('aggregate', 0)} email non importate singolarmente")
+            logger.info(
+                f"    Riduzione:        {filter_stats.get('discard', 0) + filter_stats.get('aggregate', 0)} email non importate singolarmente"
+            )
 
     logger.info("=" * 50)
 
@@ -1527,16 +1510,14 @@ def status(
     addressbook_dir = vault_root / "Addressbook"
     contact_count = 0
     if addressbook_dir.exists():
-        contact_count = len(
-            [f for f in addressbook_dir.glob("*.md") if f.name != "_index.md"]
-        )
+        contact_count = len([f for f in addressbook_dir.glob("*.md") if f.name != "_index.md"])
 
     # --- Intervallo date ---
     min_date = min(dates) if dates else "—"
     max_date = max(dates) if dates else "—"
 
     # --- Output ---
-    vault_display = str(vault_root.resolve())
+    vault_display = str(vault_root)
     typer.echo(f"📊 Status vault email: {vault_display}")
     typer.echo("")
     typer.echo(f"Note totali:    {total_notes:,}")
@@ -1652,9 +1633,7 @@ def discover(
     typer.echo("")
 
     # --- YAML output ---
-    yaml_content = PatternDiscovery.patterns_to_yaml(
-        patterns, period_start, today_str
-    )
+    yaml_content = PatternDiscovery.patterns_to_yaml(patterns, period_start, today_str)
 
     if output:
         try:
@@ -1726,9 +1705,7 @@ def _save_rules_to_disk(
     """
     path = path or _get_rules_path()
     # Sort by priority descending for consistent output
-    rules_sorted = sorted(
-        rules, key=lambda r: r.get("priority", 0), reverse=True
-    )
+    rules_sorted = sorted(rules, key=lambda r: r.get("priority", 0), reverse=True)
     data = {
         "version": 1,
         "rules": rules_sorted,
@@ -1800,9 +1777,17 @@ def _display_rules_table(rules: list[dict]) -> None:
 
 # Sender local parts / names esclusi (non umani)
 _HUMAN_EXCLUDE_NAMES: set[str] = {
-    "noreply", "no-reply", "no_reply", "automation", "system",
-    "zabbixsrv", "backup", "postmaster", "mailer-daemon",
-    "mailerdaemon", "administrator",
+    "noreply",
+    "no-reply",
+    "no_reply",
+    "automation",
+    "system",
+    "zabbixsrv",
+    "backup",
+    "postmaster",
+    "mailer-daemon",
+    "mailerdaemon",
+    "administrator",
 }
 
 # Domini esclusi (automazione / sistema)
@@ -1866,7 +1851,10 @@ def _is_human_sender(email: str, name: str = "") -> bool:
 
     # Escludi indirizzi interni a Emerson generici
     if domain == "emerson.com" and local_part in (
-        "noreply", "no-reply", "automation", "system",
+        "noreply",
+        "no-reply",
+        "automation",
+        "system",
     ):
         return False
 
@@ -2046,11 +2034,7 @@ def _suggest_trusted(file: Path) -> None:
     _trusted_patterns: set[str] = set()
     for rule in rules:
         if rule.get("priority") == 95 and rule.get("label") == "fis-work":
-            from_match = (
-                rule.get("match", {})
-                .get("from", {})
-                .get("contains", [])
-            )
+            from_match = rule.get("match", {}).get("from", {}).get("contains", [])
             for pattern in from_match:
                 if isinstance(pattern, str):
                     _trusted_patterns.add(pattern.lower())
@@ -2070,9 +2054,7 @@ def _suggest_trusted(file: Path) -> None:
             continue
 
         patterns_count = len(info["keep_patterns"])
-        patterns_detail = ", ".join(
-            pn[:50] for pn, _ in info["keep_patterns"]
-        )
+        patterns_detail = ", ".join(pn[:50] for pn, _ in info["keep_patterns"])
 
         display_name = email
         if info["name"]:
@@ -2111,14 +2093,9 @@ def _suggest_trusted(file: Path) -> None:
                 existing = [r for r in existing if r.get("id") != rule["id"]]
             existing.append(rule)
         _save_rules_to_disk(existing, path)
-        typer.echo(
-            "\nRules saved to disk. "
-            "Run 'rules save' to deduplicate and sort."
-        )
+        typer.echo("\nRules saved to disk. Run 'rules save' to deduplicate and sort.")
 
-    typer.echo(
-        f"\n Summary: {added} trusted added, {skipped} skipped, {errors} errors"
-    )
+    typer.echo(f"\n Summary: {added} trusted added, {skipped} skipped, {errors} errors")
 
 
 def _add_trusted(email_or_name: str) -> None:
@@ -2145,18 +2122,13 @@ def _add_trusted(email_or_name: str) -> None:
         width=120,
     )
     typer.echo(yaml_str.strip())
-    typer.echo(
-        "\nRule added. Run 'rules save' to deduplicate and sort."
-    )
+    typer.echo("\nRule added. Run 'rules save' to deduplicate and sort.")
 
 
 def _list_trusted_rules() -> None:
     """Mostra tutte le regole trusted (priority=95, label=fis-work)."""
     rules = _load_rules_from_disk()
-    trusted = [
-        r for r in rules
-        if r.get("priority") == 95 and r.get("label") == "fis-work"
-    ]
+    trusted = [r for r in rules if r.get("priority") == 95 and r.get("label") == "fis-work"]
 
     if not trusted:
         typer.echo("No trusted sender rules found.")
@@ -2217,14 +2189,10 @@ def rules_trust(
     # Verifica che esattamente uno dei tre modi sia attivo
     opt_count = sum([suggest, add is not None, list_trusted])
     if opt_count == 0:
-        logger.error(
-            "Specifica uno di: --suggest, --add, --list"
-        )
+        logger.error("Specifica uno di: --suggest, --add, --list")
         raise typer.Exit(code=2)
     if opt_count > 1:
-        logger.error(
-            "--suggest, --add, --list sono mutuamente esclusivi"
-        )
+        logger.error("--suggest, --add, --list sono mutuamente esclusivi")
         raise typer.Exit(code=2)
 
     if suggest:
@@ -2260,9 +2228,7 @@ def rules_list(
 
 @rules_app.command("show")
 def rules_show(
-    rule_id: str = typer.Argument(
-        ..., help="Rule ID to show (e.g. 'zabbix-problem')."
-    ),
+    rule_id: str = typer.Argument(..., help="Rule ID to show (e.g. 'zabbix-problem')."),
     verbose: bool = typer.Option(
         False,
         "--verbose",
@@ -2296,9 +2262,7 @@ def rules_show(
 
 @rules_app.command("remove")
 def rules_remove(
-    rule_id: str = typer.Argument(
-        ..., help="Rule ID to remove (e.g. 'patrol-read')."
-    ),
+    rule_id: str = typer.Argument(..., help="Rule ID to remove (e.g. 'patrol-read')."),
     verbose: bool = typer.Option(
         False,
         "--verbose",
@@ -2350,26 +2314,16 @@ def rules_add(
         "--from-not-contains",
         help="From NOT contains pattern (can repeat).",
     ),
-    action: str = typer.Option(
-        ..., "--action", "-a", help="Action: discard | aggregate | keep."
-    ),
+    action: str = typer.Option(..., "--action", "-a", help="Action: discard | aggregate | keep."),
     aggregate_to: str = typer.Option(
         None,
         "--aggregate-to",
         help="Template path for aggregates (e.g. '_review/daily/foo-{date}.md').",
     ),
-    label: str = typer.Option(
-        None, "--label", help="Label for keep actions."
-    ),
-    priority: int = typer.Option(
-        50, "--priority", "-p", help="Rule priority (default: 50)."
-    ),
-    reason: str = typer.Option(
-        None, "--reason", help="Human-readable reason."
-    ),
-    name: str = typer.Option(
-        None, "--name", help="Human-readable rule name."
-    ),
+    label: str = typer.Option(None, "--label", help="Label for keep actions."),
+    priority: int = typer.Option(50, "--priority", "-p", help="Rule priority (default: 50)."),
+    reason: str = typer.Option(None, "--reason", help="Human-readable reason."),
+    name: str = typer.Option(None, "--name", help="Human-readable rule name."),
     verbose: bool = typer.Option(
         False,
         "--verbose",
@@ -2396,9 +2350,7 @@ def rules_add(
         raise typer.Exit(code=2)
 
     if action == "aggregate" and not aggregate_to:
-        logger.error(
-            "Action 'aggregate' requires --aggregate-to."
-        )
+        logger.error("Action 'aggregate' requires --aggregate-to.")
         raise typer.Exit(code=2)
 
     # Build match conditions
@@ -2413,16 +2365,11 @@ def rules_add(
         match.setdefault("from", {})["not_contains"] = from_not_contains
 
     if not match:
-        logger.error(
-            "At least one match condition is required "
-            "(e.g. --subject-contains)."
-        )
+        logger.error("At least one match condition is required (e.g. --subject-contains).")
         raise typer.Exit(code=2)
 
     # Generate rule ID
-    rule_id = _generate_rule_id(
-        subject_contains=subject_contains, name=name
-    )
+    rule_id = _generate_rule_id(subject_contains=subject_contains, name=name)
 
     rule: dict = {
         "id": rule_id,
@@ -2457,9 +2404,7 @@ def rules_add(
         width=120,
     )
     typer.echo(yaml_str.strip())
-    typer.echo(
-        f"\nRule added. Use 'rules save' to sort and deduplicate the file."
-    )
+    typer.echo(f"\nRule added. Use 'rules save' to sort and deduplicate the file.")
 
 
 @rules_app.command("apply")
@@ -2467,20 +2412,14 @@ def rules_apply(
     pattern_id: int = typer.Argument(
         ..., help="Pattern ID from discover output to convert into a rule."
     ),
-    action: str = typer.Option(
-        ..., "--action", "-a", help="Action: discard | aggregate | keep."
-    ),
+    action: str = typer.Option(..., "--action", "-a", help="Action: discard | aggregate | keep."),
     aggregate_to: str = typer.Option(
         None,
         "--aggregate-to",
         help="Template path for aggregates (required if action=aggregate).",
     ),
-    label: str = typer.Option(
-        None, "--label", help="Label for keep actions."
-    ),
-    priority: int = typer.Option(
-        50, "--priority", "-p", help="Rule priority (default: 50)."
-    ),
+    label: str = typer.Option(None, "--label", help="Label for keep actions."),
+    priority: int = typer.Option(50, "--priority", "-p", help="Rule priority (default: 50)."),
     file: Path = typer.Option(
         None,
         "--file",
@@ -2509,15 +2448,11 @@ def rules_apply(
 
     # Validate action
     if action not in ("discard", "aggregate", "keep"):
-        logger.error(
-            f"Invalid action '{action}'. Must be discard, aggregate, or keep."
-        )
+        logger.error(f"Invalid action '{action}'. Must be discard, aggregate, or keep.")
         raise typer.Exit(code=2)
 
     if action == "aggregate" and not aggregate_to:
-        logger.error(
-            "Action 'aggregate' requires --aggregate-to."
-        )
+        logger.error("Action 'aggregate' requires --aggregate-to.")
         raise typer.Exit(code=2)
 
     # Read discover YAML
@@ -2565,9 +2500,7 @@ def rules_apply(
     inferred = PatternDiscovery.infer_rule_from_pattern(pattern)
 
     # Build the rule
-    rule_id = _generate_rule_id(
-        name=inferred.get("name", pattern.normalized)
-    )
+    rule_id = _generate_rule_id(name=inferred.get("name", pattern.normalized))
 
     rule: dict = {
         "id": rule_id,
@@ -2591,9 +2524,7 @@ def rules_apply(
     _save_rules_to_disk(existing, path)
 
     # Show what was generated
-    typer.echo(
-        f"Rule generated from pattern #{pattern_id}:\n"
-    )
+    typer.echo(f"Rule generated from pattern #{pattern_id}:\n")
     yaml_str = yaml.dump(
         rule,
         default_flow_style=False,
@@ -2602,9 +2533,7 @@ def rules_apply(
         width=120,
     )
     typer.echo(yaml_str.strip())
-    typer.echo(
-        "\nRule added. Use 'rules save' to sort and deduplicate the file."
-    )
+    typer.echo("\nRule added. Use 'rules save' to sort and deduplicate the file.")
 
 
 @rules_app.command("save")
@@ -2641,8 +2570,7 @@ def rules_save(
     # Warn if file exists and --force not set
     if path.exists() and not force:
         typer.echo(
-            f"File {path} exists. Use --force to overwrite, or "
-            f"specify a different --output path."
+            f"File {path} exists. Use --force to overwrite, or specify a different --output path."
         )
         if not typer.confirm("Proceed?", default=False):
             typer.echo("Aborted.")
@@ -2660,8 +2588,7 @@ def rules_save(
 
     _save_rules_to_disk(deduped, path)
     typer.echo(
-        f"Rules saved: {len(deduped)} rules "
-        f"(deduplicated from {len(rules)}, sorted by priority)."
+        f"Rules saved: {len(deduped)} rules (deduplicated from {len(rules)}, sorted by priority)."
     )
 
 
