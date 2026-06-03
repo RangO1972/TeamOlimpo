@@ -143,7 +143,7 @@ def write_handoff_file(
     type: str,
     title: str,
 ) -> str:
-    """Write a handoff .md file directly to ``Library/Handoff/YYYY/MM/``.
+    """Write a handoff .md file directly to ``Library/Handoff/YYYY/MM/DD/``.
 
     No temporary files, no subprocess calls.
 
@@ -156,12 +156,13 @@ def write_handoff_file(
         title: Handoff title.
 
     Returns:
-        Relative path (e.g. ``Library/Handoff/2026/05/2026-05-26_1430_....md``).
+        Relative path (e.g. ``Library/Handoff/2026/06/03/2026-06-03_1430_....md``).
     """
     now = datetime.now()
     year_str = now.strftime("%Y")
     month_str = now.strftime("%m")
-    output_dir = project_root / "lib" / "Handoff" / year_str / month_str
+    day_str = now.strftime("%d")
+    output_dir = project_root / "Library" / "Handoff" / year_str / month_str / day_str
     output_dir.mkdir(parents=True, exist_ok=True)
 
     filename = build_filename(agent, type, title)

@@ -6,7 +6,7 @@ from tools.common.paths import project_root
 
 PROJECT_ROOT: Path = project_root()
 
-HANDOFF_DIR: Path = PROJECT_ROOT / "lib" / "Fucina" / "Handoff"
+HANDOFF_DIR: Path = PROJECT_ROOT / "Library" / "Handoff"
 SCRATCHPAD_PATH: Path = PROJECT_ROOT / "lib" / "Fucina" / "Hermes" / "Scratchpad.md"
 
 MEMBRI: frozenset[str] = frozenset(

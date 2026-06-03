@@ -18,10 +18,10 @@ from loguru import logger
 
 from tools.hermes_cli.config import (
     HANDOFF_DIR,
-    PROJECT_ROOT,
     MEMBRI,
-    TIPI_HANDOFF,
     PRIORITA_VALIDE,
+    PROJECT_ROOT,
+    TIPI_HANDOFF,
 )
 
 ROOT_DIR = PROJECT_ROOT
@@ -319,7 +319,8 @@ def create_handoff(
     # Cartella destinazione
     year = str(parsed_date.year)
     month = f"{parsed_date.month:02d}"
-    dest_dir = HANDOFF_DIR / year / month
+    day = f"{parsed_date.day:02d}"
+    dest_dir = HANDOFF_DIR / year / month / day
     dest_file = dest_dir / filename
 
     # Verifica collisioni

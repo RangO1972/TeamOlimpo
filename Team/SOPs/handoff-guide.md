@@ -91,7 +91,7 @@ summary: >-
   Sintesi 2-3 frasi, auto-contenuta, leggibile fuori contesto.
 tags: [tag1, tag2]
 sources:
-  - "Library/Handoff/2026/05/codice-handoff.md"
+  - "Library/Handoff/2026/06/03/codice-handoff.md"
 confidence: CONFIRMED
 
 ## Deviations                       # opzionale — solo se deviazione dallo spec
